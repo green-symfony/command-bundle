@@ -22,12 +22,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
 			
-                ->scalarNode('env')
+                ->scalarNode('env(APP_ENV)')
                     ->info('env(APP_ENV)')
                     #->defaultValue('%gs_generic_parts.locale%') Don't work, it's a simple string if defaultValue
                     ->defaultValue($this->env)
                 ->end()
-
 
             ->end()
         ;

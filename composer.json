@@ -5,8 +5,6 @@
             "GS\\Command\\": "src/"
         }
     },
-    "autoload-dev": {
-    },
 	"version":		"0.0.0",
     "type":			"symfony-bundle",
     "description":	"AbstractCommand for extending into Symfony Application.",
@@ -19,10 +17,6 @@
     "keywords":		["green-symfony", "command-bundle"],
     "license":		"MIT",
     "require":		{
-        "php": ">=7",
-    },
-    "config": {
-    },
-	"require-dev": {
+        "php": ">=7"
     }
 }

@@ -25,6 +25,7 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 class GSCommandExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
     public const PREFIX = 'gs_command';
+    public const APP_ENV = 'env(APP_ENV)';
 	
 	public function getAlias(): string
     {
@@ -37,7 +38,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     public function prepend(ContainerBuilder $container)
     {
         $this->loadYaml($container, [
-            //['config/packages',     'messenger.yaml'],
+            //['config/packages', 'messenger.yaml'],
         ]);
     }
 
@@ -46,7 +47,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         ContainerBuilder $container,
     ) {
         return new Configuration(
-            env: $container->getParameter('env(APP_ENV)'),
+            env:	$container->getParameter(self::APP_ENV),
         );
     }
 
@@ -57,9 +58,8 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     */
     public function loadInternal(array $config, ContainerBuilder $container)
     {
-		//TODO: 0
         $this->loadYaml($container, [
-            //['config',                    'services.yaml'],
+            ['config', 'services.yaml'],
         ]);
         $this->fillInParameters($config, $container);
         $this->fillInServiceArgumentsWithConfigOfCurrentBundle($config, $container);
@@ -83,7 +83,9 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
             PropertyAccess::createPropertyAccessor()->getValue($config, '[error_prod_logger_email][from]'),
         );
         */
-
+		
+		//TODO: 0
+		\dd($config);
 		$pa = PropertyAccess::createPropertyAccessor();
         GSServiceContainer::setParametersForce(
             $container,
@@ -92,60 +94,18 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
             },
             parameterPrefix: 	self::PREFIX,
             keys:				[
+				
             ],
         );
 		
 		/* to use in this object */
-		$this->localeParameter		= new Parameter(GSServiceContainer::getParameterName(
-			self::PREFIX,
-			self::LOCALE,
-		));
-		$this->timezoneParameter	= new Parameter(GSServiceContainer::getParameterName(
-			self::PREFIX,
-			self::TIMEZONE,
-		));
+		$this->appEnv = new Parameter(self::APP_ENV);
     }
 
     private function fillInServiceArgumentsWithConfigOfCurrentBundle(
         array $config,
         ContainerBuilder $container,
     ) {
-        $this->carbonService($config, $container);
-        $this->fakerService($config, $container);
-    }
-
-    private function carbonService(array $config, ContainerBuilder $container)
-    {
-        $carbon         = new Definition(
-            class:          \Carbon\FactoryImmutable::class,
-            arguments:      [
-                '$settings'         => [
-                    'locale'                    => $this->localeParameter,
-                    'strictMode'                => true,
-                    'timezone'                  => $this->timezoneParameter,
-                    'toStringFormat'            => 'd.m.Y H:i:s P',
-                    'monthOverflow'             => true,
-                    'yearOverflow'              => true,
-                ],
-            ],
-        );
-        $container->setDefinition(
-            id:             'gs_generic_parts.carbon_factory',
-            definition:     $carbon,
-        );
-    }
-
-    private function fakerService(array $config, ContainerBuilder $container)
-    {
-        $faker          = (new Definition(\Faker\Factory::class, []))
-            ->setFactory([\Faker\Factory::class, 'create'])
-            ->setArgument(0, $this->localeParameter)
-        ;
-        //\dd($config['locale']);
-        $faker          = $container->setDefinition(
-            id:             'gs_generic_parts.faker',
-            definition:     $faker,
-        );
     }
 
     private function registerBundleTagsForAutoconfiguration(ContainerBuilder $container)
