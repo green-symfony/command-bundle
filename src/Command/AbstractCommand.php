@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\{
     OutputInterface
 };
 
-// ROOT_DIR/bin/console <command>
+// PROJECT_DIR/bin/console <command>
 /*
 #[AsCommand(
     name: '<>',

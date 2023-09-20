@@ -17,6 +17,18 @@
     "keywords":		["green-symfony", "command-bundle"],
     "license":		"MIT",
     "require":		{
-        "php": ">=7"
-    }
+        "php": ">=7",
+        "symfony/translation": "^6.3",
+        "symfony/monolog-bundle": "^3.8",
+		"green-symfony/service-bundle": "*",
+        "symfony/property-access": "^6.3",
+        "symfony/string": "^6.3",
+        "symfony/config": "^6.3"
+    },
+    "repositories": [
+		{
+			"type": "path",
+			"url": "./bundles/green-symfony/service-bundle"
+		}
+	]
 }

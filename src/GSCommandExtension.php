@@ -4,7 +4,7 @@ namespace GS\Command;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\DependencyInjection\Definition;
-use GS\Command\Service\{
+use GS\Service\Service\{
     GSServiceContainer,
     GSStringNormalizer
 };
@@ -38,7 +38,8 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     public function prepend(ContainerBuilder $container)
     {
         $this->loadYaml($container, [
-            //['config/packages', 'messenger.yaml'],
+            ['config/packages', 'translation.yaml'],
+            ['config/packages', 'monolog.yaml'],
         ]);
     }
 
@@ -47,7 +48,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         ContainerBuilder $container,
     ) {
         return new Configuration(
-            env:	$container->getParameter(self::APP_ENV),
+            appEnv: $container->getParameter(self::APP_ENV),
         );
     }
 
@@ -84,22 +85,20 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         );
         */
 		
-		//TODO: 0
-		\dd($config);
 		$pa = PropertyAccess::createPropertyAccessor();
         GSServiceContainer::setParametersForce(
             $container,
-            callbackGetValue:       static function ($key) use (&$config, $pa) {
+            callbackGetValue: static function ($key) use (&$config, $pa) {
                 return $pa->getValue($config, $key);
             },
-            parameterPrefix: 	self::PREFIX,
-            keys:				[
-				
+            parameterPrefix: self::PREFIX,
+            keys: [
+				'['.self::APP_ENV.']',
             ],
         );
 		
 		/* to use in this object */
-		$this->appEnv = new Parameter(self::APP_ENV);
+		//$this->appEnv = new Parameter(self::APP_ENV);
     }
 
     private function fillInServiceArgumentsWithConfigOfCurrentBundle(

@@ -20,6 +20,7 @@
 /config/secrets/*/*.decrypt.private.php
 /public/bundles/
 /var/
+/vendor/
 ###< symfony/framework-bundle ###
 
 ###> standard ###
