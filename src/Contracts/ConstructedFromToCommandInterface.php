@@ -8,6 +8,14 @@ use Symfony\Component\Console\Input\{
 use Symfony\Component\Console\Output\{
     OutputInterface
 };
+use GS\Service\Service\{
+    StringService,
+    DumpInfoService,
+    FilesystemService,
+    ConfigService,
+    ArrayService,
+    RegexService
+};
 
 interface ConstructedFromToCommandInterface
 {

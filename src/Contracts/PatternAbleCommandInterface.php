@@ -8,6 +8,15 @@ use Symfony\Component\Console\Input\{
 use Symfony\Component\Console\Output\{
     OutputInterface
 };
+use GS\Service\Service\{
+    StringService,
+    DumpInfoService,
+    FilesystemService,
+    ConfigService,
+    ArrayService,
+    RegexService,
+    BoolService
+};
 
 interface PatternAbleCommandInterface
 {
@@ -20,12 +29,12 @@ interface PatternAbleCommandInterface
 		use PatternAbleCommandTrait;
 		
 		public function __construct(
-			StringService $stringService,
-			DumpInfoService $dumpInfoService,
-			FilesystemService $filesystemService,
-			ConfigService $configService,
-			ArrayService $arrayService,
-			RegexService $regexService,
+			protected readonly StringService $stringService,
+			protected readonly DumpInfoService $dumpInfoService,
+			protected readonly FilesystemService $filesystemService,
+			protected readonly ConfigService $configService,
+			protected readonly ArrayService $arrayService,
+			protected readonly RegexService $regexService,
 			protected readonly BoolService $boolService,
 			protected readonly string $yearRegexWithoutB,
 			protected readonly string $monthRegex,
