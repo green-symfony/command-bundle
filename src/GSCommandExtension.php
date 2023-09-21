@@ -5,8 +5,8 @@ namespace GS\Command;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\DependencyInjection\Definition;
 use GS\Service\Service\{
-    GSServiceContainer,
-    GSStringNormalizer
+    ServiceContainer,
+    StringNormalizer
 };
 use GS\Command\Configuration;
 use Symfony\Component\DependencyInjection\{
@@ -86,7 +86,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         */
 		
 		$pa = PropertyAccess::createPropertyAccessor();
-        GSServiceContainer::setParametersForce(
+        ServiceContainer::setParametersForce(
             $container,
             callbackGetValue: static function ($key) use (&$config, $pa) {
                 return $pa->getValue($config, $key);

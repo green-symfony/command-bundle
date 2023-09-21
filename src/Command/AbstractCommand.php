@@ -44,26 +44,16 @@ abstract class AbstractCommand extends Command
 	implements SignalableCommandInterface,
 	ServiceSubscriberInterface
 {
-	public const DOP_WIDTH_FOR_STR_PAD = 1;
-	
-	public const EMOJI_START_RANGE = 0x1F400;
-	public const EMOJI_END_RANGE = 0x1F43C;
-	
-    protected const WIDTH_PROGRESS_BAR = 40;
-    protected const EMPTY_COLOR_PROGRESS_BAR = 'black';
+	//###> ! CHANGE ME !
+    protected const WIDTH_PROGRESS_BAR			= 40;
+    protected const EMPTY_COLOR_PROGRESS_BAR	= 'black';
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'cyan';
+	//###< ! CHANGE ME !
 
     protected SymfonyStyle $style;
     protected $formatter;
     protected $progressBar;
     protected $table;
-
-    protected function execute(
-        InputInterface $input,
-        OutputInterface $output,
-    ): int {
-		return Command::SUCCESS;
-    }
 
     public function __construct(
 		protected $env,
@@ -72,8 +62,7 @@ abstract class AbstractCommand extends Command
 		protected $devLogger,
 	) {
         parent::__construct();
-        // >>> Style >>>
-        // >>> ProgressBar >>>
+		
         ProgressBar::setPlaceholderFormatterDefinition(
             'spin',
             static function (
@@ -105,27 +94,310 @@ abstract class AbstractCommand extends Command
         ProgressBar::setFormatDefinition('normal', '%bar% %percent:2s%% %spin%');
         ProgressBar::setFormatDefinition('normal_nomax', '%bar% progress: %current% %spin%');
     }
+	
 
+    //###> PUBLIC API ###
+
+    public function getIo(): SymfonyStyle
+    {
+        return $this->io;
+    }
+
+    public function getTable(): Table
+    {
+        return $this->table;
+    }
+
+    //###< PUBLIC API ###
+	
+
+    //###> API ###
+
+    protected function configureOption(
+        string $name,
+        string $description,
+        int $mode,
+        mixed $default = null,
+        string|array $shortcut = null,
+    ): void {
+        if ($shortcut === null) {
+            $this
+                ->addOption(
+                    name:           $name,
+                    mode:           $mode,
+                    description:    $this->getInfoDescription($mode, $description, $default),
+                    default:        $default,
+                )
+            ;
+            return;
+        }
+
+        $this
+            ->addOption(
+                name:           $name,
+                shortcut:       $shortcut,
+                mode:           $mode,
+                description:    $this->getInfoDescription($mode, $description, $default),
+                default:        $default,
+            )
+        ;
+    }
+
+    protected function configureArgument(
+        string $name,
+        int $mode,
+        ?string $description = null,
+    ) {
+        if ($description === null) {
+            $this
+                ->addArgument(
+                    $name,
+                    $mode,
+                )
+            ;
+            return;
+        }
+
+        $this
+            ->addArgument(
+                $name,
+                $mode,
+                $description,
+            )
+        ;
+    }
+
+    protected function initializeOption(
+        InputInterface $input,
+        OutputInterface $output,
+        string $name,
+        &$option,
+        // predicat callback
+        \Closure|\callable|null $predicat = null,
+        // set callback
+        \Closure|\callable|null $set = null,
+    ) {
+        /* $userOption always string, != more suitable */
+        $predicat ??= static fn(?string $userOption, &$option/*by ref*/)
+            => $userOption !== null && $option != $userOption;
+
+        $set ??= static fn(?string $userOption, &$option/*by ref*/) => $option = $userOption;
+
+        $userOption = $input->getOption($name);
+        if ($predicat(userOption: $userOption, option: $option)) {
+            $set(userOption: $userOption, option: $option);
+        }
+    }
+
+    protected function initializeArgument(
+        InputInterface $input,
+        OutputInterface $output,
+        string $name,
+        &$argument,
+        // predicat callback
+        \Closure|\callable $predicat = null,
+        // set callback
+        \Closure|\callable $set = null,
+    ) {
+        /* $userArgument always string, != more suitable */
+        $predicat ??= static fn(?string $userArgument, &$argument/*by ref*/)
+            => $userArgument !== null && $argument != $userArgument;
+
+        $set ??= static fn(?string $userArgument, &$argument/*by ref*/) => $argument = $userArgument;
+
+        $userArgument = $input->getArgument($name);
+        if ($predicat(userArgument: $userArgument, argument: $argument)) {
+            $set(userArgument: $userArgument, argument: $argument);
+        }
+    }
+	
+    protected function getInfoDescription(
+        int $mode,
+        string $description,
+        mixed $default,
+    ): string {
+        if ($mode === InputOption::VALUE_NEGATABLE && gettype($default) === 'boolean') {
+            return (string) u(((string) u($description)->ensureEnd(' ')) . $this->getDefaultValueNegatableForHelp($default))->collapseWhitespace();
+        }
+
+        return (string) u(((string) u($description)->ensureEnd(' ')) . $this->getDefaultValueForHelp($default))->collapseWhitespace();
+    }
+
+    protected function getDefaultValueForHelp(
+        ?string $default,
+    ): string {
+        if ($default === null) {
+            return '';
+        }
+        return '<bg=black;fg=yellow>[default: ' . $default . ']</>';
+    }
+
+    protected function getDefaultValueNegatableForHelp(
+        ?bool $bool,
+    ): string {
+        if ($bool === null) {
+            return '';
+        }
+        return $this->getDefaultValueForHelp($bool ? '"yes"' : '"no"');
+    }
+
+    //###< API ###
+
+
+	//###> REALIZE ABSTRACT ###
+
+	/* Command */
     protected function configure(): void
     {
 		//\pcntl_signal(\SIGINT, $this->shutdown(...));
 		//\register_shutdown_function($this->shutdown(...));
+		
+		/* AT THE END parent::configure(); */
     }
 
+	/* Command */
     protected function initialize(
         InputInterface $input,
         OutputInterface $output,
     ) {
-        // >>> Locale/Charset >>>
+		/* AT THE BEGINNING
+		
+		parent::initialize(
+            $input,
+            $output,
+        );
+		*/
+        
+		//###> Locale/Charset
         //\ini_set('mbstring.internal_encoding', 'UTF-8');
         \setlocale(LC_ALL, 'Russian');
-        // >>> Objects >>>
+		
+        //###> Objects
         $this->io = new SymfonyStyle($input, $output);
-        // >>> Style >>>
+		
+        //###> Style
         $this->setFormatter();
         $this->setProgressBar();
         $this->setTable();
     }
+
+	/* Command */
+    protected function interact(
+        InputInterface $input,
+        OutputInterface $output,
+    ) {
+        // get missed options/arguments
+    }
+
+	/* Command
+	
+		Command::<CODE>
+		
+			// ок
+			return Command::SUCCESS;
+
+			// неправильное использование
+			return Command::INVALID;
+
+			// ошибка
+			return Command::FAILURE;
+		
+		protected function execute(
+			InputInterface $input,
+			OutputInterface $output,
+		): int {
+			return Command::SUCCESS;
+		}
+	*/
+
+    /* Command
+	
+		protected function interact(
+			InputInterface $input,
+			OutputInterface $output,
+		) {
+			// get missed options/arguments
+		}	
+	*/
+
+    /* SignalableCommandInterface */
+	public function getSubscribedSignals(): array
+    {
+        return [
+            //\SIGINT,
+            //\SIGTERM,
+        ];
+    }
+
+    /* SignalableCommandInterface */
+    public function handleSignal(int $signal): void
+    {
+		/*
+        if (\SIGINT == $signal) {
+			$this->shutdown();
+        }
+		*/
+    }
+
+    /* ServiceSubscriberInterface */
+    public static function getSubscribedServices(): array
+    {
+        return [
+            'logger' => '?Psr\Log\LoggerInterface',
+        ];
+    }
+
+	//###< REALIZE ABSTRACT ###
+	
+	
+	//###> API ###
+
+    protected function isOk(
+        array|string $message = 'Ok?',
+        bool $default = true,
+        bool $exitWhenDisagree = false,
+    ) {
+        $agree = $this->io->askQuestion(
+            new ConfirmationQuestion(
+                \is_array($message) ? \implode(\PHP_EOL, $message) : $message,
+                $default,
+            )
+        );
+
+        if ($exitWhenDisagree && !$agree) {
+            $this->exit('EXIT');
+        }
+
+        return $agree;
+    }
+
+    protected function exit(
+        null|array|string $message = null,
+    ) {
+        if ($message !== null) {
+            $this->io->warning($message);
+        } else {
+            $this->io->warning('Exit');
+		}
+        exit(Command::INVALID);
+    }
+	
+	protected function shutdown(): void {
+		$this->devLogger->info(__METHOD__);
+		$this->exit(
+			$this->t->trans(
+				'Команда %command% остановлена',
+				parameters: [
+					'%command%' => $this->getName(),
+				],
+			)
+		);
+	}
+	
+	//###< API ###
+	
+	
+	//###> HELPER ###
 
     private function setFormatter()
     {
@@ -150,146 +422,16 @@ abstract class AbstractCommand extends Command
     private function setTable()
     {
         $this->table = $this->io->createTable();
+        $this->table->setStyle('box-double');
+		/*
         $this->table->setStyle(
             (new TableStyle())
             ->setHorizontalBorderChars('-')
             ->setVerticalBorderChars('|')
             ->setDefaultCrossingChar('+')
         );
-        $this->table->setStyle('box-double');
-    }
-
-    protected function interact(
-        InputInterface $input,
-        OutputInterface $output,
-    ) {
-        // get missed options/arguments
-    }
-
-	public function getSubscribedSignals(): array
-    {
-        return [
-			/*
-            \SIGINT,
-            \SIGTERM,
-			*/
-        ];
-    }
-	
-    public function handleSignal(int $signal): void
-    {
-		/*
-		if ($signal == 2 || $signal == 255) {
-            $this->shutdown();
-        }
 		*/
-    }
-
-
-    /* ServiceSubscriberInterface */
-    public static function getSubscribedServices(): array
-    {
-        return [
-            'logger' => '?Psr\Log\LoggerInterface',
-        ];
     }
 	
 	//###> HELPER ###
-	
-	protected function isOk(
-		?string $message			= null,
-		string $default				= null,
-		bool $exitWhenDisagree		= true,
-	) {
-		$message ??= $this->t->trans('Right') . '?';
-		
-		$agree = $this->io->askQuestion(
-			($default !== null ? new ConfirmationQuestion($message, $default) : new ConfirmationQuestion($message))
-		);
-		
-		if ($exitWhenDisagree && !$agree) {
-			$this->io->warning($this->t->trans('EXIT'));
-			exit(Command::INVALID);
-		}
-
-		return $agree;
-	}
-	
-	protected function getEscapedForRegex(string $string): string
-	{
-		$string = \strtr(
-			$string,
-			[
-				'|'		=> '[|]',
-				'+'		=> '[+]',
-				'*'		=> '[*]',
-				'?'		=> '[?]',
-				'['		=> '[[]',
-				']'		=> '[]]',
-				'\\'	=> '(?:\\\\|\/)',
-				'/'		=> '(?:\\|\/)',
-				'.'		=> '[.]',
-				'-'		=> '[-]',
-				')'		=> '[)]',
-				'('		=> '[(]',
-				'{'		=> '[{]',
-				'}'		=> '[}]',
-			]
-		);
-
-		return $string;
-	}
-	
-	protected function getEmoji(): string {
-		[$max, $min] = [
-			self::EMOJI_START_RANGE,
-			self::EMOJI_END_RANGE,
-		];
-		if ($min > $max) [$max, $min] = [$min, $max];
-		return \IntlChar::chr(\random_int($min, $max));
-	}
-	
-	protected function getPath(
-		string...$parts,
-	): string {
-		$NDS = Path::normalize(\DIRECTORY_SEPARATOR);
-		
-		\array_walk($parts, static fn(&$path) => $path = \rtrim(\trim($path), "/\\"));
-		
-		$resultPath = Path::normalize(\implode($NDS, $parts));
-
-		return $resultPath;
-	}
-	
-	protected function getOptimalWidthForStrPad($inputString, array $all): int {
-		// const part
-		$maxLen			= $this->arrayService->getMaxLen($all);
-		$const			= $maxLen + self::DOP_WIDTH_FOR_STR_PAD;
-		// dynamic part
-		$geLengthWithoutMbLetters = static fn($string) => \strlen(
-			\preg_replace('~[а-я]~ui', '', (string) $string)
-		);
-		$currentLen		= \mb_strlen((string) $inputString) - $geLengthWithoutMbLetters($inputString);
-		
-		// for \str_pad
-		return $currentLen + $const;
-	}
-	
-	protected function flushOb(): void {
-		while(\ob_get_level() > 0) \ob_end_flush();
-	}
-	
-	protected function shutdown(): void {
-		$this->devLogger->info(__METHOD__);
-		$this->io->warning(
-			$this->t->trans(
-				'Команда %command% остановлена',
-				parameters: [
-					'%command%'		=> $this->getName(),
-				],
-			)
-		);
-		$this->flushOb();
-		exit(Command::INVALID);
-	}
 }
