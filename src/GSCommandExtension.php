@@ -4,11 +4,6 @@ namespace GS\Command;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\DependencyInjection\Definition;
-use GS\Service\Service\{
-    ServiceContainer,
-    StringNormalizer
-};
-use GS\Command\Configuration;
 use Symfony\Component\DependencyInjection\{
 	Parameter,
 	Reference
@@ -21,11 +16,16 @@ use Symfony\Component\DependencyInjection\Loader\{
 };
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use GS\Command\Configuration;
+use GS\Service\Service\{
+    ServiceContainer,
+    StringNormalizer
+};
 
 class GSCommandExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
     public const PREFIX = 'gs_command';
-    public const APP_ENV = 'env(APP_ENV)';
+    public const APP_ENV = 'app_env';
 	
 	public function getAlias(): string
     {
@@ -48,7 +48,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         ContainerBuilder $container,
     ) {
         return new Configuration(
-            appEnv: $container->getParameter(self::APP_ENV),
+            //appEnv: $container->getParameter(self::APP_ENV),
         );
     }
 

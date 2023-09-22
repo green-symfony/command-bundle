@@ -11,7 +11,7 @@ use GS\Command\GSCommandExtension;
 class Configuration implements ConfigurationInterface
 {
     public function __construct(
-        private readonly string $appEnv,
+        //private readonly string $appEnv,
     ) {
     }
 
@@ -22,10 +22,10 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
 			
-                ->scalarNode('env(APP_ENV)')
-                    ->info('env(APP_ENV)')
+                ->scalarNode(GSCommandExtension::APP_ENV)
+					->isRequired()
                     #->defaultValue('%gs_generic_parts.locale%') Don't work, it's a simple string if defaultValue
-                    ->defaultValue($this->appEnv)
+                    //->defaultValue($this->appEnv)
                 ->end()
 
             ->end()

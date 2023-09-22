@@ -43,5 +43,6 @@ return array(
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'GS\\Service\\' => array($vendorDir . '/green-symfony/service-bundle/src'),
     'GS\\Command\\' => array($baseDir . '/src'),
+    'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
 );

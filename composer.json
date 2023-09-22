@@ -1,5 +1,5 @@
 {
-    "name":			"green-symfony/command-bundle",
+    "name": "green-symfony/command-bundle",
     "autoload": {
         "psr-4": {
             "GS\\Command\\": "src/"
@@ -7,16 +7,16 @@
     },
 	"version":		"0.0.0",
     "type":			"symfony-bundle",
-    "description":	"AbstractCommand for extending into Symfony Application.",
-    "authors":		[
+    "description":	"Commands for extending into Symfony Application.",
+    "authors": [
         {
             "name":			"Grigory Koblitsky",
 			"email":		"son5-29@mail.ru"
         }
     ],
-    "keywords":		["green-symfony", "command-bundle"],
-    "license":		"MIT",
-    "require":		{
+    "keywords": ["green-symfony", "command-bundle"],
+    "license": "MIT",
+    "require": {
         "php": ">=7",
         "symfony/translation": "^6.3",
         "symfony/monolog-bundle": "^3.8",

@@ -70,6 +70,10 @@ class ComposerStaticInit16f3c6053566386656cda120667915bc
             'GS\\Service\\' => 11,
             'GS\\Command\\' => 11,
         ),
+        'F' => 
+        array (
+            'Faker\\' => 6,
+        ),
         'C' => 
         array (
             'Carbon\\' => 7,
@@ -224,6 +228,10 @@ class ComposerStaticInit16f3c6053566386656cda120667915bc
         'GS\\Command\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Faker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
         ),
         'Carbon\\' => 
         array (

@@ -30,14 +30,15 @@ use GS\Service\Service\{
     FilesystemService
 };
 use GS\Command\Contracts\{
-    ConstructedFromToCommandInterface,
     AbstractConstructedFromToPathsDataSupplier
 };
 use GS\Command\Trait\{
     OverrideAbleTrait
 };
 
-/* extend it if you want use the CONCEPT: DUMP BEFORE, THEN EXECUTE
+/* DO SOMETHING WITH THE FILES
+	
+	CONCEPT: DUMP AT FIRST, THEN EXECUTE
 
     | __SOURCE__ |=> constructedFromToPaths <=| __SOURCE__ |
 
@@ -48,6 +49,30 @@ use GS\Command\Trait\{
 */
 trait ConstructedFromToCommandTrait
 {
+	/*###> MUST CONTAIN
+	
+	use OverrideAbleTrait, ConstructedFromToCommandTrait;
+	
+    // число отставания от цикла выполнения
+    public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;
+
+	//###> Параметры связаны с command options, указать в классе вручную
+	protected bool $override        = false;
+	protected bool $askOverride     = true;
+	
+    public function __construct(
+        protected readonly StringService $stringService,
+        protected readonly DumpInfoService $dumpInfoService,
+        protected readonly FilesystemService $filesystemService,
+        protected readonly ConfigService $configService,
+        protected readonly ArrayService $arrayService,
+        protected readonly RegexService $regexService,
+		...
+    ) {
+        parent::__construct();
+    }
+	*/
+	
     /*
         [
             [
@@ -57,18 +82,18 @@ trait ConstructedFromToCommandTrait
             ...
         ]
     */
-    private array $constructedFromToPaths           = [];
-    private ?string $fromForFinder                  = null;
-    private ?Finder $finder                         = null;
+    private array $constructedFromToPaths		= [];
+    private ?string $fromForFinder				= null;
+    private ?Finder $finder						= null;
     private ?AbstractConstructedFromToPathsDataSupplier $dataSupplierForConstructedFromToPaths = null;
-    private int $quantityConstructedFromToPaths     = 0;
+    private int $quantityConstructedFromToPaths	= 0;
 
-    protected function constructedFromToCommandDuringConfigure(): void
+    public function constructedFromToCommandDuringConfigure(): void
     {
         $this->configureOverrideOptions();
     }
 
-    protected function constructedFromToCommandDuringInitialize(
+    public function constructedFromToCommandDuringInitialize(
         InputInterface $input,
         OutputInterface $output,
     ) {
@@ -475,7 +500,10 @@ trait ConstructedFromToCommandTrait
         $updateProgressBar      = function (
             bool $force = false,
         ) use (&$counter) {
-            if ($force || ++$counter > ConstructedFromToCommandInterface::PROGRESS_BAR_DISPLAY_FREQUENCY) {
+            if (
+				$force
+				|| ++$counter > self::PROGRESS_BAR_DISPLAY_FREQUENCY
+			) {
                 $counter = 0;
                 $this->progressBar->advance();
                 $this->progressBar->display();

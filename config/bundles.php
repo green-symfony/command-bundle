@@ -9,4 +9,5 @@ return [
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
 	Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
     Symfony\UX\TwigComponent\TwigComponentBundle::class => ['all' => true],
+    GS\Service\GSServiceBundle::class => ['all' => true],
 ];

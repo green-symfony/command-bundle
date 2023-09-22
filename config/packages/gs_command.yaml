@@ -1,0 +1,3 @@
+###> JUST EXAMPLE, copy it into your config ###
+
+app_env:        '%env(APP_ENV)%'

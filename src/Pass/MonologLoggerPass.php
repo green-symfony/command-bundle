@@ -50,6 +50,7 @@ class MonologLoggerPass implements CompilerPassInterface
                 self::GS_COMMAND_DEV_LOGGER_ID,  # this service
                 'monolog.handler.null_internal', # points to this service
             );
+		}
     }
 	
 	//###< HELPER ###

@@ -10,6 +10,15 @@
         'dev' => true,
     ),
     'versions' => array(
+        'fzaninotto/faker' => array(
+            'pretty_version' => 'v1.5.0',
+            'version' => '1.5.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../fzaninotto/faker',
+            'aliases' => array(),
+            'reference' => 'd0190b156bcca848d401fb80f31f504f37141c8d',
+            'dev_requirement' => false,
+        ),
         'green-symfony/command-bundle' => array(
             'pretty_version' => '0.0.0',
             'version' => '0.0.0.0',
@@ -25,7 +34,7 @@
             'type' => 'symfony-bundle',
             'install_path' => __DIR__ . '/../green-symfony/service-bundle',
             'aliases' => array(),
-            'reference' => '3ebb4e110bd5d55c206be97f90a0bd66d044f3d0',
+            'reference' => '4c69059bffc469cd262539d67fc377156d008523',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(

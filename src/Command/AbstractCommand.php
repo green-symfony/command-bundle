@@ -56,9 +56,6 @@ abstract class AbstractCommand extends Command
     protected $table;
 
     public function __construct(
-		protected $env,
-		protected $arrayService,
-		protected $t,
 		protected $devLogger,
 	) {
         parent::__construct();

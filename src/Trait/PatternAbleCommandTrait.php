@@ -63,73 +63,58 @@ use App\Contracts\{
 };
 use GS\Command\Contracts\PatternAbleCommandInterface;
 
+/*
+	Realize your own parser in a certain class:
+		PARSERS DESCRIPTIONS
+		PARSERS API
+		PARSER HELPERS
+*/
 trait PatternAbleCommandTrait
-{	
+{
+	/*###> MUST CONTAIN
+	
+		use PatternAbleCommandTrait;
+		
+		public function __construct(
+			protected readonly StringService $stringService,
+			protected readonly DumpInfoService $dumpInfoService,
+			protected readonly FilesystemService $filesystemService,
+			protected readonly ConfigService $configService,
+			protected readonly ArrayService $arrayService,
+			protected readonly RegexService $regexService,
+			protected readonly BoolService $boolService,
+			protected readonly string $yearRegexWithoutB,
+			protected readonly string $monthRegex,
+			protected readonly string $boardRegexSoft,
+		) {
+			parent::__construct();
+		}
+	*/
+	
 	private ?string $stringPattern      = null;
 	private array $explodedPatterns     = [];
-		
-    //###> PARSER_YEAR_MONTH_BOARD_NUMBER ###
-    public const PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER   = ',';
-    public const PARSER_YEAR_MONTH_BOARD_NUMBER_DESCRIPTION         = ''
-        . 'Год Месяц Номера_борта (всевозможные человекопонятные варианты, регистронезависимо)'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '2024 декабрь 22992'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '24 дек 992'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '24дек992'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '24 992дек'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '24 992'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '24 дек'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . 'дек24'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . 'дек 992'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '992 дек'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '992дек'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '992'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . 'дек'
-        . self::PARSER_YEAR_MONTH_BOARD_NUMBER_SECTION_DELIMITER
-        . ' ' . '24'
-    ;
-    //###< PARSER_YEAR_MONTH_BOARD_NUMBER ###
+	
+    //###> PARSERS DESCRIPTIONS ###
+    //###< PARSERS DESCRIPTIONS ###
 
-
-    protected function patternAbleCommandDuringExecute(
+    public function patternAbleCommandDuringExecute(
         InputInterface $input,
         OutputInterface $output,
     ): void {
-        /* GUARANTEE THAT stringPattern WILL GIVE NOT NULL */
+        /* GUARANTEE THAT THE stringPattern WAS GIVEN */
         if ($this->stringPattern !== null) {
             $this->explodedPatterns = $this->getCalculatedExplodedPatterns(
                 $this->stringPattern,
             );
-			
-			/* For correct filtering
-				less strict first
-				
-				Если в первом больше ограничений, идёт ниже
-			*/
-			\usort(
-				$this->explodedPatterns,
-				static fn($f, $s) => \count($f) > \count($s),
-			);
         }
     }
 
-    protected function patternAbleCommandDuringConfigure(): void
+    public function patternAbleCommandDuringConfigure(): void
     {
         $this->configurePatternArgument();
     }
 
-    protected function patternAbleCommandDuringInitialize(
+    public function patternAbleCommandDuringInitialize(
         InputInterface $input,
         OutputInterface $output,
     ) {
@@ -139,6 +124,9 @@ trait PatternAbleCommandTrait
         );
     }
 
+
+	//###> PARSERS API ###
+	//###< PARSERS API ###
 
     //###> API ###
 
@@ -155,160 +143,17 @@ trait PatternAbleCommandTrait
     //###< API ###
 	
 
-    //###> PARSERS API ###
-
-    /*
-        INPUT:
-            22,22 992,22дек,22дек992
-
-        OUTPUT:
-            [
-                [
-                    'year'          => <>,
-                ],
-                [
-                    'year'          => <>,
-                    'boardNumber'   => <>,
-                ],
-                [
-                    'year'          => <>,
-                    'month'         => <>,
-                ],
-                [
-                    'year'          => <>,
-                    'month'         => <>,
-                    'boardNumber'   => <>,
-                ],
-                ...
-            ]
-    */
-    protected function useParserYearMonthBoardNumber(
-        string $stringPattern,
-        string $delimiter,
-        bool $asIntoConfig = true,
-    ): array {
-        $yearMonthAndBoardNumber    = [];
-
-        $explodedStringPatterns     = \explode(
-            $delimiter,
-            $stringPattern,
-        );
-
-        $idx = -1; /* ONLY FOR PARSE FUNCTION */
-        foreach ($explodedStringPatterns as $explodedStringPattern) {
-            ++$idx;
-
-            $explodedStringPattern = \trim($explodedStringPattern);
-
-            $is = static fn(string $regex, string $string)
-                => \preg_match($fulRegex = '~^' . $regex . '$~ui', $string) === 1
-                    ? $fulRegex
-                    : false
-                ;
-
-            $Y  = '(?<' . PatternAbleCommandInterface::Y_NAME . '>' . $this->yearRegexWithoutB . ')';
-            $M  = '(?<' . PatternAbleCommandInterface::M_NAME . '>' . $this->monthRegex . ')';
-            $Bn = '(?<' . PatternAbleCommandInterface::B_N_NAME . '>' . $this->boardRegexSoft . ')';
-
-            //###> Y M Bn
-
-            if ($regex = $is($Y . '\s*' . $M . '\s*' . $Bn, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($Y . '\s+' . $Bn . '\s*' . $M, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($M . '\s*' . $Bn . '\s+' . $Y, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($M . '\s*' . $Y . '\s+' . $Bn, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($Bn . '\s+' . $Y . '\s*' . $M, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($Bn . '\s*' . $M . '\s*' . $Y, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            //###> Y M
-            if ($regex = $is($Y . '\s*' . $M, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($M . '\s*' . $Y, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            //###> Y Bn
-
-            if ($regex = $is($Y . '\s+' . $Bn, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($Bn . '\s+' . $Y, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            //###> M Bn
-
-            if ($regex = $is($M . '\s*' . $Bn, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            if ($regex = $is($Bn . '\s*' . $M, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            //###> Y
-
-            if ($regex = $is($Y, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            //###> M
-
-            if ($regex = $is($M, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-
-            //###> Bn
-
-            if ($regex = $is($Bn, $explodedStringPattern)) {
-                $this->parse($yearMonthAndBoardNumber, $regex, $explodedStringPattern, $asIntoConfig, $idx);
-                continue;
-            }
-        }
-
-        return $yearMonthAndBoardNumber;
-    }
-
-    //###< PARSERS API ###
-
     //###> ABSTRACT ###
 	
     /* GUARANTEED THAT stringPattern ALREADY GIVES NOT NULL */
     /* AbstractPatternAbleConstructedFromToCommand
         USE PARSERS API HERE
+		
+		EXAMPLE:
+			return $this-><use*Parser>(
+				$stringPattern,
+				<>::SECTION_DELIMITER,
+			);
     */
     abstract protected function getCalculatedExplodedPatterns(
         string $stringPattern,
@@ -350,41 +195,5 @@ trait PatternAbleCommandTrait
 
 
     //###> PARSER HELPERS ###
-
-    private function parse(
-        array &$array,
-        string $regex,
-        string $string,
-        bool $asIntoConfig,
-        int $idx,
-    ): void {
-        $matches = [];
-        \preg_match($regex, $string, $matches);
-        if ($v = $this->boolService->isGet($matches, PatternAbleCommandInterface::Y_NAME)) {
-            $y = $this->stringService->getYearBySubstr($v);
-            if ($y !== null) {
-                $v = $y;
-            }
-
-            $array[$idx][PatternAbleCommandInterface::Y_NAME] = $v;
-        }
-        if ($v = $this->boolService->isGet($matches, PatternAbleCommandInterface::M_NAME)) {
-            $m = $this->configService->getMonthBySubstr($v);
-            if ($m !== null) {
-                $v = $m;
-            }
-
-            $array[$idx][PatternAbleCommandInterface::M_NAME] = $v;
-        }
-        if ($v = $this->boolService->isGet($matches, PatternAbleCommandInterface::B_N_NAME)) {
-            $bn = $this->configService->getBoardNumberBySubstr($v);
-            if ($bn !== null) {
-                $v = $bn;
-            }
-
-            $array[$idx][PatternAbleCommandInterface::B_N_NAME] = $v;
-        }
-    }
-
     //###< PARSER HELPERS ###
 }
