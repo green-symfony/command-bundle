@@ -1,3 +1,4 @@
 ###> JUST EXAMPLE, copy it into your config ###
 
-app_env:        '%env(APP_ENV)%'
+gs_command:
+    app_env:        '%env(APP_ENV)%'

@@ -18,7 +18,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use GS\Service\Service\{
-    ConfigsService,
+    ConfigService,
     FilesystemService,
     DumpInfoService,
     StringService,

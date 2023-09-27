@@ -7,13 +7,13 @@ use Symfony\Component\Mime\Email;
 use GS\Service\Service\{
     ServiceContainer
 };
-use GS\GenericParts\GSGenericPartsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\{
 	Parameter,
 	Reference
 };
+use GS\Command\GSCommandExtension;
 
 class MonologLoggerPass implements CompilerPassInterface
 {

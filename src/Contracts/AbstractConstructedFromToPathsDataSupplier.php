@@ -3,7 +3,7 @@
 namespace GS\Command\Contracts;
 
 use Symfony\Component\Finder\SplFileInfo;
-use GS\Command\Command\AbstractConstructedFromToCommand;
+use Symfony\Component\Console\Command\Command;
 
 abstract class AbstractConstructedFromToPathsDataSupplier
 {
@@ -22,7 +22,7 @@ abstract class AbstractConstructedFromToPathsDataSupplier
     }
 
     /*
-        for AbstractConstructedFromToCommand
+        for Command
     */
     public function getInfo(): string
     {
@@ -30,7 +30,7 @@ abstract class AbstractConstructedFromToPathsDataSupplier
     }
 
     /*
-        for AbstractConstructedFromToCommand
+        for Command
     */
     public function getDefaultIsOk(): bool
     {
@@ -38,6 +38,7 @@ abstract class AbstractConstructedFromToPathsDataSupplier
     }
 
     //###< PUBLIC API ###
+
 
     //###> API ###
 
@@ -68,7 +69,7 @@ abstract class AbstractConstructedFromToPathsDataSupplier
     /* AbstractConstructedFromToPathsDataSupplier */
     abstract public function getFromForFinder(
         ?string $currentFromForFinder,
-        AbstractConstructedFromToCommand $command,
+        Command $command,
     ): string;
 
     /* AbstractConstructedFromToPathsDataSupplier */

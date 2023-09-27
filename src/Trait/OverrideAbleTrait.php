@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use App\Command\AbstractCommand;
 use GS\Service\Service\{
-    ConfigsService,
+    ConfigService,
     FilesystemService,
     DumpInfoService,
     StringService,
