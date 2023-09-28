@@ -48,7 +48,6 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         ContainerBuilder $container,
     ) {
         return new Configuration(
-            //appEnv: $container->getParameter(self::APP_ENV),
         );
     }
 
@@ -65,11 +64,6 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         $this->fillInParameters($config, $container);
         $this->fillInServiceArgumentsWithConfigOfCurrentBundle($config, $container);
         $this->registerBundleTagsForAutoconfiguration($container);
-        /*
-        \dd(
-            $container->getParameter('gs_generic_parts.timezone'),
-        );
-        */
     }
 
     //###> HELPERS ###
@@ -86,19 +80,18 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         */
 		
 		$pa = PropertyAccess::createPropertyAccessor();
+		
         ServiceContainer::setParametersForce(
             $container,
             callbackGetValue: static function ($key) use (&$config, $pa) {
-                return $pa->getValue($config, $key);
+                return $pa->getValue($config, '['.$key.']');
             },
             parameterPrefix: self::PREFIX,
             keys: [
-				'['.self::APP_ENV.']',
+				self::APP_ENV,
             ],
         );
-		
 		/* to use in this object */
-		//$this->appEnv = new Parameter(self::APP_ENV);
     }
 
     private function fillInServiceArgumentsWithConfigOfCurrentBundle(

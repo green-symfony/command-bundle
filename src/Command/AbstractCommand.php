@@ -2,6 +2,8 @@
 
 namespace GS\Command\Command;
 
+use function Symfony\Component\String\u;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Filesystem\{
 	Path
 };
@@ -273,9 +275,18 @@ abstract class AbstractCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
 		
         //###> Style
-        $this->setFormatter();
-        $this->setProgressBar();
-        $this->setTable();
+        $this->setFormatter(
+			$input,
+			$output,
+		);
+        $this->setProgressBar(
+			$input,
+			$output,
+		);
+        $this->setTable(
+			$input,
+			$output,
+		);
     }
 
 	/* Command */
@@ -369,18 +380,27 @@ abstract class AbstractCommand extends Command
     }
 
     protected function exit(
-        null|array|string $message = null,
+        array|string|null $message = null,
+        \Closure|callable|null $callback = null,
     ) {
-        if ($message !== null) {
+		$this->devLogger->info(__METHOD__);
+       
+		//###> message
+		$this->io->writeln('');
+		if ($message !== null) {
             $this->io->warning($message);
         } else {
             $this->io->warning('Exit');
 		}
-        exit(Command::INVALID);
+		
+        //###> callback before the exit
+		if (!\is_null($callback)) $callback();
+        
+        //###> the exit
+		exit(Command::INVALID);
     }
 	
 	protected function shutdown(): void {
-		$this->devLogger->info(__METHOD__);
 		$this->exit(
 			$this->t->trans(
 				'Команда %command% остановлена',
@@ -394,21 +414,24 @@ abstract class AbstractCommand extends Command
 	//###< API ###
 	
 	
-	//###> HELPER ###
+	//###> OVERRIDE IT ###
 
-    private function setFormatter()
-    {
+    protected function setFormatter(
+        InputInterface $input,
+        OutputInterface $output,
+	): void {
         $this->formatter = $this->getHelper('formatter');
     }
 
     /*
-        protected const WIDTH_PROGRESS_BAR = 20;
-
-        $this->progressBar->setMaxSteps(<int>);
-        $this->progressBar->start();
+		WHEN YOU HAVE THE MAX STEPS USE IT:
+			$this->progressBar->setMaxSteps(<int>);
+			$this->progressBar->start();
     */
-    private function setProgressBar()
-    {
+    protected function setProgressBar(
+        InputInterface $input,
+        OutputInterface $output,
+	): void {
         $this->progressBar = $this->io->createProgressBar();
         $this->progressBar->setEmptyBarCharacter("<bg=" . static::EMPTY_COLOR_PROGRESS_BAR . "> </>");
         $this->progressBar->setProgressCharacter("<bg=" . static::EMPTY_COLOR_PROGRESS_BAR . ";fg=" . static::EMPTY_COLOR_PROGRESS_BAR . "> </>");
@@ -416,19 +439,24 @@ abstract class AbstractCommand extends Command
         $this->progressBar->setBarWidth(static::WIDTH_PROGRESS_BAR);
     }
 
-    private function setTable()
-    {
-        $this->table = $this->io->createTable();
-        $this->table->setStyle('box-double');
-		/*
-        $this->table->setStyle(
-            (new TableStyle())
-            ->setHorizontalBorderChars('-')
-            ->setVerticalBorderChars('|')
-            ->setDefaultCrossingChar('+')
-        );
-		*/
+    protected function setTable(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+        //###> create table
+		$this->table = new Table($output); //$this->io->createTable();
+        $tableStyle = new TableStyle();
+		
+        //###> customize style
+        $tableStyle
+            ->setHorizontalBorderChars(' ')
+            ->setVerticalBorderChars(' ')
+            ->setDefaultCrossingChar(' ')
+        ;
+        
+		//###> set style
+		$this->table->setStyle($tableStyle);
     }
 	
-	//###> HELPER ###
+	//###> OVERRIDE IT ###
 }

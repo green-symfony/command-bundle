@@ -2,6 +2,15 @@
 
 namespace GS\Command;
 
+use GS\Service\Service\{
+    ServiceContainer,
+    StringNormalizer
+};
+use Symfony\Component\DependencyInjection\{
+	Parameter,
+	Reference
+};
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\AddEventAliasesPass;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -24,7 +33,10 @@ class GSCommandBundle extends Bundle
         parent::build($container);
 		
 		$container
-            ->addCompilerPass(new MonologLoggerPass)
+            ->addCompilerPass(
+				new MonologLoggerPass(),
+				//type:	PassConfig::TYPE_AFTER_REMOVING,
+			)
         ;
     }
 

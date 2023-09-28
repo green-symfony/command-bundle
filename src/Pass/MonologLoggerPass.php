@@ -17,10 +17,10 @@ use GS\Command\GSCommandExtension;
 
 class MonologLoggerPass implements CompilerPassInterface
 {
-    public const GS_COMMAND_DEV_LOGGER_ID = 'monolog.logger.gs_command.dev_logger';
+    public const GS_COMMAND_DEV_LOGGER_ID = 'monolog.handler.gs_command.dev_logger';
 
-    public function __construct()
-    {
+    public function __construct(
+	) {
     }
 
     public function process(ContainerBuilder $container)
@@ -33,18 +33,21 @@ class MonologLoggerPass implements CompilerPassInterface
     private function resetDevLoggerWhenAppEnvIsNotDev(
         ContainerBuilder $container,
     ): void {
-        $appEnv = $container->getParameter(
-            new Parameter(ServiceContainer::getParameterName(
-				GSCommandExtension::PREFIX,
-				GSCommandExtension::APP_ENV,
-			))
-        );
-
-        if (!$container->hasDefinition(self::GS_COMMAND_DEV_LOGGER_ID)) {
+		if (!$container->hasDefinition(self::GS_COMMAND_DEV_LOGGER_ID)) {
             return;
         }
-
-        if ($appEnv != 'dev') {
+		
+		/* TODO: 0
+			задача: получить env(APP_ENV) в проходе компилятора
+		*/
+        $appEnv = $container->getParameter(
+            ServiceContainer::getParameterName(
+				GSCommandExtension::PREFIX,
+				GSCommandExtension::APP_ENV,
+			)
+        );
+		
+		if ($appEnv == 'prod') {
             /* reset with null: 'monolog.handler.null_internal' */
             $container->setAlias(
                 self::GS_COMMAND_DEV_LOGGER_ID,  # this service

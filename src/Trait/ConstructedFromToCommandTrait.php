@@ -4,6 +4,7 @@ namespace GS\Command\Trait;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\{
@@ -51,14 +52,10 @@ trait ConstructedFromToCommandTrait
 {
 	/*###> MUST CONTAIN
 	
-	use OverrideAbleTrait, ConstructedFromToCommandTrait;
+	use ConstructedFromToCommandTrait;
 	
     // число отставания от цикла выполнения
     public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;
-
-	//###> Параметры связаны с command options, указать в классе вручную
-	protected bool $override        = false;
-	protected bool $askOverride     = true;
 	
     public function __construct(
         protected readonly StringService $stringService,
@@ -87,24 +84,8 @@ trait ConstructedFromToCommandTrait
     private ?Finder $finder						= null;
     private ?AbstractConstructedFromToPathsDataSupplier $dataSupplierForConstructedFromToPaths = null;
     private int $quantityConstructedFromToPaths	= 0;
-
-    public function constructedFromToCommandDuringConfigure(): void
-    {
-        $this->configureOverrideOptions();
-    }
-
-    public function constructedFromToCommandDuringInitialize(
-        InputInterface $input,
-        OutputInterface $output,
-    ) {
-        $this->initializeOverrideOptions(
-            $input,
-            $output,
-            command: $this,
-        );
-    }
 	
-
+	
     //###> ABSTRACT ###
 
     /* AbstractCommand */
