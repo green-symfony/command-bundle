@@ -237,6 +237,7 @@ trait ConstructedFromToCommandTrait
     }
 
     //###< API ###
+	
 
     //###> ABSTRACT ###
 
@@ -252,7 +253,9 @@ trait ConstructedFromToCommandTrait
         ###>READY:
             getFromForFinder
     */
-    abstract protected function getFinder(): Finder;
+    abstract protected function getFinder(
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+	): Finder;
 
     /* AbstractConstructedFromToCommand
 		[INTO CYCLE]
@@ -427,7 +430,7 @@ trait ConstructedFromToCommandTrait
 
         $this->checkFromForFinder();
 
-        $this->finder               = $this->getFinder()
+        $this->finder = $this->getFinder($dataSupplier)
             ->in($this->fromForFinder)
             ->files()
         ;

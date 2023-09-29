@@ -37,8 +37,8 @@ class MonologLoggerPass implements CompilerPassInterface
             return;
         }
 		
-		/* TODO: 0
-			задача: получить env(APP_ENV) в проходе компилятора
+		/*
+			получить DYNAMIC env(<>) в проходе компилятора НЕВОЗМОЖНО!
 		*/
         $appEnv = $container->getParameter(
             ServiceContainer::getParameterName(

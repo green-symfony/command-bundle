@@ -59,6 +59,7 @@ abstract class AbstractCommand extends Command
 
     public function __construct(
 		protected $devLogger,
+		protected readonly array $progressBarSpin,
 	) {
         parent::__construct();
 		
@@ -67,27 +68,12 @@ abstract class AbstractCommand extends Command
             static function (
                 ProgressBar $progressBar,
                 OutputInterface $output,
-            ) {
+            ) use(&$progressBarSpin) {
                 static $i = 0;
-                //https://raw.githubusercontent.com/sindresorhus/cli-spinners/master/spinners.json
-                $spin = [
-                    "🕐 ",
-                    "🕑 ",
-                    "🕒 ",
-                    "🕓 ",
-                    "🕔 ",
-                    "🕕 ",
-                    "🕖 ",
-                    "🕗 ",
-                    "🕘 ",
-                    "🕙 ",
-                    "🕚 ",
-                    "🕛 ",
-                ];
-                if ($i >= \count($spin)) {
+                if ($i >= \count($progressBarSpin)) {
                     $i = 0;
                 }
-                return $spin[$i++];
+                return $progressBarSpin[$i++];
             }
         );
         ProgressBar::setFormatDefinition('normal', '%bar% %percent:2s%% %spin%');

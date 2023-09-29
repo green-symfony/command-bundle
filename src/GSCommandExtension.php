@@ -26,6 +26,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
 {
     public const PREFIX = 'gs_command';
     public const APP_ENV = 'app_env';
+    public const PROGRESS_BAR_SPIN = 'progress_bar_spin';
 	
 	public function getAlias(): string
     {
@@ -38,6 +39,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     public function prepend(ContainerBuilder $container)
     {
         $this->loadYaml($container, [
+            ['config', 'services.yaml'],
             ['config/packages', 'translation.yaml'],
             ['config/packages', 'monolog.yaml'],
         ]);
@@ -48,6 +50,10 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         ContainerBuilder $container,
     ) {
         return new Configuration(
+			progressBarSpin: $container->getParameter(ServiceContainer::getParameterName(
+				self::PREFIX,
+				self::PROGRESS_BAR_SPIN,
+			)),
         );
     }
 
@@ -59,7 +65,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     public function loadInternal(array $config, ContainerBuilder $container)
     {
         $this->loadYaml($container, [
-            ['config', 'services.yaml'],
+            //['config', 'services.yaml'],
         ]);
         $this->fillInParameters($config, $container);
         $this->fillInServiceArgumentsWithConfigOfCurrentBundle($config, $container);
@@ -89,6 +95,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
             parameterPrefix: self::PREFIX,
             keys: [
 				self::APP_ENV,
+				self::PROGRESS_BAR_SPIN,
             ],
         );
 		/* to use in this object */
@@ -124,8 +131,8 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     ): void {
 
         if (\is_array($relPath)) {
-            foreach ($relPath as [$path, $filename]) {
-                $this->loadYaml($container, $path, $filename);
+            foreach ($relPath as [$unpackedRelPath, $filename]) {
+                $this->loadYaml($container, $unpackedRelPath, $filename);
             }
             return;
         }

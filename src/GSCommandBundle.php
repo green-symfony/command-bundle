@@ -33,10 +33,12 @@ class GSCommandBundle extends Bundle
         parent::build($container);
 		
 		$container
+			/*
             ->addCompilerPass(
 				new MonologLoggerPass(),
 				//type:	PassConfig::TYPE_AFTER_REMOVING,
 			)
+			*/
         ;
     }
 
