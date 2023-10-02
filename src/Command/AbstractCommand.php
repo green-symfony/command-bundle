@@ -49,7 +49,7 @@ abstract class AbstractCommand extends Command
 	//###> ! CHANGE ME !
     protected const WIDTH_PROGRESS_BAR			= 40;
     protected const EMPTY_COLOR_PROGRESS_BAR	= 'black';
-    protected const PROGRESS_COLOR_PROGRESS_BAR = 'cyan';
+    protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
 	//###< ! CHANGE ME !
 
     protected SymfonyStyle $style;
