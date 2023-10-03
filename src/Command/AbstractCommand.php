@@ -237,7 +237,8 @@ abstract class AbstractCommand extends Command
 		//\pcntl_signal(\SIGINT, $this->shutdown(...));
 		//\register_shutdown_function($this->shutdown(...));
 		
-		/* AT THE END parent::configure(); */
+		/*###> AT THE END ###*/
+		parent::configure();
     }
 
 	/* Command */
@@ -245,17 +246,11 @@ abstract class AbstractCommand extends Command
         InputInterface $input,
         OutputInterface $output,
     ) {
-		/* AT THE BEGINNING
-		
+		/*###> AT THE BEGINNING ###*/
 		parent::initialize(
             $input,
             $output,
         );
-		*/
-        
-		//###> Locale/Charset
-        //\ini_set('mbstring.internal_encoding', 'UTF-8');
-        \setlocale(LC_ALL, 'Russian');
 		
         //###> Objects
         $this->io = new SymfonyStyle($input, $output);
