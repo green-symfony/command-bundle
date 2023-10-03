@@ -31,11 +31,13 @@ class Configuration implements ConfigurationInterface
             ->children()
 			
                 ->scalarNode(GSCommandExtension::APP_ENV)
+					->info('env(APP_ENV) of the project')
 					->isRequired()
                     #->defaultValue('%gs_generic_parts.locale%') Don't work, it's a simple string
                 ->end()
 			
                 ->arrayNode(GSCommandExtension::PROGRESS_BAR_SPIN)
+				->info('Array with the animation elements')
 				->beforeNormalization()
 					// adds space in the end of each el
 					->always(static function ($array): array { return \array_map(static fn($v) => (string) u($v)->ensureEnd(' '), $array); })
