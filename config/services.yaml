@@ -23,7 +23,6 @@ services:
         
         bind:
             ###> VALUES ###
-            ### TODO: from !php/const GS\Command\GSCommandExtension::PREFIX GS\Command\GSCommandExtension::APP_ENV
             $appEnv:            '%gs_command.app_env%'
             $progressBarSpin:   '%gs_command.progress_bar_spin%'
             ###< VALUES ###
