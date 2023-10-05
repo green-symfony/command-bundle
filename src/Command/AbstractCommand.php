@@ -57,11 +57,15 @@ abstract class AbstractCommand extends Command
     protected $progressBar;
     protected $table;
 
+	public readonly string $initialCwd;
+
     public function __construct(
 		protected $devLogger,
 		protected readonly array $progressBarSpin,
 	) {
-        parent::__construct();
+		$this->initialCwd = Path::normalize(\getcwd());
+        
+		parent::__construct();
 		
         ProgressBar::setPlaceholderFormatterDefinition(
             'spin',
@@ -76,6 +80,7 @@ abstract class AbstractCommand extends Command
                 return $progressBarSpin[$i++];
             }
         );
+		
         ProgressBar::setFormatDefinition('normal', '%bar% %percent:2s%% %spin%');
         ProgressBar::setFormatDefinition('normal_nomax', '%bar% progress: %current% %spin%');
     }
