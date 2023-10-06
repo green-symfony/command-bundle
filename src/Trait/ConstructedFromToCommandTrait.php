@@ -38,8 +38,8 @@ use GS\Command\Trait\{
 };
 
 /* DO SOMETHING WITH THE FILES
-	
-	CONCEPT: DUMP AT FIRST, THEN EXECUTE
+
+    CONCEPT: DUMP AT FIRST, THEN EXECUTE
 
     | __SOURCE__ |=> constructedFromToPaths <=| __SOURCE__ |
 
@@ -50,13 +50,13 @@ use GS\Command\Trait\{
 */
 trait ConstructedFromToCommandTrait
 {
-	/*###> MUST CONTAIN
-	
-	use ConstructedFromToCommandTrait;
-	
+    /*###> MUST CONTAIN
+
+    use ConstructedFromToCommandTrait;
+
     // число отставания от цикла выполнения
     public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;
-	
+
     public function __construct(
         protected readonly StringService $stringService,
         protected readonly DumpInfoService $dumpInfoService,
@@ -64,12 +64,12 @@ trait ConstructedFromToCommandTrait
         protected readonly ConfigService $configService,
         protected readonly ArrayService $arrayService,
         protected readonly RegexService $regexService,
-		...
+        ...
     ) {
         parent::__construct();
     }
-	*/
-	
+    */
+
     /*
         [
             [
@@ -79,13 +79,13 @@ trait ConstructedFromToCommandTrait
             ...
         ]
     */
-    private array $constructedFromToPaths		= [];
-    private ?string $fromForFinder				= null;
-    private ?Finder $finder						= null;
+    private array $constructedFromToPaths       = [];
+    private ?string $fromForFinder              = null;
+    private ?Finder $finder                     = null;
     private ?AbstractConstructedFromToPathsDataSupplier $dataSupplierForConstructedFromToPaths = null;
-    private int $quantityConstructedFromToPaths	= 0;
-	
-	
+    private int $quantityConstructedFromToPaths = 0;
+
+
     //###> ABSTRACT ###
 
     /* AbstractCommand */
@@ -105,8 +105,8 @@ trait ConstructedFromToCommandTrait
             $this->clearCycleStateInTheBeginning();
 
             $this->setConstructedFromToPaths(
-				$input,
-				$output,
+                $input,
+                $output,
                 $dataSupplier,
             );
 
@@ -168,12 +168,12 @@ trait ConstructedFromToCommandTrait
     //###> API ###
 
     protected function getAlertStringForDataSupplier(
-		string $title,
-		AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-	): string {
-		return ''. $title .' "' . $dataSupplier->getInfo() . '"';
-	}
-	
+        string $title,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): string {
+        return '' . $title . ' "' . $dataSupplier->getInfo() . '"';
+    }
+
     protected function tryToRemovePaths(
         /* MESSAGE IS BASED ON from IN constructedFromToPaths */
         string $whatFromIsInConstructedFromToPaths,
@@ -237,7 +237,7 @@ trait ConstructedFromToCommandTrait
     }
 
     //###< API ###
-	
+
 
     //###> ABSTRACT ###
 
@@ -255,16 +255,16 @@ trait ConstructedFromToCommandTrait
     */
     abstract protected function getFinder(
         AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-	): Finder;
+    ): Finder;
 
     /* AbstractConstructedFromToCommand
-		[INTO CYCLE]
-	*/
+        [INTO CYCLE]
+    */
     abstract protected function initScanningConstructedFromToPaths(
         InputInterface $input,
         OutputInterface $output,
-		AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-	): void;
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): void;
 
     /* AbstractConstructedFromToCommand
         [CYCLE INTO CYCLE]
@@ -349,7 +349,7 @@ trait ConstructedFromToCommandTrait
     ): void;
 
     /* AbstractConstructedFromToCommand
-        [INTO CYCLE] 
+        [INTO CYCLE]
     */
     abstract protected function beforeMakeFromToAlgorithmAndAfterStartProgressBar(
         InputInterface $input,
@@ -407,7 +407,7 @@ trait ConstructedFromToCommandTrait
     ): void;
 
     //###< ABSTRACT ###
-	
+
 
     //###> HELPER ###
 
@@ -435,11 +435,11 @@ trait ConstructedFromToCommandTrait
             ->files()
         ;
 
-        $this->setConstructedFromToPathsByFinder(			
-			$input,
-			$output,
-			$dataSupplier,
-		);
+        $this->setConstructedFromToPathsByFinder(
+            $input,
+            $output,
+            $dataSupplier,
+        );
     }
 
     private function dumpConstructedFromToPaths(
@@ -447,12 +447,12 @@ trait ConstructedFromToCommandTrait
         OutputInterface $output,
         AbstractConstructedFromToPathsDataSupplier $dataSupplier,
     ): void {
-		$this->io->title(
-			$this->getAlertStringForDataSupplier(
-				'Будет выполнено',
-				$dataSupplier,
-			),		
-		);
+        $this->io->title(
+            $this->getAlertStringForDataSupplier(
+                'Будет выполнено',
+                $dataSupplier,
+            ),
+        );
 
         $this->beforeDumpInfoConstructedFromToPaths(
             $input,
@@ -485,9 +485,9 @@ trait ConstructedFromToCommandTrait
             bool $force = false,
         ) use (&$counter) {
             if (
-				$force
-				|| ++$counter > self::PROGRESS_BAR_DISPLAY_FREQUENCY
-			) {
+                $force
+                || ++$counter > self::PROGRESS_BAR_DISPLAY_FREQUENCY
+            ) {
                 $counter = 0;
                 $this->progressBar->advance();
                 $this->progressBar->display();
@@ -503,7 +503,7 @@ trait ConstructedFromToCommandTrait
         //###>
         $this->progressBar->setMaxSteps($this->getMaxSteps());
         $this->progressBar->start();
-		$this->beforeMakeFromToAlgorithmAndAfterStartProgressBar(
+        $this->beforeMakeFromToAlgorithmAndAfterStartProgressBar(
             $input,
             $output,
         );
@@ -530,7 +530,7 @@ trait ConstructedFromToCommandTrait
             }
         }
         $updateProgressBar(force: true);
-		$this->progressBar->finish();
+        $this->progressBar->finish();
         $this->progressBar->clear();
 
         return $madeQuantity;
@@ -551,13 +551,13 @@ trait ConstructedFromToCommandTrait
     private function setConstructedFromToPathsByFinder(
         InputInterface $input,
         OutputInterface $output,
-		AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-	): void {
-		$this->initScanningConstructedFromToPaths(
-			$input,
-			$output,
-			$dataSupplier,
-		);
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): void {
+        $this->initScanningConstructedFromToPaths(
+            $input,
+            $output,
+            $dataSupplier,
+        );
         // FINDER
         foreach ($this->finder as $finderSplFileInfo) {
             // FROM:    FIRST
@@ -574,11 +574,11 @@ trait ConstructedFromToCommandTrait
             $to             = $this->dataSupplierForConstructedFromToPaths->getTo(
                 $finderSplFileInfo,
             );
-			
-			$this->scanningCycleForConstructedFromToPaths(
-				$input,
-				$output,
-			);
+
+            $this->scanningCycleForConstructedFromToPaths(
+                $input,
+                $output,
+            );
 
             //###>
             if (
@@ -598,10 +598,10 @@ trait ConstructedFromToCommandTrait
             ];
             ++$this->quantityConstructedFromToPaths;
         }
-		$this->endScanningForConstructedFromToPaths(
-			$input,
-			$output,
-		);
+        $this->endScanningForConstructedFromToPaths(
+            $input,
+            $output,
+        );
     }
 
     private function clearConstructedFromToPaths(): void

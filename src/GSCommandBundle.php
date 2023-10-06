@@ -7,8 +7,8 @@ use GS\Service\Service\{
     StringNormalizer
 };
 use Symfony\Component\DependencyInjection\{
-	Parameter,
-	Reference
+    Parameter,
+    Reference
 };
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\EventDispatcher\DependencyInjection\AddEventAliasesPass;
@@ -31,14 +31,14 @@ class GSCommandBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-		
-		$container
-			/*
+
+        $container
+            /*
             ->addCompilerPass(
-				new MonologLoggerPass(),
-				//type:	PassConfig::TYPE_AFTER_REMOVING,
-			)
-			*/
+                new MonologLoggerPass(),
+                //type: PassConfig::TYPE_AFTER_REMOVING,
+            )
+            */
         ;
     }
 

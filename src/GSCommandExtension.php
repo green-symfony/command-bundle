@@ -5,8 +5,8 @@ namespace GS\Command;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\{
-	Parameter,
-	Reference
+    Parameter,
+    Reference
 };
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,11 +27,11 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     public const PREFIX = 'gs_command';
     public const APP_ENV = 'app_env';
     public const PROGRESS_BAR_SPIN = 'progress_bar_spin';
-	
-	public function getAlias(): string
+
+    public function getAlias(): string
     {
-		return self::PREFIX;
-	}
+        return self::PREFIX;
+    }
 
     /**
         -   load packages .yaml
@@ -50,10 +50,10 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         ContainerBuilder $container,
     ) {
         return new Configuration(
-			progressBarSpin: $container->getParameter(ServiceContainer::getParameterName(
-				self::PREFIX,
-				self::PROGRESS_BAR_SPIN,
-			)),
+            progressBarSpin: $container->getParameter(ServiceContainer::getParameterName(
+                self::PREFIX,
+                self::PROGRESS_BAR_SPIN,
+            )),
         );
     }
 
@@ -84,21 +84,21 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
             PropertyAccess::createPropertyAccessor()->getValue($config, '[error_prod_logger_email][from]'),
         );
         */
-		
-		$pa = PropertyAccess::createPropertyAccessor();
-		
+
+        $pa = PropertyAccess::createPropertyAccessor();
+
         ServiceContainer::setParametersForce(
             $container,
             callbackGetValue: static function ($key) use (&$config, $pa) {
-                return $pa->getValue($config, '['.$key.']');
+                return $pa->getValue($config, '[' . $key . ']');
             },
             parameterPrefix: self::PREFIX,
             keys: [
-				self::APP_ENV,
-				self::PROGRESS_BAR_SPIN,
+                self::APP_ENV,
+                self::PROGRESS_BAR_SPIN,
             ],
         );
-		/* to use in this object */
+        /* to use in this object */
     }
 
     private function fillInServiceArgumentsWithConfigOfCurrentBundle(

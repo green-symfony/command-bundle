@@ -64,36 +64,36 @@ use App\Contracts\{
 use GS\Command\Contracts\PatternAbleCommandInterface;
 
 /*
-	Realize your own parser in a certain class:
-		PARSERS DESCRIPTIONS
-		PARSERS API
-		PARSER HELPERS
+    Realize your own parser in a certain class:
+        PARSERS DESCRIPTIONS
+        PARSERS API
+        PARSER HELPERS
 */
 trait PatternAbleCommandTrait
 {
-	/*###> MUST CONTAIN
-	
-		use PatternAbleCommandTrait;
-		
-		public function __construct(
-			protected readonly StringService $stringService,
-			protected readonly DumpInfoService $dumpInfoService,
-			protected readonly FilesystemService $filesystemService,
-			protected readonly ConfigService $configService,
-			protected readonly ArrayService $arrayService,
-			protected readonly RegexService $regexService,
-			protected readonly BoolService $boolService,
-			protected readonly string $yearRegexWithoutB,
-			protected readonly string $monthRegex,
-			protected readonly string $boardRegexSoft,
-		) {
-			parent::__construct();
-		}
-	*/
-	
-	private ?string $stringPattern      = null;
-	private array $explodedPatterns     = [];
-	
+    /*###> MUST CONTAIN
+
+        use PatternAbleCommandTrait;
+
+        public function __construct(
+            protected readonly StringService $stringService,
+            protected readonly DumpInfoService $dumpInfoService,
+            protected readonly FilesystemService $filesystemService,
+            protected readonly ConfigService $configService,
+            protected readonly ArrayService $arrayService,
+            protected readonly RegexService $regexService,
+            protected readonly BoolService $boolService,
+            protected readonly string $yearRegexWithoutB,
+            protected readonly string $monthRegex,
+            protected readonly string $boardRegexSoft,
+        ) {
+            parent::__construct();
+        }
+    */
+
+    private ?string $stringPattern      = null;
+    private array $explodedPatterns     = [];
+
     //###> PARSERS DESCRIPTIONS ###
     //###< PARSERS DESCRIPTIONS ###
 
@@ -125,8 +125,8 @@ trait PatternAbleCommandTrait
     }
 
 
-	//###> PARSERS API ###
-	//###< PARSERS API ###
+    //###> PARSERS API ###
+    //###< PARSERS API ###
 
     //###> API ###
 
@@ -134,26 +134,26 @@ trait PatternAbleCommandTrait
     {
         return $this->stringPattern;
     }
-	
+
     protected function getExplodedPatterns(): array
     {
         return $this->explodedPatterns;
     }
 
     //###< API ###
-	
+
 
     //###> ABSTRACT ###
-	
+
     /* GUARANTEED THAT stringPattern ALREADY GIVES NOT NULL */
     /* AbstractPatternAbleConstructedFromToCommand
         USE PARSERS API HERE
-		
-		EXAMPLE:
-			return $this-><use*Parser>(
-				$stringPattern,
-				<>::SECTION_DELIMITER,
-			);
+
+        EXAMPLE:
+            return $this-><use*Parser>(
+                $stringPattern,
+                <>::SECTION_DELIMITER,
+            );
     */
     abstract protected function getCalculatedExplodedPatterns(
         string $stringPattern,

@@ -3,19 +3,20 @@
 namespace GS\Command\Command;
 
 use function Symfony\Component\String\u;
+
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Filesystem\{
-	Path
+    Path
 };
 use Symfony\Component\Console\Question\{
-	Question,
-	ConfirmationQuestion
+    Question,
+    ConfirmationQuestion
 };
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Component\Console\Command\{
-	Command,
-	LockableTrait,
-	SignalableCommandInterface
+    Command,
+    LockableTrait,
+    SignalableCommandInterface
 };
 use Symfony\Component\Console\Helper\{
     ProgressBar,
@@ -42,37 +43,37 @@ use Symfony\Component\Console\Output\{
     hidden: <bool>,
 )]
 */
-abstract class AbstractCommand extends Command
-	implements SignalableCommandInterface,
-	ServiceSubscriberInterface
+abstract class AbstractCommand extends Command implements
+    SignalableCommandInterface,
+    ServiceSubscriberInterface
 {
-	//###> ! CHANGE ME !
-    protected const WIDTH_PROGRESS_BAR			= 40;
-    protected const EMPTY_COLOR_PROGRESS_BAR	= 'black';
+    //###> ! CHANGE ME !
+    protected const WIDTH_PROGRESS_BAR          = 40;
+    protected const EMPTY_COLOR_PROGRESS_BAR    = 'black';
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
-	//###< ! CHANGE ME !
+    //###< ! CHANGE ME !
 
     protected SymfonyStyle $style;
     protected $formatter;
     protected $progressBar;
     protected $table;
 
-	public readonly string $initialCwd;
+    public readonly string $initialCwd;
 
     public function __construct(
-		protected $devLogger,
-		protected readonly array $progressBarSpin,
-	) {
-		$this->initialCwd = Path::normalize(\getcwd());
-        
-		parent::__construct();
-		
+        protected $devLogger,
+        protected readonly array $progressBarSpin,
+    ) {
+        $this->initialCwd = Path::normalize(\getcwd());
+
+        parent::__construct();
+
         ProgressBar::setPlaceholderFormatterDefinition(
             'spin',
             static function (
                 ProgressBar $progressBar,
                 OutputInterface $output,
-            ) use(&$progressBarSpin) {
+            ) use (&$progressBarSpin) {
                 static $i = 0;
                 if ($i >= \count($progressBarSpin)) {
                     $i = 0;
@@ -80,11 +81,11 @@ abstract class AbstractCommand extends Command
                 return $progressBarSpin[$i++];
             }
         );
-		
+
         ProgressBar::setFormatDefinition('normal', '%bar% %percent:2s%% %spin%');
         ProgressBar::setFormatDefinition('normal_nomax', '%bar% progress: %current% %spin%');
     }
-	
+
 
     //###> PUBLIC API ###
 
@@ -99,7 +100,7 @@ abstract class AbstractCommand extends Command
     }
 
     //###< PUBLIC API ###
-	
+
 
     //###> API ###
 
@@ -200,7 +201,7 @@ abstract class AbstractCommand extends Command
             $set(userArgument: $userArgument, argument: $argument);
         }
     }
-	
+
     protected function getInfoDescription(
         int $mode,
         string $description,
@@ -234,48 +235,48 @@ abstract class AbstractCommand extends Command
     //###< API ###
 
 
-	//###> REALIZE ABSTRACT ###
+    //###> REALIZE ABSTRACT ###
 
-	/* Command */
+    /* Command */
     protected function configure(): void
     {
-		//\pcntl_signal(\SIGINT, $this->shutdown(...));
-		//\register_shutdown_function($this->shutdown(...));
-		
-		/*###> AT THE END ###*/
-		parent::configure();
+        //\pcntl_signal(\SIGINT, $this->shutdown(...));
+        //\register_shutdown_function($this->shutdown(...));
+
+        /*###> AT THE END ###*/
+        parent::configure();
     }
 
-	/* Command */
+    /* Command */
     protected function initialize(
         InputInterface $input,
         OutputInterface $output,
     ) {
-		/*###> AT THE BEGINNING ###*/
-		parent::initialize(
+        /*###> AT THE BEGINNING ###*/
+        parent::initialize(
             $input,
             $output,
         );
-		
+
         //###> Objects
         $this->io = new SymfonyStyle($input, $output);
-		
+
         //###> Style
         $this->setFormatter(
-			$input,
-			$output,
-		);
+            $input,
+            $output,
+        );
         $this->setProgressBar(
-			$input,
-			$output,
-		);
+            $input,
+            $output,
+        );
         $this->setTable(
-			$input,
-			$output,
-		);
+            $input,
+            $output,
+        );
     }
 
-	/* Command */
+    /* Command */
     protected function interact(
         InputInterface $input,
         OutputInterface $output,
@@ -283,39 +284,39 @@ abstract class AbstractCommand extends Command
         // get missed options/arguments
     }
 
-	/* Command
-	
-		Command::<CODE>
-		
-			// ок
-			return Command::SUCCESS;
+    /* Command
 
-			// неправильное использование
-			return Command::INVALID;
+        Command::<CODE>
 
-			// ошибка
-			return Command::FAILURE;
-		
-		protected function execute(
-			InputInterface $input,
-			OutputInterface $output,
-		): int {
-			return Command::SUCCESS;
-		}
-	*/
+            // ок
+            return Command::SUCCESS;
+
+            // неправильное использование
+            return Command::INVALID;
+
+            // ошибка
+            return Command::FAILURE;
+
+        protected function execute(
+            InputInterface $input,
+            OutputInterface $output,
+        ): int {
+            return Command::SUCCESS;
+        }
+    */
 
     /* Command
-	
-		protected function interact(
-			InputInterface $input,
-			OutputInterface $output,
-		) {
-			// get missed options/arguments
-		}	
-	*/
+
+        protected function interact(
+            InputInterface $input,
+            OutputInterface $output,
+        ) {
+            // get missed options/arguments
+        }
+    */
 
     /* SignalableCommandInterface */
-	public function getSubscribedSignals(): array
+    public function getSubscribedSignals(): array
     {
         return [
             //\SIGINT,
@@ -326,11 +327,11 @@ abstract class AbstractCommand extends Command
     /* SignalableCommandInterface */
     public function handleSignal(int $signal): void
     {
-		/*
+        /*
         if (\SIGINT == $signal) {
-			$this->shutdown();
+            $this->shutdown();
         }
-		*/
+        */
     }
 
     /* ServiceSubscriberInterface */
@@ -341,10 +342,10 @@ abstract class AbstractCommand extends Command
         ];
     }
 
-	//###< REALIZE ABSTRACT ###
-	
-	
-	//###> API ###
+    //###< REALIZE ABSTRACT ###
+
+
+    //###> API ###
 
     protected function isOk(
         array|string $message = 'Ok?',
@@ -369,55 +370,58 @@ abstract class AbstractCommand extends Command
         array|string|null $message = null,
         \Closure|callable|null $callback = null,
     ) {
-		$this->devLogger->info(__METHOD__);
-       
-		//###> message
-		$this->io->writeln('');
-		if ($message !== null) {
+        $this->devLogger->info(__METHOD__);
+
+        //###> message
+        $this->io->writeln('');
+        if ($message !== null) {
             $this->io->warning($message);
         } else {
             $this->io->warning('Exit');
-		}
-		
+        }
+
         //###> callback before the exit
-		if (!\is_null($callback)) $callback();
-        
+        if (!\is_null($callback)) {
+            $callback();
+        }
+
         //###> the exit
-		exit(Command::INVALID);
+        exit(Command::INVALID);
     }
-	
-	protected function shutdown(): void {
-		$this->exit(
-			$this->t->trans(
-				'Команда %command% остановлена',
-				parameters: [
-					'%command%' => $this->getName(),
-				],
-			)
-		);
-	}
-	
-	//###< API ###
-	
-	
-	//###> OVERRIDE IT ###
+
+    protected function shutdown(): void
+    {
+        $this->exit(
+            $this->t->trans(
+                'Команда %command% остановлена',
+                parameters: [
+                    '%command%' => $this->getName(),
+                ],
+            )
+        );
+    }
+
+    //###< API ###
+
+
+    //###> OVERRIDE IT ###
 
     protected function setFormatter(
         InputInterface $input,
         OutputInterface $output,
-	): void {
+    ): void {
         $this->formatter = $this->getHelper('formatter');
     }
 
     /*
-		WHEN YOU HAVE THE MAX STEPS USE IT:
-			$this->progressBar->setMaxSteps(<int>);
-			$this->progressBar->start();
+        WHEN YOU HAVE THE MAX STEPS USE IT:
+            $this->progressBar->setMaxSteps(<int>);
+            $this->progressBar->start();
     */
     protected function setProgressBar(
         InputInterface $input,
         OutputInterface $output,
-	): void {
+    ): void {
         $this->progressBar = $this->io->createProgressBar();
         $this->progressBar->setEmptyBarCharacter("<bg=" . static::EMPTY_COLOR_PROGRESS_BAR . "> </>");
         $this->progressBar->setProgressCharacter("<bg=" . static::EMPTY_COLOR_PROGRESS_BAR . ";fg=" . static::EMPTY_COLOR_PROGRESS_BAR . "> </>");
@@ -430,19 +434,19 @@ abstract class AbstractCommand extends Command
         OutputInterface $output,
     ): void {
         //###> create table
-		$this->table = new Table($output); //$this->io->createTable();
+        $this->table = new Table($output); //$this->io->createTable();
         $tableStyle = new TableStyle();
-		
+
         //###> customize style
         $tableStyle
             ->setHorizontalBorderChars(' ')
             ->setVerticalBorderChars(' ')
             ->setDefaultCrossingChar(' ')
         ;
-        
-		//###> set style
-		$this->table->setStyle($tableStyle);
+
+        //###> set style
+        $this->table->setStyle($tableStyle);
     }
-	
-	//###> OVERRIDE IT ###
+
+    //###> OVERRIDE IT ###
 }
