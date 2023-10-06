@@ -68,6 +68,7 @@ $this->progressBar->start();
 
 ```console
 git clone "https://github.com/green-symfony/command-bundle.git"
+git clone "https://github.com/green-symfony/service-bundle.git"
 ```
 
 ### Step 2: Require the bundle
@@ -77,11 +78,16 @@ In your `%kernel.project_dir%/composer.json`
 ```json
 "require": {
 	"green-symfony/command-bundle": "VERSION"
+	"green-symfony/service-bundle": "VERSION"
 },
 "repositories": [
 	{
 		"type": "path",
 		"url": "./bundles/green-symfony/command-bundle"
+	},
+	{
+		"type": "path",
+		"url": "./bundles/green-symfony/service-bundle"
 	}
 ]
 ```
