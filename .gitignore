@@ -1,5 +1,7 @@
 ###> APP ###
 
+.git
+
 ###> source files ###
 *.rar
 *.zip
