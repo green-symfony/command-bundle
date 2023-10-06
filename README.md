@@ -97,6 +97,10 @@ Open your console into your main project directory and execute:
 composer require "green-symfony/command-bundle"
 ```
 
+[Binds](https://github.com/green-symfony/docs/blob/main/docs/borrow-services.yaml-section.md)
+
+**Monolog customization**
+
 In your `%kernel.project_dir%/config/packages/monolog.yaml`
 
 ```yaml

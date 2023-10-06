@@ -22,16 +22,18 @@ services:
         autoconfigure:      false
         
         bind:
-            ###> VALUES ###
-            $appEnv:            '%gs_command.app_env%'
-            $progressBarSpin:   '%gs_command.progress_bar_spin%'
-            ###< VALUES ###
+            ###> !BORROW THESE VALUES! ###
+            $appEnv: '%gs_command.app_env%'
+            $progressBarSpin: '%gs_command.progress_bar_spin%'
             
             ###> SERVICES ###
-            $devLogger:         '@monolog.logger.gs_command.dev_logger'
+            $devLogger: '@monolog.logger.gs_command.dev_logger'
             ###< SERVICES ###
             
             ###> LIB SERVICES ###
-            $t:                 '@translator.default'
+            $t: '@translator.default'
             ###< LIB SERVICES ###
+            
+            ###< !BORROW THESE VALUES! ###
+            
             
