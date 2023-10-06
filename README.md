@@ -97,4 +97,20 @@ Open your console into your main project directory and execute:
 composer require "green-symfony/command-bundle"
 ```
 
+In your `%kernel.project_dir%/config/packages/monolog.yaml`
+
+```yaml
+###> TODO: REALIZE IT IN YOUR monolog.yaml ###
+when@dev:
+    monolog:
+        handlers:
+            gs_command.dev_logger:
+                type:           rotating_file
+                max_files:      1
+                path:           "%kernel.logs_dir%/gs_command_%kernel.environment%.log"
+                level:          debug
+                channels:       ["gs_command.dev_logger"]
+###< TODO: REALIZE IT IN YOUR monolog.yaml ###
+```
+
 ### Step 3: Extend the AbstractCommand in your Command
