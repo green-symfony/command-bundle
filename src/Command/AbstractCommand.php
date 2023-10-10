@@ -62,6 +62,7 @@ abstract class AbstractCommand extends Command implements
 
     public function __construct(
         protected $devLogger,
+        protected $t,
         protected readonly array $progressBarSpin,
     ) {
         $this->initialCwd = Path::normalize(\getcwd());
@@ -113,7 +114,16 @@ abstract class AbstractCommand extends Command implements
 	/*
 		Usage:
 		
-		
+		protected function configure(): void
+		{
+			$this-><methodName>(
+				name:			<NAME>,
+				default:        <PROPERTY>,
+				description:    <DESCRIPTION>,
+				mode:           InputOption::<CONSTANT>,
+				shortcut:       <SHORTCUT>,
+			);
+		}
 	*/
     protected function configureOption(
         string $name,
@@ -145,6 +155,18 @@ abstract class AbstractCommand extends Command implements
         ;
     }
 
+	/*
+		Usage:
+		
+		protected function configure(): void
+		{
+			$this-><methodName>(
+				name:			<NAME>,
+				mode:           InputArgument::<CONSTANT>,
+				description:    <DESCRIPTION>,
+			);
+		}
+	*/
     protected function configureArgument(
         string $name,
         int $mode,
@@ -169,14 +191,27 @@ abstract class AbstractCommand extends Command implements
         ;
     }
 
+	/*
+		Usage:
+		
+		protected function initialize(): void
+		{
+			$this-><methodName>(
+				input:			<InputInterface object>,
+				output:			<OutputInterface object>,
+				name:			<NAME>,
+				option:			$this-><OPTION>,
+				predicat:		<predicat CALLABLE>,
+				set:			<set CALLABLE>,
+			);
+		}
+	*/
     protected function initializeOption(
         InputInterface $input,
         OutputInterface $output,
         string $name,
         &$option,
-        // predicat callback
         \Closure|\callable|null $predicat = null,
-        // set callback
         \Closure|\callable|null $set = null,
     ) {
         /* $userOption always string, != more suitable */
@@ -191,14 +226,28 @@ abstract class AbstractCommand extends Command implements
         }
     }
 
+
+	/*
+		Usage:
+		
+		protected function initialize(): void
+		{
+			$this-><methodName>(
+				input:			<InputInterface object>,
+				output:			<OutputInterface object>,
+				name:			<NAME>,
+				argument:		$this-><ARGUMENT>,
+				predicat:		<predicat CALLABLE>,
+				set:			<set CALLABLE>,
+			);
+		}
+	*/
     protected function initializeArgument(
         InputInterface $input,
         OutputInterface $output,
         string $name,
         &$argument,
-        // predicat callback
         \Closure|\callable $predicat = null,
-        // set callback
         \Closure|\callable $set = null,
     ) {
         /* $userArgument always string, != more suitable */
@@ -213,11 +262,16 @@ abstract class AbstractCommand extends Command implements
         }
     }
 
+	/*
+		Gets the TRANSLATED description of the option or argument configuration
+	*/
     protected function getInfoDescription(
         int $mode,
         string $description,
         mixed $default,
     ): string {
+		$description = $this->t->trans($description);
+		
         if ($mode === InputOption::VALUE_NEGATABLE && gettype($default) === 'boolean') {
             return (string) u(((string) u($description)->ensureEnd(' ')) . $this->getDefaultValueNegatableForHelp($default))->collapseWhitespace();
         }
@@ -225,6 +279,9 @@ abstract class AbstractCommand extends Command implements
         return (string) u(((string) u($description)->ensureEnd(' ')) . $this->getDefaultValueForHelp($default))->collapseWhitespace();
     }
 
+	/*
+		Gets part of the option description
+	*/
     protected function getDefaultValueForHelp(
         ?string $default,
     ): string {
@@ -234,6 +291,9 @@ abstract class AbstractCommand extends Command implements
         return '<bg=black;fg=yellow>[default: ' . $default . ']</>';
     }
 
+	/*
+		Gets boolean part of the option description
+	*/
     protected function getDefaultValueNegatableForHelp(
         ?bool $bool,
     ): string {
@@ -243,11 +303,16 @@ abstract class AbstractCommand extends Command implements
         return $this->getDefaultValueForHelp($bool ? '"yes"' : '"no"');
     }
 
+	/*
+		Asks user in the console: MOVE ON?
+	*/
     protected function isOk(
-        array|string $message = 'Ok?',
+        array|string $message = 'gs_command.command.default.is_ok',
         bool $default = true,
         bool $exitWhenDisagree = false,
     ) {
+		$message = $this->t->trans($message);
+		
         $agree = $this->io->askQuestion(
             new ConfirmationQuestion(
                 \is_array($message) ? \implode(\PHP_EOL, $message) : $message,
@@ -256,12 +321,19 @@ abstract class AbstractCommand extends Command implements
         );
 
         if ($exitWhenDisagree && !$agree) {
-            $this->exit('EXIT');
+            $this->exit('gs_command.command.exit_disagree');
         }
 
         return $agree;
     }
 
+	/*
+		Dumps the TRANSLATED message
+		
+		Executes callback
+		
+		And afther all this exits from the command
+	*/
     protected function exit(
         array|string|null $message = null,
         \Closure|callable|null $callback = null,
@@ -271,9 +343,13 @@ abstract class AbstractCommand extends Command implements
         //###> message
         $this->io->writeln('');
         if ($message !== null) {
-            $this->io->warning($message);
+            $this->io->warning(
+				$this->t->trans($message),
+			);
         } else {
-            $this->io->warning('Exit');
+            $this->io->warning(
+				$this->t->trans('gs_command.command.default.exit'),
+			);
         }
 
         //###> callback before the exit
@@ -285,11 +361,14 @@ abstract class AbstractCommand extends Command implements
         exit(Command::INVALID);
     }
 
+	/*
+		Alias for exit with the defined message
+	*/
     protected function shutdown(): void
     {
         $this->exit(
             $this->t->trans(
-                'Команда %command% остановлена',
+                'gs_command.command.shutdown',
                 parameters: [
                     '%command%' => $this->getName(),
                 ],
@@ -344,7 +423,7 @@ abstract class AbstractCommand extends Command implements
         $this->table->setStyle($tableStyle);
     }
 
-    //###> YOU CAN OVERRIDE IT ###
+    //###< YOU CAN OVERRIDE IT ###
 
 
     //###> REALIZED ABSTRACT ###

@@ -40,6 +40,7 @@ trait DumpInfoAbleTrait
 
     //###< PUBLIC API ###
 
+
     private function configureDumpInfoOption(): void
     {
         $this->configureOption(

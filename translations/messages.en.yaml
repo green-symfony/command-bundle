@@ -1,0 +1,12 @@
+gs_command:
+    command:
+        
+        default:
+            exit: 'Exit'
+            is_ok: 'Ok?'
+        
+        shutdown: 'The command "%command%" was stopped'
+        exit_disagree: 'Exit, the user turned down'
+    
+    trait:
+        is_ask_ok: 'Should it ask ok?'

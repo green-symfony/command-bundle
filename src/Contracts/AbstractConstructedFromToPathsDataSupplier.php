@@ -38,31 +38,7 @@ abstract class AbstractConstructedFromToPathsDataSupplier
     }
 
     //###< PUBLIC API ###
-
-
-    //###> API ###
-
-    /*
-        Get year month and board number by from or default values
-    */
-    protected function getYearMonthBoardNumber(
-        SplFileInfo $finderSplFileInfo,
-    ): array {
-
-        $relativePath = $finderSplFileInfo->getRelativePath();
-
-        $yearMonthAndBoardNumber = [
-            $this->partOfPathService->getYear($relativePath),
-            $this->partOfPathService->getMonth($relativePath),
-            $this->partOfPathService->getBoardNumberFromPath(
-                $finderSplFileInfo,
-            ),
-        ];
-
-        return $yearMonthAndBoardNumber;
-    }
-
-    //###< API ###
+	
 
     //###> ABSTRACT ###
 

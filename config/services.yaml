@@ -31,3 +31,7 @@ services:
             $devLogger:         '@monolog.logger.gs_command.dev_logger'
             ###< SERVICES ###
             
+            ###> LIB SERVICES ###
+            $t:                 '@translator.default'
+            ###< LIB SERVICES ###
+            

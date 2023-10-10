@@ -1,0 +1,12 @@
+gs_command:
+    command:
+        
+        default:
+            exit: 'Выход'
+            is_ok: 'Ok?'
+        
+        shutdown: 'Команда "%command%" остановлена'
+        exit_disagree: 'Выход, пользователь не дал согласия'
+    
+    trait:
+        is_ask_ok: 'Спрашивать ок?'

@@ -36,7 +36,7 @@ trait AskAbleTrait
         $this->configureOption(
             name:           'ask',
             default:        $this->ask,
-            description:    'Спрашивать ок?',
+            description:    'gs_command.trait.is_ask_ok',
             mode:           InputOption::VALUE_NEGATABLE,
         );
     }
