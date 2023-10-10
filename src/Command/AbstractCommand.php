@@ -47,11 +47,11 @@ abstract class AbstractCommand extends Command implements
     SignalableCommandInterface,
     ServiceSubscriberInterface
 {
-    //###> ! CHANGE ME !
-    protected const WIDTH_PROGRESS_BAR          = 40;
-    protected const EMPTY_COLOR_PROGRESS_BAR    = 'black';
+    //###> CONSTANTS CHANGE ME ###
+    protected const WIDTH_PROGRESS_BAR = 40;
+    protected const EMPTY_COLOR_PROGRESS_BAR = 'black';
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
-    //###< ! CHANGE ME !
+    //###< CONSTANTS CHANGE ME ###
 
     protected SymfonyStyle $style;
     protected $formatter;
@@ -89,11 +89,17 @@ abstract class AbstractCommand extends Command implements
 
     //###> PUBLIC API ###
 
+	/*
+		gets the \Symfony\Component\Console\Style\SymfonyStyle object
+	*/
     public function getIo(): SymfonyStyle
     {
         return $this->io;
     }
 
+	/*
+		gets the \Symfony\Component\Console\Helper\Table object
+	*/
     public function getTable(): Table
     {
         return $this->table;
@@ -104,6 +110,11 @@ abstract class AbstractCommand extends Command implements
 
     //###> API ###
 
+	/*
+		Usage:
+		
+		
+	*/
     protected function configureOption(
         string $name,
         string $description,
@@ -232,121 +243,6 @@ abstract class AbstractCommand extends Command implements
         return $this->getDefaultValueForHelp($bool ? '"yes"' : '"no"');
     }
 
-    //###< API ###
-
-
-    //###> REALIZE ABSTRACT ###
-
-    /* Command */
-    protected function configure(): void
-    {
-        //\pcntl_signal(\SIGINT, $this->shutdown(...));
-        //\register_shutdown_function($this->shutdown(...));
-
-        /*###> AT THE END ###*/
-        parent::configure();
-    }
-
-    /* Command */
-    protected function initialize(
-        InputInterface $input,
-        OutputInterface $output,
-    ) {
-        /*###> AT THE BEGINNING ###*/
-        parent::initialize(
-            $input,
-            $output,
-        );
-
-        //###> Objects
-        $this->io = new SymfonyStyle($input, $output);
-
-        //###> Style
-        $this->setFormatter(
-            $input,
-            $output,
-        );
-        $this->setProgressBar(
-            $input,
-            $output,
-        );
-        $this->setTable(
-            $input,
-            $output,
-        );
-    }
-
-    /* Command */
-    protected function interact(
-        InputInterface $input,
-        OutputInterface $output,
-    ) {
-        // get missed options/arguments
-    }
-
-    /* Command
-
-        Command::<CODE>
-
-            // ок
-            return Command::SUCCESS;
-
-            // неправильное использование
-            return Command::INVALID;
-
-            // ошибка
-            return Command::FAILURE;
-
-        protected function execute(
-            InputInterface $input,
-            OutputInterface $output,
-        ): int {
-            return Command::SUCCESS;
-        }
-    */
-
-    /* Command
-
-        protected function interact(
-            InputInterface $input,
-            OutputInterface $output,
-        ) {
-            // get missed options/arguments
-        }
-    */
-
-    /* SignalableCommandInterface */
-    public function getSubscribedSignals(): array
-    {
-        return [
-            //\SIGINT,
-            //\SIGTERM,
-        ];
-    }
-
-    /* SignalableCommandInterface */
-    public function handleSignal(int $signal): void
-    {
-        /*
-        if (\SIGINT == $signal) {
-            $this->shutdown();
-        }
-        */
-    }
-
-    /* ServiceSubscriberInterface */
-    public static function getSubscribedServices(): array
-    {
-        return [
-            'logger' => '?Psr\Log\LoggerInterface',
-        ];
-    }
-
-    //###< REALIZE ABSTRACT ###
-
-
-    //###> API ###
-
     protected function isOk(
         array|string $message = 'Ok?',
         bool $default = true,
@@ -404,7 +300,7 @@ abstract class AbstractCommand extends Command implements
     //###< API ###
 
 
-    //###> OVERRIDE IT ###
+    //###> YOU CAN OVERRIDE IT  ###
 
     protected function setFormatter(
         InputInterface $input,
@@ -448,5 +344,100 @@ abstract class AbstractCommand extends Command implements
         $this->table->setStyle($tableStyle);
     }
 
-    //###> OVERRIDE IT ###
+    //###> YOU CAN OVERRIDE IT ###
+
+
+    //###> REALIZED ABSTRACT ###
+
+    /*
+        protected function execute(
+            InputInterface $input,
+            OutputInterface $output,
+        ): int {
+            // OK
+            return Command::SUCCESS;
+
+            // Incorrect usage
+            return Command::INVALID;
+
+            // Program failure
+            return Command::FAILURE;
+        }
+    */
+
+    /* Command */
+    protected function configure(): void
+    {
+        //\pcntl_signal(\SIGINT, $this->shutdown(...));
+        //\register_shutdown_function($this->shutdown(...));
+
+        /*###> parent::configure() AT THE END ###*/
+        parent::configure();
+    }
+
+    /* Command */
+    protected function initialize(
+        InputInterface $input,
+        OutputInterface $output,
+    ) {
+        /*###> parent::initialize() AT THE BEGINNING ###*/
+        parent::initialize(
+            $input,
+            $output,
+        );
+
+        //###> Objects
+        $this->io = new SymfonyStyle($input, $output);
+
+        //###> Style
+        $this->setFormatter(
+            $input,
+            $output,
+        );
+        $this->setProgressBar(
+            $input,
+            $output,
+        );
+        $this->setTable(
+            $input,
+            $output,
+        );
+    }
+
+    /* Command */
+    protected function interact(
+        InputInterface $input,
+        OutputInterface $output,
+    ) {
+        // get missed options/arguments
+    }
+
+    /* SignalableCommandInterface */
+    public function getSubscribedSignals(): array
+    {
+        return [
+            //\SIGINT,
+            //\SIGTERM,
+        ];
+    }
+
+    /* SignalableCommandInterface */
+    public function handleSignal(int $signal): void
+    {
+        /*
+        if (\SIGINT == $signal) {
+            $this->shutdown();
+        }
+        */
+    }
+
+    /* ServiceSubscriberInterface */
+    public static function getSubscribedServices(): array
+    {
+        return [
+            'logger' => '?Psr\Log\LoggerInterface',
+        ];
+    }
+
+    //###< REALIZED ABSTRACT ###
 }
