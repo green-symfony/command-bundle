@@ -7,11 +7,10 @@ green-symfony/command-bundle
 This bundle provides:
 | Class name | Description |
 | ------------- | ------------- |
-| AbstractCommand | The basic class which realizes the Symfony Command class |
+| [AbstractCommand](https://github.com/green-symfony/command-bundle/blob/main/src/Command/AbstractCommand.php) | The basic class which realizes the Symfony Command class |
+| [Traits](https://github.com/green-symfony/command-bundle/tree/main/src/Trait) | For users' options and abstactions |
 
 ## AbstractCommand
-
-[AbstractCommand](https://github.com/green-symfony/command-bundle/blob/main/src/Command/AbstractCommand.php)
 
 - See the "CONSTANTS CHANGE ME" section.
 - See the "PUBLIC API" section for your services.
