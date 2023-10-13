@@ -338,7 +338,7 @@ abstract class AbstractCommand extends Command implements
         array|string|null $message = null,
         \Closure|callable|null $callback = null,
     ) {
-        $this->devLogger->info(__METHOD__);
+        //$this->devLogger->info(__METHOD__);
 
         //###> message
         $this->io->writeln('');
