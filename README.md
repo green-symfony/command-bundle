@@ -68,6 +68,9 @@ $this->progressBar->start();
 
 ```console
 git clone "https://github.com/green-symfony/command-bundle.git"
+```
+
+```console
 git clone "https://github.com/green-symfony/service-bundle.git"
 ```
 
