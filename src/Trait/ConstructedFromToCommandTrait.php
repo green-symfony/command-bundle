@@ -50,7 +50,7 @@ use GS\Command\Trait\{
 */
 trait ConstructedFromToCommandTrait
 {
-    /*###> MUST CONTAIN
+    /*###> MUST CONTAIN ###
 
     use ConstructedFromToCommandTrait;
 

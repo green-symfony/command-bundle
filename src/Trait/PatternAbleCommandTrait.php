@@ -71,7 +71,7 @@ use GS\Command\Contracts\PatternAbleCommandInterface;
 */
 trait PatternAbleCommandTrait
 {
-    /*###> MUST CONTAIN
+    /*###> MUST CONTAIN ###
 
         use PatternAbleCommandTrait;
 
