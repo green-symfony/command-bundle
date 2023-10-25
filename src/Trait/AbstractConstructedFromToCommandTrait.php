@@ -51,6 +51,8 @@ use GS\Command\Trait\{
 trait AbstractConstructedFromToCommandTrait
 {
     /*###> MUST CONTAIN ###
+	
+	MUST extend \GS\Command\Command\AbstractCommand
 
     use AbstractConstructedFromToCommandTrait;
 
