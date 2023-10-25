@@ -69,11 +69,11 @@ use GS\Command\Contracts\PatternAbleCommandInterface;
         PARSERS API
         PARSER HELPERS
 */
-trait PatternAbleCommandTrait
+trait AbstractPatternAbleCommandTrait
 {
     /*###> MUST CONTAIN ###
 
-        use PatternAbleCommandTrait;
+        use AbstractPatternAbleCommandTrait;
 
         public function __construct(
             protected readonly StringService $stringService,

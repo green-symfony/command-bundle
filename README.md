@@ -56,8 +56,8 @@ $this->progressBar->start();
 | MakeLockAbleTrait | Adds option which allows user to choose whether to lock or not. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MakeLockAbleTrait.php) |
 | MoveAbleTrait | Adds option which allows user to choose whether to move or not. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MoveAbleTrait.php) |
 | OverrideAbleTrait | Adds option which allows user to choose whether to override or not. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/OverrideAbleTrait.php) |
-| ConstructedFromToCommandTrait | Abstraction for doing something with the constructed files. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/ConstructedFromToCommandTrait.php) |
-| PatternAbleCommandTrait | Abstraction for processing the passed pattern. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/PatternAbleCommandTrait.php) |
+| AbstractConstructedFromToCommandTrait | Abstraction for doing something with the constructed files. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) |
+| AbstractPatternAbleCommandTrait | Abstraction for processing the passed pattern. | [Code](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractPatternAbleCommandTrait.php) |
 
 # Installation
 

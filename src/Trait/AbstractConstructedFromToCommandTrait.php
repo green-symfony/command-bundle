@@ -48,11 +48,11 @@ use GS\Command\Trait\{
     isOk
         makeConstructedFromToPaths
 */
-trait ConstructedFromToCommandTrait
+trait AbstractConstructedFromToCommandTrait
 {
     /*###> MUST CONTAIN ###
 
-    use ConstructedFromToCommandTrait;
+    use AbstractConstructedFromToCommandTrait;
 
     // число отставания от цикла выполнения
     public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;
