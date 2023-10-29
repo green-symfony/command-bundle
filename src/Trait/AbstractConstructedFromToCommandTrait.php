@@ -60,7 +60,11 @@ trait AbstractConstructedFromToCommandTrait
     public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;
 
     public function __construct(
-        protected readonly StringService $stringService,
+        $devLogger,
+		$t,
+		array $progressBarSpin,
+		//
+		protected readonly StringService $stringService,
         protected readonly DumpInfoService $dumpInfoService,
         protected readonly FilesystemService $filesystemService,
         protected readonly ConfigService $configService,
@@ -68,7 +72,11 @@ trait AbstractConstructedFromToCommandTrait
         protected readonly RegexService $regexService,
         ...
     ) {
-        parent::__construct();
+        parent::__construct(
+			devLogger:			$devLogger,
+			t:					$t,
+			progressBarSpin:	$progressBarSpin,
+		);
     }
     */
 
@@ -168,6 +176,16 @@ trait AbstractConstructedFromToCommandTrait
 
 
     //###> API ###
+
+    protected function userChecksFrom(
+		string $from,
+	): void {
+	}
+
+    protected function userChecksTo(
+		string $to,
+	): void {
+	}
 
     protected function getAlertStringForDataSupplier(
         string $title,
@@ -576,6 +594,10 @@ trait AbstractConstructedFromToCommandTrait
             $to             = $this->dataSupplierForConstructedFromToPaths->getTo(
                 $finderSplFileInfo,
             );
+			
+			$this->userChecksFrom($from);
+			
+			$this->userChecksTo($to);
 
             $this->scanningCycleForConstructedFromToPaths(
                 $input,

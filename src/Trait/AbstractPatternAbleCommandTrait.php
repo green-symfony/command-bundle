@@ -76,6 +76,10 @@ trait AbstractPatternAbleCommandTrait
         use AbstractPatternAbleCommandTrait;
 
         public function __construct(
+			$devLogger,
+			$t,
+			array $progressBarSpin,
+			//
             protected readonly StringService $stringService,
             protected readonly DumpInfoService $dumpInfoService,
             protected readonly FilesystemService $filesystemService,
@@ -87,7 +91,11 @@ trait AbstractPatternAbleCommandTrait
             protected readonly string $monthRegex,
             protected readonly string $boardRegexSoft,
         ) {
-            parent::__construct();
+            parent::__construct(
+				devLogger:			$devLogger,
+				t:					$t,
+				progressBarSpin:	$progressBarSpin,
+			);
         }
     */
 
