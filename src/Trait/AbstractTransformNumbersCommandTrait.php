@@ -42,7 +42,7 @@ trait AbstractTransformNumbersCommandTrait
 	
     /* AbstractTransformNumbersCommandTrait */
 	abstract protected function getNumberTransformator(
-		int|float $number,
+		$number,
 	): NumberTransformator;
 	
 	/* AbstractTransformNumbersCommandTrait */

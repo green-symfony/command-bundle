@@ -7,8 +7,8 @@ abstract class NumberTransformator
 	//###> ABSTRACT ###
 	
 	abstract public function getTransformed(
-		int|float $number,
-	): int|float;
+		$number,
+	);
 	
 	//###< ABSTRACT ###
 }
