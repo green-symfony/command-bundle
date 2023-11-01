@@ -175,7 +175,7 @@ trait AbstractConstructedFromToCommandTrait
     //###< ABSTRACT ###
 
 
-    //###> API ###
+    //###> !OVERRIDE IT! ###
 
     protected function userChecksFrom(
 		string $from,
@@ -186,6 +186,11 @@ trait AbstractConstructedFromToCommandTrait
 		string $to,
 	): void {
 	}
+	
+    //###< !OVERRIDE IT! ###
+
+
+    //###> API ###
 
     protected function getAlertStringForDataSupplier(
         string $title,
@@ -257,9 +262,9 @@ trait AbstractConstructedFromToCommandTrait
     }
 
     //###< API ###
-
-
-    //###> ABSTRACT ###
+    
+	
+	//###> ABSTRACT ###
 
     /* AbstractConstructedFromToCommand
         create your own ConstructedFromToPathsDataSupplier for a certain command
