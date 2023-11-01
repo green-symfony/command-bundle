@@ -56,7 +56,7 @@ $this->progressBar->start();
 | [MakeLockAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MakeLockAbleTrait.php) | Adds option which allows user to choose whether to lock or not. |
 | [MoveAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MoveAbleTrait.php) | Adds option which allows user to choose whether to move or not. |
 | [OverrideAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/OverrideAbleTrait.php) | Adds option which allows user to choose whether to override or not. |
-| [AbstractConstructedFromToCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) | Abstraction for doing something with the constructed files. |
+| [AbstractConstructedFromToCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) | Abstraction for doing something with the constructed absolute paths from and to. |
 | [AbstractPatternAbleCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractPatternAbleCommandTrait.php) | Abstraction for processing the passed pattern. |
 
 # Installation
