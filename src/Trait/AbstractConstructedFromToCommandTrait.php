@@ -371,6 +371,7 @@ trait AbstractConstructedFromToCommandTrait
     abstract protected function beforeMakeFromToAlgorithm(
         InputInterface $input,
         OutputInterface $output,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
     ): void;
 
     /* AbstractConstructedFromToCommand
@@ -523,6 +524,7 @@ trait AbstractConstructedFromToCommandTrait
         $this->beforeMakeFromToAlgorithm(
             $input,
             $output,
+			$dataSupplier,
         );
 
         //###>
