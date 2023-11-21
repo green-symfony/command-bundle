@@ -114,6 +114,7 @@ trait AbstractConvertExtCommandTrait
 	
 	//###> CAN OVERRIDE ###
 
+	protected bool $isDumpConvertedInfo = true;
 	protected bool $move            = false;
 	protected array|string $depth   = '== 0';
 	protected bool $ask             = true;
@@ -154,7 +155,6 @@ trait AbstractConvertExtCommandTrait
 	//###< CAN OVERRIDE ###
 
 
-	private bool $isDumpConvertedInfo = true;
     private ?array $fromExtensions = null;	
     private null|array|string $from = null;
     private null|array|string $to = null;

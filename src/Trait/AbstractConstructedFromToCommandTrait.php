@@ -56,9 +56,6 @@ trait AbstractConstructedFromToCommandTrait
 
     use <TRAIT_NAME>;
 
-    // число отставания от цикла выполнения
-    public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;
-
     public function __construct(
         $devLogger,
 		$t,
@@ -96,7 +93,17 @@ trait AbstractConstructedFromToCommandTrait
     private int $quantityConstructedFromToPaths = 0;
 
 
-    //###> ABSTRACT ###
+    //###> CAN OVERRIDE ###
+
+    // число отставания от цикла выполнения
+	protected function getProgressBarDisplayFrequency(): int {
+		return 0;
+	}
+
+    //###< CAN OVERRIDE ###
+
+
+    //###> ABSTRACT REALIZATION ###
 
     /* AbstractCommand */
     protected function command(
@@ -172,7 +179,7 @@ trait AbstractConstructedFromToCommandTrait
         return Command::SUCCESS;
     }
 
-    //###< ABSTRACT ###
+    //###< ABSTRACT REALIZATION ###
 
 
     //###> !OVERRIDE IT! ###
@@ -512,7 +519,7 @@ trait AbstractConstructedFromToCommandTrait
         ) use (&$counter) {
             if (
                 $force
-                || ++$counter > self::PROGRESS_BAR_DISPLAY_FREQUENCY
+                || ++$counter > $this->getProgressBarDisplayFrequency()
             ) {
                 $counter = 0;
                 $this->progressBar->advance();
@@ -674,7 +681,7 @@ trait AbstractConstructedFromToCommandTrait
 
     private function getMaxSteps(): int
     {
-        $f = self::PROGRESS_BAR_DISPLAY_FREQUENCY;
+        $f = $this->getProgressBarDisplayFrequency();
         if ($f <= 0) {
             $f = 1;
         }

@@ -27,13 +27,9 @@ use GS\Service\Service\{
 
 trait MakeLockAbleTrait
 {
-    /*###> MUST CONTAIN ###
-	(not included in connection with the inability to display the default value in cmd)
-    
 	protected bool $makeLock = true;
-    */
 
-    private function configureLockOption(): void
+    protected function configureLockOption(): void
     {
         $this->configureOption(
             name:           'make-lock',
@@ -43,7 +39,7 @@ trait MakeLockAbleTrait
         );
     }
 
-    private function initializeLockOption(
+    protected function initializeLockOption(
         InputInterface $input,
         OutputInterface $output,
     ): void {

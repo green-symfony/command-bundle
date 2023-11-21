@@ -29,14 +29,10 @@ use GS\Service\Service\{
 
 trait OverrideAbleTrait
 {
-    /*###> MUST CONTAIN ###
-	(not included in connection with the inability to display the default value in cmd)
-	
     protected bool $override        = false;
     protected bool $askOverride     = true;
-    */
 
-    private function configureOverrideOptions(): void
+    protected function configureOverrideOptions(): void
     {
         $this->configureOption(
             name:           'override',
@@ -54,7 +50,7 @@ trait OverrideAbleTrait
         );
     }
 
-    private function initializeOverrideOptions(
+    protected function initializeOverrideOptions(
         InputInterface $input,
         OutputInterface $output,
         AbstractCommand $command,

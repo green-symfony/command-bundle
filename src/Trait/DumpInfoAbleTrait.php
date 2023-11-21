@@ -27,11 +27,7 @@ use GS\Service\Service\{
 
 trait DumpInfoAbleTrait
 {
-    /*###> MUST CONTAIN ###
-	(not included in connection with the inability to display the default value in cmd)
-    
 	protected bool $dumpInfo = true;
-    */
 
     //###> PUBLIC API ###
 
@@ -43,7 +39,7 @@ trait DumpInfoAbleTrait
     //###< PUBLIC API ###
 
 
-    private function configureDumpInfoOption(): void
+    protected function configureDumpInfoOption(): void
     {
         $this->configureOption(
             name:           'dump-info',
@@ -53,7 +49,7 @@ trait DumpInfoAbleTrait
         );
     }
 
-    private function initializeDumpInfoOption(
+    protected function initializeDumpInfoOption(
         InputInterface $input,
         OutputInterface $output,
     ): void {

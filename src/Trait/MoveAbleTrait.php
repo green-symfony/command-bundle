@@ -27,13 +27,9 @@ use GS\Service\Service\{
 
 trait MoveAbleTrait
 {
-    /*###> MUST CONTAIN ###
-	(not included in connection with the inability to display the default value in cmd)
-    
 	protected bool $move = false;
-    */
 
-    private function configureMoveOption(): void
+    protected function configureMoveOption(): void
     {
         $this->configureOption(
             name:           'move',
@@ -43,7 +39,7 @@ trait MoveAbleTrait
         );
     }
 
-    private function initializeMoveOption(
+    protected function initializeMoveOption(
         InputInterface $input,
         OutputInterface $output,
     ): void {

@@ -50,12 +50,12 @@ $this->progressBar->start();
 
 | Trait | Description |
 | ------------- | ------------- |
-| [AskAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AskAbleTrait.php) | Adds option which allows user to choose whether to ask him or not. |
-| [DepthAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/DepthAbleTrait.php) | Adds option which allows user to indicate depth. |
-| [DumpInfoAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/DumpInfoAbleTrait.php) | Adds option which allows user to dump information or not. [\GS\Service\Service\DumpInfoService::dumpInfo()](https://github.com/green-symfony/service-bundle/blob/main/src/Service/DumpInfoService.php) from the other bundle relies on `DepthAbleTrait::isDumpInfo()` method before the dump but it's not crucial. |
-| [MakeLockAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MakeLockAbleTrait.php) | Adds option which allows user to choose whether to lock or not. |
-| [MoveAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MoveAbleTrait.php) | Adds option which allows user to choose whether to move or not. |
-| [OverrideAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/OverrideAbleTrait.php) | Adds option which allows user to choose whether to override or not. |
+| [AskAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AskAbleTrait.php) | Adds option for the programm which allows user to choose whether to ask him or not. |
+| [DepthAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/DepthAbleTrait.php) | Adds option for the programm which allows user to indicate depth. |
+| [DumpInfoAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/DumpInfoAbleTrait.php) | Adds option for the programm which allows user to dump information or not. [\GS\Service\Service\DumpInfoService::dumpInfo()](https://github.com/green-symfony/service-bundle/blob/main/src/Service/DumpInfoService.php) from the other bundle relies on `DepthAbleTrait::isDumpInfo()` method before the dump but it's not crucial. |
+| [MakeLockAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MakeLockAbleTrait.php) | Adds option for the programm which allows user to choose whether to lock or not. |
+| [MoveAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/MoveAbleTrait.php) | Adds option for the programm which allows user to choose whether to move or not. |
+| [OverrideAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/OverrideAbleTrait.php) | Adds option for the programm which allows user to choose whether to override or not. |
 | [AbstractConstructedFromToCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) | Abstraction for doing something with the constructed absolute paths from and to. |
 | [AbstractPatternAbleCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractPatternAbleCommandTrait.php) | Abstraction for processing the passed pattern. |
 | [AbstractConvertExtCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConvertExtCommandTrait.php) | Abstraction for converting files into another extension. |

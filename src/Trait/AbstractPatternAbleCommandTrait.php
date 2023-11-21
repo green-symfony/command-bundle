@@ -178,7 +178,7 @@ trait AbstractPatternAbleCommandTrait
 
     //###> HELPER ###
 
-    private function configurePatternArgument(): void
+    protected function configurePatternArgument(): void
     {
         $this->addArgument(
             $this->getPatternName(),
@@ -187,7 +187,7 @@ trait AbstractPatternAbleCommandTrait
         );
     }
 
-    private function initializePatternArgument(
+    protected function initializePatternArgument(
         InputInterface $input,
         OutputInterface $output,
     ): void {

@@ -27,13 +27,9 @@ use GS\Service\Service\{
 
 trait AskAbleTrait
 {
-    /*###> MUST CONTAIN ###
-	(not included in connection with the inability to display the default value in cmd)
-	
     protected bool $ask = true;
-    */
 
-    private function configureAskOption(): void
+    protected function configureAskOption(): void
     {
         $this->configureOption(
             name:           'ask',
@@ -43,7 +39,7 @@ trait AskAbleTrait
         );
     }
 
-    private function initializeAskOption(
+    protected function initializeAskOption(
         InputInterface $input,
         OutputInterface $output,
     ): void {
