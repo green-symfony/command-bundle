@@ -104,7 +104,10 @@ trait AbstractConvertExtCommandTrait
 	
     abstract protected function getDefaultTo(): string;
 	
-	abstract protected function convertFromTo(
+	/*
+		To stop you can throw an Exception
+	*/
+	abstract protected function saveConvertedTo(
         string $absPathFrom,
         string $absPathTo,
     ): void;
@@ -379,7 +382,7 @@ trait AbstractConvertExtCommandTrait
     ): void {
 		
         $madeResult = $this->filesystemService->executeWithoutChangeMTime(
-			$this->convertFromTo(...),
+			$this->saveConvertedTo(...),
             $absPathFrom,
             $absPathTo,
             $this->override,
