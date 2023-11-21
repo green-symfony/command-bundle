@@ -1,12 +1,19 @@
 gs_command:
     command:
-        
         default:
             exit: 'Выход'
             is_ok: 'Ok?'
         
         shutdown: 'Команда "%command%" остановлена'
         exit_disagree: 'Выход, пользователь не дал согласия'
+    
+    convertor:
+        converted:      'Преобразован'
+        not_converted:  'Не преобразован'
+        is_dump_converting_info:   'Отображать информацию о преобразовании?'
+        there_is_no_newer_file_for_converting: 'Нет более ногвого файла для преобразования в "%ext%"'
+        there_is_no_newer_files_for_converting: 'Нет более новых файлов для преобразования в "%ext%"'
+        have_not_been_converted: 'Не преобразовался в "%ext%"'
     
     trait:
         is_ask_ok: 'Спрашивать ок?'

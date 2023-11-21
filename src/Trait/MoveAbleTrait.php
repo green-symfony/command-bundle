@@ -27,8 +27,10 @@ use GS\Service\Service\{
 
 trait MoveAbleTrait
 {
-    /*###> MUST CONTAIN ### (not included in connection with the inability to display the default value in cmd)
-    protected bool $move = false;
+    /*###> MUST CONTAIN ###
+	(not included in connection with the inability to display the default value in cmd)
+    
+	protected bool $move = false;
     */
 
     private function configureMoveOption(): void

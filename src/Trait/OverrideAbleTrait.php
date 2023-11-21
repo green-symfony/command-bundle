@@ -29,7 +29,9 @@ use GS\Service\Service\{
 
 trait OverrideAbleTrait
 {
-    /*###> MUST CONTAIN ### (not included in connection with the inability to display the default value in cmd)
+    /*###> MUST CONTAIN ###
+	(not included in connection with the inability to display the default value in cmd)
+	
     protected bool $override        = false;
     protected bool $askOverride     = true;
     */

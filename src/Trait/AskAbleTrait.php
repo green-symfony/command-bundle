@@ -27,7 +27,9 @@ use GS\Service\Service\{
 
 trait AskAbleTrait
 {
-    /*###> MUST CONTAIN ### (not included in connection with the inability to display the default value in cmd)
+    /*###> MUST CONTAIN ###
+	(not included in connection with the inability to display the default value in cmd)
+	
     protected bool $ask = true;
     */
 

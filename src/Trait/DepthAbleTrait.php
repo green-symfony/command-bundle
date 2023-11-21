@@ -27,8 +27,10 @@ use GS\Service\Service\{
 
 trait DepthAbleTrait
 {
-    /*###> MUST CONTAIN ### (not included in connection with the inability to display the default value in cmd)
-    protected array|string $depth = '== 0';
+    /*###> MUST CONTAIN ###
+	(not included in connection with the inability to display the default value in cmd)
+    
+	protected array|string $depth = '== 0';
     */
 
     private function configureDepthOption(): void

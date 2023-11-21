@@ -73,7 +73,7 @@ trait AbstractPatternAbleCommandTrait
 {
     /*###> MUST CONTAIN ###
 
-        use AbstractPatternAbleCommandTrait;
+        use <TRAIT_NAME>;
 
         public function __construct(
 			$devLogger,

@@ -8,5 +8,13 @@ gs_command:
         shutdown: 'The command "%command%" was stopped'
         exit_disagree: 'Exit, the user turned down'
     
+    convertor:
+        converted:      'Converted'
+        not_converted:  'Not converted'
+        is_dump_converting_info:   'Display conversion information?'
+        there_is_no_newer_file_for_converting: 'There is no newer file to convert into "%ext%"'
+        there_is_no_newer_files_for_converting: 'There is no newer files to convert into "%ext%"'
+        have_not_been_converted: 'Not converted into "%ext%"'
+        
     trait:
         is_ask_ok: 'Should it ask ok?'

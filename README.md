@@ -58,6 +58,7 @@ $this->progressBar->start();
 | [OverrideAbleTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/OverrideAbleTrait.php) | Adds option which allows user to choose whether to override or not. |
 | [AbstractConstructedFromToCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) | Abstraction for doing something with the constructed absolute paths from and to. |
 | [AbstractPatternAbleCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractPatternAbleCommandTrait.php) | Abstraction for processing the passed pattern. |
+| [AbstractConvertExtCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConvertExtCommandTrait.php) | Abstraction for converting files into another extension. |
 
 # Installation
 

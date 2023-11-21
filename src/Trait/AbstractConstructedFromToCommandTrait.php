@@ -54,7 +54,7 @@ trait AbstractConstructedFromToCommandTrait
 	
 	MUST extend \GS\Command\Command\AbstractCommand
 
-    use AbstractConstructedFromToCommandTrait;
+    use <TRAIT_NAME>;
 
     // число отставания от цикла выполнения
     public const PROGRESS_BAR_DISPLAY_FREQUENCY = 0;

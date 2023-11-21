@@ -132,12 +132,16 @@ abstract class AbstractCommand extends Command implements
         mixed $default = null,
         string|array $shortcut = null,
     ): void {
+		if ($mode != InputOption::VALUE_REQUIRED) {
+			$description = $this->getInfoDescription($mode, $description, $default);			
+		}
+		
         if ($shortcut === null) {
             $this
                 ->addOption(
                     name:           $name,
                     mode:           $mode,
-                    description:    $this->getInfoDescription($mode, $description, $default),
+                    description:    $description,
                     default:        $default,
                 )
             ;
@@ -149,8 +153,8 @@ abstract class AbstractCommand extends Command implements
                 name:           $name,
                 shortcut:       $shortcut,
                 mode:           $mode,
-                description:    $this->getInfoDescription($mode, $description, $default),
-                default:        $default,
+                description:    $description,
+				default:        $default,
             )
         ;
     }
@@ -273,10 +277,18 @@ abstract class AbstractCommand extends Command implements
 		$description = $this->t->trans($description);
 		
         if ($mode === InputOption::VALUE_NEGATABLE && gettype($default) === 'boolean') {
-            return (string) u(((string) u($description)->ensureEnd(' ')) . $this->getDefaultValueNegatableForHelp($default))->collapseWhitespace();
+            return (string) u(
+					''
+					. u($description)->ensureEnd(' ')
+					. $this->getDefaultValueNegatableForHelp($default)
+			)->collapseWhitespace();
         }
-
-        return (string) u(((string) u($description)->ensureEnd(' ')) . $this->getDefaultValueForHelp($default))->collapseWhitespace();
+		
+        return (string) u(
+				''
+				. u($description)->ensureEnd(' ')
+				. $this->getDefaultValueForHelp($default)
+			)->collapseWhitespace();
     }
 
 	/*
@@ -288,7 +300,7 @@ abstract class AbstractCommand extends Command implements
         if ($default === null) {
             return '';
         }
-        return '<bg=black;fg=yellow>[default: ' . $default . ']</>';
+        return '<bg=black;fg=yellow>[default: "' . $default . '"]</>';
     }
 
 	/*
@@ -300,7 +312,7 @@ abstract class AbstractCommand extends Command implements
         if ($bool === null) {
             return '';
         }
-        return $this->getDefaultValueForHelp($bool ? '"yes"' : '"no"');
+        return $this->getDefaultValueForHelp($bool ? 'yes' : 'no');
     }
 
 	/*
