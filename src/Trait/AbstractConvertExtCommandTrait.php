@@ -104,9 +104,6 @@ trait AbstractConvertExtCommandTrait
 	
     abstract protected function getDefaultTo(): string;
 	
-	/*
-		To stop you can throw an Exception
-	*/
 	abstract protected function saveConvertedTo(
         string $absPathFrom,
         string $absPathTo,
@@ -601,14 +598,14 @@ trait AbstractConvertExtCommandTrait
             return false;
         }
         //from is ready
-        $this->to = $this->getAbsToWithPdfExt();
+        $this->to = $this->getAbsToWithExt();
         return true;
     }
 
     /*
         Calls only when $this->from is absolute file
     */
-    private function getAbsToWithPdfExt(): string
+    private function getAbsToWithExt(): string
     {
         $to = $this->to;
 
