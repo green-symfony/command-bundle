@@ -4,6 +4,7 @@ namespace GS\Command\Trait;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Finder\Finder;
@@ -23,11 +24,8 @@ use Symfony\Component\Console\Output\{
     OutputInterface
 };
 use GS\Service\Service\{
-    ConfigService,
-    DumpInfoService,
-    RegexService,
-    ArrayService,
     StringService,
+    DumpInfoService,
     FilesystemService
 };
 use GS\Command\Contracts\{
@@ -50,32 +48,7 @@ use GS\Command\Trait\{
 */
 trait AbstractConstructedFromToCommandTrait
 {
-    /*###> MUST CONTAIN ###
-	
-	MUST extend \GS\Command\Command\AbstractCommand
-
-    use <TRAIT_NAME>;
-
-    public function __construct(
-        $devLogger,
-		$t,
-		array $progressBarSpin,
-		//
-		protected readonly StringService $stringService,
-        protected readonly DumpInfoService $dumpInfoService,
-        protected readonly FilesystemService $filesystemService,
-        protected readonly ConfigService $configService,
-        protected readonly ArrayService $arrayService,
-        protected readonly RegexService $regexService,
-        ...
-    ) {
-        parent::__construct(
-			devLogger:			$devLogger,
-			t:					$t,
-			progressBarSpin:	$progressBarSpin,
-		);
-    }
-    */
+	use AbstractGetCommandTrait;
 
     /*
         [
@@ -91,6 +64,186 @@ trait AbstractConstructedFromToCommandTrait
     private ?Finder $finder                     = null;
     private ?AbstractConstructedFromToPathsDataSupplier $dataSupplierForConstructedFromToPaths = null;
     private int $quantityConstructedFromToPaths = 0;
+    
+	
+	//###> ABSTRACT ###
+	
+	/* AbstractConstructedFromToCommandTrait */
+	abstract protected function &gsCommandGetStringServiceForTrait(): StringService;
+	
+	/* AbstractConstructedFromToCommandTrait */
+	abstract protected function &gsCommandGetDumpInfoServiceForTrait(): DumpInfoService;
+	
+	/* AbstractConstructedFromToCommandTrait */
+	abstract protected function &gsCommandGetFilesystemServiceForTrait(): FilesystemService;
+
+    /* AbstractConstructedFromToCommandTrait
+        create your own ConstructedFromToPathsDataSupplier for a certain command
+        extends AbstractConstructedFromToPathsDataSupplier
+    */
+    abstract protected function getDataSuppliersForConstructedFromToPaths(): \Traversable|array;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+
+        ###>READY:
+            getFromForFinder
+    */
+    abstract protected function getFinder(
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): Finder;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function initScanningConstructedFromToPaths(
+        InputInterface $input,
+        OutputInterface $output,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [CYCLE INTO CYCLE]
+    */
+    abstract protected function scanningCycleForConstructedFromToPaths(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [CYCLE INTO CYCLE]
+
+        FILTER
+    */
+    abstract protected function isSkipForConstructedFromToPaths(
+        SplFileInfo $finderSplFileInfo,
+        string $from,
+        string $to,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): bool;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function endScanningForConstructedFromToPaths(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function clearStateWhenStartCycle(): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function makeWillNotBe(
+        InputInterface $input,
+        OutputInterface $output,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function beforeDumpInfoConstructedFromToPaths(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function isDumpInfoOnlyDirname(): bool;
+
+    /* AbstractConstructedFromToCommandTrait
+        RETURN NULL IF YOU DON'T WANNT CONSIDER IT
+
+        [INTO CYCLE]
+    */
+    abstract protected function isDumpInfoOnlyFrom(): ?bool;
+
+    /* AbstractConstructedFromToCommandTrait
+        RETURN NULL IF YOU DON'T WANNT CONSIDER IT
+
+        [INTO CYCLE]
+    */
+    abstract protected function isDumpInfoOnlyTo(): ?bool;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+
+        ###>READY:
+            getFromForFinder
+            isConstructedFromToPathsEmpty
+            getQuantityConstructedFromToPaths
+    */
+    abstract protected function beforeMakeFromToAlgorithm(
+        InputInterface $input,
+        OutputInterface $output,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function beforeMakeFromToAlgorithmAndAfterStartProgressBar(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [CYCLE INTO CYCLE]
+    */
+    abstract protected function beforeMakeCycle(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [CYCLE INTO CYCLE]
+    */
+    abstract protected function makeFromToAlgorithm(
+        string $from,
+        string $to,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): ?array;
+
+    /* AbstractConstructedFromToCommandTrait
+        [CYCLE INTO CYCLE]
+    */
+    abstract protected function afterMakeCycle(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+        [INTO CYCLE]
+    */
+    abstract protected function afterDataSupplierCycleExecute(
+        InputInterface $input,
+        OutputInterface $output,
+        bool $operationWasMade,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+        int $madeQuantity,
+        bool $madeQuantityEqualsAllFilesFrom,
+    ): void;
+
+    /* AbstractConstructedFromToCommandTrait
+
+        ###>READY:
+            getFromForFinder IN LAST ITERATION
+            isConstructedFromToPathsEmpty IN LAST ITERATION
+            getQuantityConstructedFromToPaths IN LAST ITERATION
+    */
+    abstract protected function afterDataSupplierExecute(
+        InputInterface $input,
+        OutputInterface $output,
+        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
+    ): void;
+
+    //###< ABSTRACT ###
 
 
     //###> CAN OVERRIDE ###
@@ -101,9 +254,9 @@ trait AbstractConstructedFromToCommandTrait
 	}
 
     //###< CAN OVERRIDE ###
-
-
-    //###> ABSTRACT REALIZATION ###
+	
+	
+	//###> ABSTRACT REALIZATION ###	
 
     /* AbstractCommand */
     protected function command(
@@ -111,7 +264,7 @@ trait AbstractConstructedFromToCommandTrait
         OutputInterface $output,
     ): int {
         $dataSuppliers = $this->getDataSuppliersForConstructedFromToPaths();
-
+		
         // DATA SUPPLIERS
         foreach ($dataSuppliers as $dataSupplier) {
             $this->setDataSupplierForConstructedFromToPaths(
@@ -146,7 +299,7 @@ trait AbstractConstructedFromToCommandTrait
             $operationWasMade = false;
             $madeQuantity = 0;
             if (
-                $this->isOk(
+                $this->gsCommandGetCommandForTrait()->isOk(
                     default:        $dataSupplier->getDefaultIsOk(),
                 )
             ) {
@@ -215,30 +368,57 @@ trait AbstractConstructedFromToCommandTrait
 
         $longestCommon  = $this->getDirIfFile($longestCommon);
 
-        $fromDirPartMessage = 'from ' . '[' . $longestCommon . '] directory';
-        $message        = ''
-            . 'REMOVE: ' . $whatFromIsInConstructedFromToPaths . ''
+        $fromDirPartMessage = ''
+			. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+				'from_word',
+			)
+			. ' ' . '[' . $longestCommon . ']'
+			. ' ' . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+				'directory_word',
+			)
+		;
+        $message = ''
+            . \mb_strtoupper($this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+				'gs_command.trait.constructed_from_to_trait.delete_word',
+			)) . ':'
+			. ' ' . $whatFromIsInConstructedFromToPaths
             . ' ' . $fromDirPartMessage . '?'
-        . '';
+		;
 
         $infoMessage = (string) u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
-        if ($this->isOk($message)) {
-            $this->io->info([
-                'Процесс удаления' . $infoMessage . '...',
+        
+		$this->gsCommandGetCommandForTrait()->getIo()->info([
+			$this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
+		]);
+		if ($this->gsCommandGetCommandForTrait()->isOk()) {
+            $this->gsCommandGetCommandForTrait()->getIo()->info([
+                ''
+				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+					'gs_command.trait.constructed_from_to_trait.deleting_process',
+				)
+				. $infoMessage . '...',
             ]);
             foreach ($pathsForRemove as $pathForRemove) {
-                $this->filesystemService->deleteByAbsPathIfExists(
+                $this->gsCommandGetFilesystemServiceForTrait()->deleteByAbsPathIfExists(
                     $pathForRemove,
                 );
             }
             //###>
-            $this->io->note([
-                'Удалены' . $infoMessage,
+            $this->gsCommandGetCommandForTrait()->getIo()->note([
+                ''
+				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+					'gs_command.trait.constructed_from_to_trait.have_been_deleted',
+				)
+				. $infoMessage,
             ]);
         } else {
             //###>
-            $this->io->note([
-                'Не удалены' . $infoMessage,
+            $this->gsCommandGetCommandForTrait()->getIo()->note([
+                ''
+				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+					'gs_command.trait.constructed_from_to_trait.have_not_been_deleted',
+				)
+				. $infoMessage,
             ]);
         }
     }
@@ -269,177 +449,6 @@ trait AbstractConstructedFromToCommandTrait
     }
 
     //###< API ###
-    
-	
-	//###> ABSTRACT ###
-
-    /* AbstractConstructedFromToCommand
-        create your own ConstructedFromToPathsDataSupplier for a certain command
-        extends AbstractConstructedFromToPathsDataSupplier
-    */
-    abstract protected function getDataSuppliersForConstructedFromToPaths(): \Traversable|array;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-
-        ###>READY:
-            getFromForFinder
-    */
-    abstract protected function getFinder(
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): Finder;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function initScanningConstructedFromToPaths(
-        InputInterface $input,
-        OutputInterface $output,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [CYCLE INTO CYCLE]
-    */
-    abstract protected function scanningCycleForConstructedFromToPaths(
-        InputInterface $input,
-        OutputInterface $output,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [CYCLE INTO CYCLE]
-
-        FILTER
-    */
-    abstract protected function isSkipForConstructedFromToPaths(
-        SplFileInfo $finderSplFileInfo,
-        string $from,
-        string $to,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): bool;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function endScanningForConstructedFromToPaths(
-        InputInterface $input,
-        OutputInterface $output,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function clearStateWhenStartCycle(): void;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function makeWillNotBe(
-        InputInterface $input,
-        OutputInterface $output,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function beforeDumpInfoConstructedFromToPaths(
-        InputInterface $input,
-        OutputInterface $output,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function isDumpInfoOnlyDirname(): bool;
-
-    /* AbstractConstructedFromToCommand
-        RETURN NULL IF YOU DON'T WANNT CONSIDER IT
-
-        [INTO CYCLE]
-    */
-    abstract protected function isDumpInfoOnlyFrom(): ?bool;
-
-    /* AbstractConstructedFromToCommand
-        RETURN NULL IF YOU DON'T WANNT CONSIDER IT
-
-        [INTO CYCLE]
-    */
-    abstract protected function isDumpInfoOnlyTo(): ?bool;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-
-        ###>READY:
-            getFromForFinder
-            isConstructedFromToPathsEmpty
-            getQuantityConstructedFromToPaths
-    */
-    abstract protected function beforeMakeFromToAlgorithm(
-        InputInterface $input,
-        OutputInterface $output,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function beforeMakeFromToAlgorithmAndAfterStartProgressBar(
-        InputInterface $input,
-        OutputInterface $output,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [CYCLE INTO CYCLE]
-    */
-    abstract protected function beforeMakeCycle(
-        InputInterface $input,
-        OutputInterface $output,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [CYCLE INTO CYCLE]
-    */
-    abstract protected function makeFromToAlgorithm(
-        string $from,
-        string $to,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): ?array;
-
-    /* AbstractConstructedFromToCommand
-        [CYCLE INTO CYCLE]
-    */
-    abstract protected function afterMakeCycle(
-        InputInterface $input,
-        OutputInterface $output,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-        [INTO CYCLE]
-    */
-    abstract protected function afterDataSupplierCycleExecute(
-        InputInterface $input,
-        OutputInterface $output,
-        bool $operationWasMade,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-        int $madeQuantity,
-        bool $madeQuantityEqualsAllFilesFrom,
-    ): void;
-
-    /* AbstractConstructedFromToCommand
-
-        ###>READY:
-            getFromForFinder IN LAST ITERATION
-            isConstructedFromToPathsEmpty IN LAST ITERATION
-            getQuantityConstructedFromToPaths IN LAST ITERATION
-    */
-    abstract protected function afterDataSupplierExecute(
-        InputInterface $input,
-        OutputInterface $output,
-        AbstractConstructedFromToPathsDataSupplier $dataSupplier,
-    ): void;
-
-    //###< ABSTRACT ###
 
 
     //###> HELPER ###
@@ -480,9 +489,9 @@ trait AbstractConstructedFromToCommandTrait
         OutputInterface $output,
         AbstractConstructedFromToPathsDataSupplier $dataSupplier,
     ): void {
-        $this->io->title(
+        $this->gsCommandGetCommandForTrait()->getIo()->title(
             $this->getAlertStringForDataSupplier(
-                'Будет выполнено',
+                $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.constructed_from_to_trait.will_be_executed_word'),
                 $dataSupplier,
             ),
         );
@@ -492,7 +501,7 @@ trait AbstractConstructedFromToCommandTrait
             $output,
         );
 
-        $this->dumpInfoService->dumpInfo(
+        $this->gsCommandGetDumpInfoServiceForTrait()->dumpInfo(
             $this,
             $this->constructedFromToPaths,
             dirname:        $this->isDumpInfoOnlyDirname(),
@@ -522,8 +531,8 @@ trait AbstractConstructedFromToCommandTrait
                 || ++$counter > $this->getProgressBarDisplayFrequency()
             ) {
                 $counter = 0;
-                $this->progressBar->advance();
-                $this->progressBar->display();
+                $this->gsCommandGetCommandForTrait()->getProgressBar()->advance();
+                $this->gsCommandGetCommandForTrait()->getProgressBar()->display();
             }
         };
         //###< INIT ###
@@ -535,8 +544,8 @@ trait AbstractConstructedFromToCommandTrait
         );
 
         //###>
-        $this->progressBar->setMaxSteps($this->getMaxSteps());
-        $this->progressBar->start();
+        $this->gsCommandGetCommandForTrait()->getProgressBar()->setMaxSteps($this->getMaxSteps());
+        $this->gsCommandGetCommandForTrait()->getProgressBar()->start();
         $this->beforeMakeFromToAlgorithmAndAfterStartProgressBar(
             $input,
             $output,
@@ -564,8 +573,8 @@ trait AbstractConstructedFromToCommandTrait
             }
         }
         $updateProgressBar(force: true);
-        $this->progressBar->finish();
-        $this->progressBar->clear();
+        $this->gsCommandGetCommandForTrait()->getProgressBar()->finish();
+        $this->gsCommandGetCommandForTrait()->getProgressBar()->clear();
 
         return $madeQuantity;
     }
@@ -656,7 +665,7 @@ trait AbstractConstructedFromToCommandTrait
         }
 
         return empty(
-            $this->filesystemService->getErrorsIfNot(
+            $this->gsCommandGetFilesystemServiceForTrait()->getErrorsIfNot(
                 [
                     'exists',
                     'isAbsolutePath',
@@ -669,7 +678,7 @@ trait AbstractConstructedFromToCommandTrait
 
     private function checkFromForFinder(): void
     {
-        $this->filesystemService->throwIfNot(
+        $this->gsCommandGetFilesystemServiceForTrait()->throwIfNot(
             [
                 'exists',
                 'isAbsolutePath',
@@ -697,8 +706,8 @@ trait AbstractConstructedFromToCommandTrait
     private function getDirIfFile(
         string $path,
     ): string {
-        if (\is_file($path)) {
-            return $this->stringService->getDirectory($path);
+		if (\is_file($path)) {
+            return $this->gsCommandGetStringServiceForTrait()->getDirectory($path);
         }
         return $path;
     }

@@ -27,14 +27,21 @@ use GS\Service\Service\{
 
 trait MoveAbleTrait
 {
-	protected bool $move = false;
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* MoveAbleTrait */
+	abstract protected function &getMoveProperty(): bool;
+	
+	//###< ABSTRACT ###
 
     protected function configureMoveOption(): void
     {
         $this->configureOption(
             name:           'move',
-            default:        $this->move,
-            description:    'Переместить вместо копирования',
+            default:        $this->getMoveProperty(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.move_able.description'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
     }
@@ -47,7 +54,7 @@ trait MoveAbleTrait
             $input,
             $output,
             'move',
-            $this->move,
+            $this->getMoveProperty(),
         );
     }
 }

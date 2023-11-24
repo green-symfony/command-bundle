@@ -49,15 +49,6 @@ use Symfony\Component\Console\Input\{
 use Symfony\Component\Console\Output\{
     OutputInterface
 };
-use GS\Service\Service\{
-    ConfigService,
-    DumpInfoService,
-    BoolService,
-    ArrayService,
-    RegexService,
-    StringService,
-    FilesystemService
-};
 use App\Contracts\{
     AbstractConstructedFromToPathsDataSupplier
 };
@@ -71,36 +62,18 @@ use GS\Command\Contracts\PatternAbleCommandInterface;
 */
 trait AbstractPatternAbleCommandTrait
 {
-    /*###> MUST CONTAIN ###
-
-        use <TRAIT_NAME>;
-
-        public function __construct(
-			$devLogger,
-			$t,
-			array $progressBarSpin,
-			//
-            protected readonly StringService $stringService,
-            protected readonly DumpInfoService $dumpInfoService,
-            protected readonly FilesystemService $filesystemService,
-            protected readonly ConfigService $configService,
-            protected readonly ArrayService $arrayService,
-            protected readonly RegexService $regexService,
-            protected readonly BoolService $boolService,
-            protected readonly string $yearRegexWithoutB,
-            protected readonly string $monthRegex,
-            protected readonly string $boardRegexSoft,
-        ) {
-            parent::__construct(
-				devLogger:			$devLogger,
-				t:					$t,
-				progressBarSpin:	$progressBarSpin,
-			);
-        }
-    */
-
-    private ?string $stringPattern      = null;
-    private array $explodedPatterns     = [];
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* AbstractPatternAbleCommandTrait */
+	abstract protected function &getStringPatternProperty(): ?string;
+	
+	/* AbstractPatternAbleCommandTrait */
+	abstract protected function &getExplodedPatternsProperty(): array;
+	
+	//###< ABSTRACT ###
+	
 
     //###> PARSERS DESCRIPTIONS ###
     //###< PARSERS DESCRIPTIONS ###
@@ -110,10 +83,12 @@ trait AbstractPatternAbleCommandTrait
         OutputInterface $output,
     ): void {
         /* GUARANTEE THAT THE stringPattern WAS GIVEN */
-        if ($this->stringPattern !== null) {
-            $this->explodedPatterns = $this->getCalculatedExplodedPatterns(
-                $this->stringPattern,
-            );
+        if ($this->getStringPatternProperty() !== null) {
+            $this->setExplodedPatterns(
+				$this->getCalculatedExplodedPatterns(
+					$this->getStringPatternProperty(),
+				),
+			);
         }
     }
 
@@ -136,16 +111,17 @@ trait AbstractPatternAbleCommandTrait
     //###> PARSERS API ###
     //###< PARSERS API ###
 
+
     //###> API ###
 
     protected function getStringPattern(): ?string
     {
-        return $this->stringPattern;
+        return $this->getStringPatternProperty();
     }
 
     protected function getExplodedPatterns(): array
     {
-        return $this->explodedPatterns;
+        return $this->getExplodedPatternsProperty();
     }
 
     //###< API ###
@@ -180,10 +156,12 @@ trait AbstractPatternAbleCommandTrait
 
     protected function configurePatternArgument(): void
     {
-        $this->addArgument(
-            $this->getPatternName(),
-            $this->getPatternMode(),
-            'Строка наподобии: "' . $this->getPatternDescription() . '"',
+        $this->gsCommandGetCommandForTrait()->configureArgument(
+            name: $this->getPatternName(),
+            mode: $this->getPatternMode(),
+            description: $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.pattern_able_trait.string_like_word')
+			. ': "' . $this->getPatternDescription() . '"',
+			add_default_to_description: false,
         );
     }
 
@@ -191,13 +169,21 @@ trait AbstractPatternAbleCommandTrait
         InputInterface $input,
         OutputInterface $output,
     ): void {
-        $this->initializeArgument(
+        $this->gsCommandGetCommandForTrait()->initializeArgument(
             $input,
             $output,
             $this->getPatternName(),
-            $this->stringPattern,
+            $this->getStringPatternProperty(),
         );
     }
+	
+	private function setExplodedPatterns(
+		array $explodedPatterns,
+	): static {
+		$v =& $this->getExplodedPatternsProperty();
+		$v = $explodedPatterns;
+		return $this;
+	}
 
     //###< HELPER ###
 

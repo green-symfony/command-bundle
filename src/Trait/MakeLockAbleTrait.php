@@ -27,14 +27,21 @@ use GS\Service\Service\{
 
 trait MakeLockAbleTrait
 {
-	protected bool $makeLock = true;
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* MakeLockAbleTrait */
+	abstract protected function &getMakeLockProperty(): bool;
+	
+	//###< ABSTRACT ###
 
     protected function configureLockOption(): void
     {
         $this->configureOption(
             name:           'make-lock',
-            default:        $this->makeLock,
-            description:    'Запретить одновременное выполнение одной и той же команды',
+            default:        $this->getMakeLockProperty(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.make_lock_able.description'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
     }
@@ -47,7 +54,7 @@ trait MakeLockAbleTrait
             $input,
             $output,
             'make-lock',
-            $this->makeLock,
+            $this->getMakeLockProperty(),
         );
     }
 }

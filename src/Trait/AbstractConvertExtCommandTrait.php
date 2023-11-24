@@ -74,36 +74,53 @@ use GS\Command\Trait\DepthAbleTrait;
 */
 trait AbstractConvertExtCommandTrait
 {
-    /*###> MUST CONTAIN ###
-
-        use <TRAIT_NAME>;
-		
-		public function __construct(
-			protected readonly StringService $stringService,
-			protected readonly FilesystemService $filesystemService,
-			protected readonly DumpInfoService $dumpInfoService,
-			protected readonly RegexService $regexService,
-			protected readonly TranslatorInterface $t,
-		) {}
-    */
+	use AbstractGetCommandTrait;
+    use MoveAbleTrait;
+    use DepthAbleTrait;
+    use AskAbleTrait;
+    use DumpInfoAbleTrait;
+    use OverrideAbleTrait;
 	
 	
 	//###> ABSTRACT ###
 	
+	/* AbstractConvertExtCommandTrait */
+	abstract protected function &gsCommandGetStringServiceForTrait(): StringService;
+	
+	/* AbstractConvertExtCommandTrait */
+	abstract protected function &gsCommandGetFilesystemServiceForTrait(): FilesystemService;
+	
+	/* AbstractConvertExtCommandTrait */
+	abstract protected function &gsCommandGetDumpInfoServiceForTrait(): DumpInfoService;
+	
+	/* AbstractConvertExtCommandTrait */
+	abstract protected function &gsCommandGetRegexServiceForTrait(): RegexService;
+	
+	/* AbstractConvertExtCommandTrait */
+    abstract protected function &isDumpConvertedInfo(): bool;
+	
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getFromExtensions(): string|array;
 	
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getToExtension(): string;
 	
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getCommandDescription(): string;
 	
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getFromDescription(): string;
 	
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getToDescription(): string;
 
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getDefaultFrom(): string;
 	
+	/* AbstractConvertExtCommandTrait */
     abstract protected function getDefaultTo(): string;
 	
+	/* AbstractConvertExtCommandTrait */
 	abstract protected function saveConvertedTo(
         string $absPathFrom,
         string $absPathTo,
@@ -113,21 +130,13 @@ trait AbstractConvertExtCommandTrait
 	
 	
 	//###> CAN OVERRIDE ###
-
-	protected bool $isDumpConvertedInfo = true;
-	protected bool $move            = false;
-	protected array|string $depth   = '== 0';
-	protected bool $ask             = true;
-	protected bool $dumpInfo        = true;
-	protected bool $override        = false;
-	protected bool $askOverride     = true;
 	
     protected function finderPass(
 		Finder &$finder,
 	): void {
 		$finder
 			->notName([
-				$this->regexService->getNotTmpDocxRegex(),
+				$this->gsCommandGetRegexServiceForTrait()->getNotTmpDocxRegex(),
 			])
 		;
 	}
@@ -136,9 +145,9 @@ trait AbstractConvertExtCommandTrait
 		string $absPathFrom,
 		string $absPathTo,
 	): void {
-		$this->io->note([
-			$this->stringService->replaceSlashWithSystemDirectorySeparator($absPathTo),
-			$this->t->trans('gs_command.convertor.converted'),
+		$this->gsCommandGetCommandForTrait()->getIo()->note([
+			$this->gsCommandGetStringServiceForTrait()->replaceSlashWithSystemDirectorySeparator($absPathTo),
+			$this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.convertor.converted'),
 		]);
 	}
 	
@@ -146,9 +155,9 @@ trait AbstractConvertExtCommandTrait
 		string $absPathFrom,
 		string $absPathTo,
 	): void {
-		$this->io->warning([
-			$this->stringService->replaceSlashWithSystemDirectorySeparator($absPathTo),
-			$this->t->trans('gs_command.convertor.not_converted'),
+		$this->gsCommandGetCommandForTrait()->getIo()->warning([
+			$this->gsCommandGetStringServiceForTrait()->replaceSlashWithSystemDirectorySeparator($absPathTo),
+			$this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.convertor.not_converted'),
 		]);
 	}
 	
@@ -158,15 +167,8 @@ trait AbstractConvertExtCommandTrait
     private ?array $fromExtensions = null;	
     private null|array|string $from = null;
     private null|array|string $to = null;
-	
-    use MoveAbleTrait;
-    use DepthAbleTrait;
-    use AskAbleTrait;
-    use DumpInfoAbleTrait;
-    use OverrideAbleTrait;
 
-	protected function configure(): void
-    {
+	protected function configure(): void {
         $this->configureMoveOption();
 
         $this->configureDepthOption();
@@ -177,24 +179,24 @@ trait AbstractConvertExtCommandTrait
 
         $this->configureOverrideOptions();
 
-        $this->configureOption(
+        $this->gsCommandGetCommandForTrait()->configureOption(
             'from',
             default:        $this->getDefaultFrom(),
             description:    $this->getFromDescription(),
             mode:           InputOption::VALUE_REQUIRED,
         );
 
-        $this->configureOption(
+        $this->gsCommandGetCommandForTrait()->configureOption(
             'to',
             default:        $this->getDefaultTo(),
             description:    $this->getToDescription(),
             mode:           InputOption::VALUE_REQUIRED,
         );
 
-        $this->configureOption(
+        $this->gsCommandGetCommandForTrait()->configureOption(
             'dump-converted-info',
-            default:        $this->isDumpConvertedInfo,
-            description:    $this->t->trans('gs_command.convertor.is_dump_converting_info'),
+            default:        $this->isDumpConvertedInfo(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.convertor.is_dump_converting_info'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
 
@@ -244,25 +246,25 @@ trait AbstractConvertExtCommandTrait
             command: $this,
         );
 
-        $this->initializeOption(
+        $this->gsCommandGetCommandForTrait()->initializeOption(
             $input,
             $output,
             'from',
             $this->from,
         );
 
-        $this->initializeOption(
+        $this->gsCommandGetCommandForTrait()->initializeOption(
             $input,
             $output,
             'to',
             $this->to,
         );
 
-        $this->initializeOption(
+        $this->gsCommandGetCommandForTrait()->initializeOption(
             $input,
             $output,
             'dump-converted-info',
-            $this->isDumpConvertedInfo,
+            $this->isDumpConvertedInfo(),
         );
     }
 
@@ -295,7 +297,7 @@ trait AbstractConvertExtCommandTrait
 			
             $message = [
                 ''
-				. $this->t->trans(
+				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
 					'gs_command.convertor.there_is_no_newer_file_for_converting',
 					[
 						'%ext%' => $this->getToExtensionInner(),
@@ -309,7 +311,7 @@ trait AbstractConvertExtCommandTrait
                 ];
                 $message = [
 					''
-                    . $this->t->trans(
+                    . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
 						'gs_command.convertor.have_not_been_converted',
 						[
 							'%ext%' => $this->getToExtensionInner()
@@ -317,18 +319,18 @@ trait AbstractConvertExtCommandTrait
 					),
                     \str_pad(
 						$fromToString[0],
-						$this->stringService->getOptimalWidthForStrPad(
+						$this->gsCommandGetStringServiceForTrait()->getOptimalWidthForStrPad(
 							$fromToString[0],
 							$fromToString,
 						)
-					) . $this->stringService->replaceSlashWithSystemDirectorySeparator($from),
+					) . $this->gsCommandGetStringServiceForTrait()->replaceSlashWithSystemDirectorySeparator($from),
                     \str_pad(
 						$fromToString[1],
-						$this->stringService->getOptimalWidthForStrPad(
+						$this->gsCommandGetStringServiceForTrait()->getOptimalWidthForStrPad(
 							$fromToString[1],
 							$fromToString,
 						)
-					) . $this->stringService->replaceSlashWithSystemDirectorySeparator($to),
+					) . $this->gsCommandGetStringServiceForTrait()->replaceSlashWithSystemDirectorySeparator($to),
                 ];
             }
 
@@ -345,7 +347,7 @@ trait AbstractConvertExtCommandTrait
             $this->noFilesToConvertMessage(
                 $input,
                 $output,
-                message: $this->t->trans(
+                message: $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
 					'gs_command.convertor.there_is_no_newer_files_for_converting',
 					[
 						'%ext%' => $this->getToExtensionInner(),
@@ -378,17 +380,17 @@ trait AbstractConvertExtCommandTrait
         string $absPathTo,
     ): void {
 		
-        $madeResult = $this->filesystemService->executeWithoutChangeMTime(
+        $madeResult = $this->gsCommandGetFilesystemServiceForTrait()->executeWithoutChangeMTime(
 			$this->saveConvertedTo(...),
             $absPathFrom,
             $absPathTo,
-            $this->override,
-            $this->move,
+            $this->getOverrideProperty(),
+            $this->getMoveProperty(),
         );
 		
         $wasMade = !empty($madeResult);
 
-        if ($this->isDumpConvertedInfo) {
+        if ($this->isDumpConvertedInfo()) {
             if ($wasMade) {
                 $this->afterProcessFromToWasMadeDumpInfo(
 					$absPathFrom,
@@ -407,12 +409,14 @@ trait AbstractConvertExtCommandTrait
         InputInterface $input,
         OutputInterface $output,
     ): void {
-        if ($this->ask) {
-            if ($this->isOk()) {
+        if ($this->getAskProperty()) {
+            if ($this->gsCommandGetCommandForTrait()->isOk()) {
                 $this->makeFromTo();
                 return;
             }
-            $this->io->warning('Отмена преобразования');
+            $this->gsCommandGetCommandForTrait()->getIo()->warning(
+				$this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.convert_trait.cancel_converting')
+			);
             return;
         }
         $this->makeFromTo();
@@ -423,7 +427,7 @@ trait AbstractConvertExtCommandTrait
         OutputInterface $output,
         string|array $message,
     ): void {
-        $this->io->warning($message);
+        $this->gsCommandGetCommandForTrait()->getIo()->warning($message);
     }
 
     private function isNotThereToConvert(): bool
@@ -450,14 +454,23 @@ trait AbstractConvertExtCommandTrait
             return;
         }
 
-        throw new \Exception('Команда "' . $this->getName() . '" не выполнила преобразование!');
+        throw new \Exception(''
+			. ' "'
+			. $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.command_word')
+			. ' ' . $this->getName()
+			. '" '
+			. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(	
+				'gs_command.trait.convert_trait.didn_not_convert',
+			)
+			. '!',
+		);
     }
 
     private function dumpFromTo(
         InputInterface $input,
         OutputInterface $output,
     ): void {
-        $this->dumpInfoService->dumpInfo(
+        $this->gsCommandGetDumpInfoServiceForTrait()->dumpInfo(
             $this,
             $this->from,
             $this->to,
@@ -480,23 +493,23 @@ trait AbstractConvertExtCommandTrait
 
     private function setFromIfItsWithoutExtTryToGuess(): void
     {
-        $from = $this->stringService->makeAbsolute(
+        $from = $this->gsCommandGetStringServiceForTrait()->makeAbsolute(
 			$this->from,
 			$this->getDefaultFrom(),
 		);
 		
-		$ext = $this->stringService->getExtFromPath(
+		$ext = $this->gsCommandGetStringServiceForTrait()->getExtFromPath(
 			$from,
 			onlyExistingPath: true,
 			amongExtensions: $this->getFromExtensionsInner(),
 		);
 		
-		$this->from = $this->stringService->makeAbsolute(
-			$this->stringService->getFilenameWithExt(
+		$this->from = $this->gsCommandGetStringServiceForTrait()->makeAbsolute(
+			$this->gsCommandGetStringServiceForTrait()->getFilenameWithExt(
 				$from,
 				$ext,
 			),
-			$this->stringService->getDirectory($from),
+			$this->gsCommandGetStringServiceForTrait()->getDirectory($from),
 		);
     }
 
@@ -511,7 +524,7 @@ trait AbstractConvertExtCommandTrait
             ->ignoreUnreadableDirs()
             ->in($this->from)
             ->files()
-            ->depth($this->depth)
+            ->depth($this->getDepthProperty())
             ->name([
 				//###> FILTERED BY EXTENSION
                 $this->getFromExtensionsInnerRegex(),
@@ -528,9 +541,9 @@ trait AbstractConvertExtCommandTrait
         ;
         foreach ($finder as $finderSplFileInfo) {
             $from   = Path::normalize($finderSplFileInfo->getRealPath());
-            $to     = $this->stringService->makeAbsolute(
+            $to     = $this->gsCommandGetStringServiceForTrait()->makeAbsolute(
                 $finderSplFileInfo->getFilenameWithoutExtension() . '.' . $this->getToExtensionInner(),
-                $this->stringService->makeAbsolute(
+                $this->gsCommandGetStringServiceForTrait()->makeAbsolute(
                     $finderSplFileInfo->getRelativePath(),
                     $this->getDefaultTo(),
                 ),
@@ -559,8 +572,8 @@ trait AbstractConvertExtCommandTrait
             return false;
         }
 
-        $notOverride            = !$this->override;
-        $toNewer                = !$this->filesystemService->firstFileNewer(
+        $notOverride            = !$this->getOverrideProperty();
+        $toNewer                = !$this->gsCommandGetFilesystemServiceForTrait()->firstFileNewer(
             first:  $from,
             second: $to,
         );
@@ -582,7 +595,7 @@ trait AbstractConvertExtCommandTrait
 
     private function checkFrom(): void
     {
-        $this->filesystemService->throwIfNot(
+        $this->gsCommandGetFilesystemServiceForTrait()->throwIfNot(
             [
                 'exists',
                 'isAbsolutePath',
@@ -611,19 +624,19 @@ trait AbstractConvertExtCommandTrait
 
         //###>
         if (\is_dir($to)) {
-            $filename = $this->stringService->getFilenameWithExt(
+            $filename = $this->gsCommandGetStringServiceForTrait()->getFilenameWithExt(
 				$this->from,
 				$this->getToExtensionInner(),
 			);
 			
-            $to = $this->stringService->getPath(
+            $to = $this->gsCommandGetStringServiceForTrait()->getPath(
                 $to,
                 $filename,
             );
         } else {
             //###> $to is file
-            $toDir = $this->stringService->getDirectory($to);
-            $this->filesystemService->throwIfNot(
+            $toDir = $this->gsCommandGetStringServiceForTrait()->getDirectory($to);
+            $this->gsCommandGetFilesystemServiceForTrait()->throwIfNot(
                 [
                     'exists',
                     'isDir',
@@ -631,18 +644,18 @@ trait AbstractConvertExtCommandTrait
                 $toDir,
             );
 
-            $filename = $this->stringService->getFilenameWithExt(
+            $filename = $this->gsCommandGetStringServiceForTrait()->getFilenameWithExt(
 				$to,
 				$this->getToExtensionInner(),
 			);
 
-            $to = $this->stringService->getPath(
+            $to = $this->gsCommandGetStringServiceForTrait()->getPath(
                 $toDir,
                 $filename,
             );
         }
 
-        return $this->stringService->makeAbsolute($to, $this->getDefaultTo());
+        return $this->gsCommandGetStringServiceForTrait()->makeAbsolute($to, $this->getDefaultTo());
     }
 	
 	private function getNormalizedExtension(

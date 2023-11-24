@@ -27,14 +27,22 @@ use GS\Service\Service\{
 
 trait DepthAbleTrait
 {
-	protected array|string $depth = '== 0';
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* DepthAbleTrait */
+	abstract protected function &getDepthProperty(): array|string;
+
+	//###< ABSTRACT ###
+
 
     protected function configureDepthOption(): void
     {
         $this->configureOption(
             name:           'depth',
-            default:        $this->depth,
-            description:    'Глубина сканирования файлов: (>= 1, <= 0, == 2, >= 1, == 2)',
+            default:        $this->getDepthProperty(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.depth_able.description'),
             mode:           InputOption::VALUE_REQUIRED,
             shortcut:       'd',
         );
@@ -48,7 +56,7 @@ trait DepthAbleTrait
             $input,
             $output,
             'depth',
-            $this->depth,
+            $this->getDepthProperty(),
             set:        static fn(?string $userOption, &$option)
                 => $option = \array_map(\trim(...), \explode(',', $userOption)),
         );

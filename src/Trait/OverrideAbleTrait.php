@@ -29,23 +29,32 @@ use GS\Service\Service\{
 
 trait OverrideAbleTrait
 {
-    protected bool $override        = false;
-    protected bool $askOverride     = true;
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* OverrideAbleTrait */
+	abstract protected function &getOverrideProperty(): bool;
+	
+	/* OverrideAbleTrait */
+	abstract protected function &isAskOverride(): bool;
+	
+	//###< ABSTRACT ###
 
     protected function configureOverrideOptions(): void
     {
         $this->configureOption(
             name:           'override',
-            default:        $this->override,
-            description:    '!ОПАСНЫЙ ФЛАГ! Перезаписывать даже более новые файлы',
+            default:        $this->getOverrideProperty(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.override_able.description'),
             mode:           InputOption::VALUE_NEGATABLE,
             shortcut:       'o',
         );
-
+		
         $this->configureOption(
             name:           'ask-override',
-            default:        $this->askOverride,
-            description:    'Спрашивать об уверенности перезаписи',
+            default:        $this->isAskOverride(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.override_able.ask_description'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
     }
@@ -55,11 +64,12 @@ trait OverrideAbleTrait
         OutputInterface $output,
         AbstractCommand $command,
     ): void {
+		
         $this->initializeOption(
             $input,
             $output,
             'ask-override',
-            $this->askOverride,
+            $this->isAskOverride(),
         );
 
         $do = function (
@@ -67,10 +77,10 @@ trait OverrideAbleTrait
             &$override,/*by ref*/
         ) use ($command) {
             if ($overrideUserOption == true) {
-                if ($this->askOverride) {
+                if ($this->isAskOverride()) {
                     $anwer = $command->getIo()->askQuestion(
                         new ConfirmationQuestion(
-                            'Overwrite even newer files?',
+                            $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.override_able.confirm_ask'),
                             $override,
                         )
                     );
@@ -88,7 +98,7 @@ trait OverrideAbleTrait
             $input,
             $output,
             name:           'override',
-            option:         $this->override,
+            option:         $this->getOverrideProperty(),
             predicat:       static fn(?string $userOption, &$option/*by ref*/)
                 => $userOption !== null && $option !== true,
             set:            static fn(?string $userOption, &$option/*by ref*/)

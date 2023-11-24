@@ -27,14 +27,22 @@ use GS\Service\Service\{
 
 trait AskAbleTrait
 {
-    protected bool $ask = true;
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* AskAbleTrait */
+	abstract protected function &getAskProperty(): bool;
+	
+	//###< ABSTRACT ###
+
 
     protected function configureAskOption(): void
     {
         $this->configureOption(
             name:           'ask',
-            default:        $this->ask,
-            description:    'gs_command.trait.is_ask_ok',
+            default:        $this->getAskProperty(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.ask_able.description'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
     }
@@ -47,7 +55,7 @@ trait AskAbleTrait
             $input,
             $output,
             'ask',
-            $this->ask,
+            $this->getAskProperty(),
         );
     }
 }

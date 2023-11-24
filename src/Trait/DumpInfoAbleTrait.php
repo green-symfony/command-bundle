@@ -27,13 +27,21 @@ use GS\Service\Service\{
 
 trait DumpInfoAbleTrait
 {
-	protected bool $dumpInfo = true;
+	use AbstractGetCommandTrait;
+	
+	//###> ABSTRACT ###
+	
+	/* DumpInfoAbleTrait */
+	abstract protected function &getDumpInfoProperty(): bool;
+	
+	//###< ABSTRACT ###
+	
 
     //###> PUBLIC API ###
 
     public function isDumpInfo(): bool
     {
-        return $this->dumpInfo;
+        return $this->getDumpInfoProperty();
     }
 
     //###< PUBLIC API ###
@@ -43,8 +51,8 @@ trait DumpInfoAbleTrait
     {
         $this->configureOption(
             name:           'dump-info',
-            default:        $this->dumpInfo,
-            description:    'Показывать информацию о выполнении программы?',
+            default:        $this->getDumpInfoProperty(),
+            description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.dump_info_able.description'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
     }
@@ -57,7 +65,7 @@ trait DumpInfoAbleTrait
             $input,
             $output,
             'dump-info',
-            $this->dumpInfo,
+            $this->getDumpInfoProperty(),
         );
     }
 }

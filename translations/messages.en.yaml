@@ -1,6 +1,8 @@
 gs_command:
+    command_word: 'Command'
+    already_triggered: 'has already triggered'
+
     command:
-        
         default:
             exit: 'Exit'
             is_ok: 'Ok?'
@@ -17,4 +19,39 @@ gs_command:
         have_not_been_converted: 'Not converted into "%ext%"'
         
     trait:
-        is_ask_ok: 'Should it ask ok?'
+    
+        constructed_from_to_trait:
+            will_be_executed_word: 'Will be executed'
+            have_not_been_deleted: 'Have not been deleted'
+            have_been_deleted: 'Have been deleted'
+            deleting_process: 'Removing process'
+            delete_word: 'Remove'
+            from_word: 'from'
+            directory_word: 'directory'
+    
+        pattern_able_trait:
+            string_like_word: 'String like'
+            
+        convert_trait:
+            cancel_converting: 'Cancel converting'
+            didn_not_convert: 'has not converted'
+            
+        override_able:
+            description: '!DANGEROUS FLAG! Overwrite even newer files'
+            ask_description: 'Ask about overwriting confidence'
+            confirm_ask: 'Overwrite even newer files?'
+            
+        move_able:
+            description: 'Move instead of copying'
+            
+        make_lock_able:
+            description: 'Prohibit simultaneous execution of the same command'
+            
+        dump_info_able:
+            description: 'Show information about program execution?'
+            
+        depth_able:
+            description: 'File scanning depth: (>= 1, <= 0, == 2, >= 1, == 2)'
+            
+        ask_able:
+            description: 'Do ask "ok"?'

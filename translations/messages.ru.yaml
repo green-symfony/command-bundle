@@ -1,4 +1,7 @@
 gs_command:
+    command_word: 'Команда'
+    already_triggered: 'уже запущена'
+    
     command:
         default:
             exit: 'Выход'
@@ -16,4 +19,39 @@ gs_command:
         have_not_been_converted: 'Не преобразовался в "%ext%"'
     
     trait:
-        is_ask_ok: 'Спрашивать ок?'
+    
+        constructed_from_to_trait:
+            will_be_executed_word: 'Будет выполнено'
+            have_not_been_deleted: 'Не удалены'
+            have_been_deleted: 'Удалены'
+            deleting_process: 'Процесс удаления'
+            delete_word: 'Удалить'
+            from_word: 'из'
+            directory_word: 'папки'
+    
+        pattern_able_trait:
+            string_like_word: 'Строка наподобии'
+        
+        convert_trait:
+            cancel_converting: 'Отмена преобразования'
+            didn_not_convert: 'не выполнила преобразование'
+    
+        override_able:
+            description: '!ОПАСНЫЙ ФЛАГ! Перезаписывать даже более новые файлы'
+            ask_description: 'Спрашивать об уверенности перезаписи'
+            confirm_ask: 'Overwrite even newer files?'
+            
+        move_able:
+            description: 'Переместить вместо копирования'
+            
+        make_lock_able:
+            description: 'Запретить одновременное выполнение одной и той же команды'
+            
+        dump_info_able:
+            description: 'Показывать информацию о выполнении программы?'
+            
+        depth_able:
+            description: 'Глубина сканирования файлов: (>= 1, <= 0, == 2, >= 1, == 2)'
+            
+        ask_able:
+            description: 'Спрашивать "ок"?'

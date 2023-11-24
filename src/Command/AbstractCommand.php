@@ -4,6 +4,7 @@ namespace GS\Command\Command;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Filesystem\{
     Path
@@ -20,6 +21,7 @@ use Symfony\Component\Console\Command\{
 };
 use Symfony\Component\Console\Helper\{
     ProgressBar,
+    FormatterHelper,
     Table,
     TableStyle,
     TableSeparator
@@ -34,6 +36,7 @@ use Symfony\Component\Console\Input\{
 use Symfony\Component\Console\Output\{
     OutputInterface
 };
+use GS\Command\Command\UseTrait\AbstractCommandUseTrait;
 
 // PROJECT_DIR/bin/console <command>
 /*
@@ -43,26 +46,28 @@ use Symfony\Component\Console\Output\{
     hidden: <bool>,
 )]
 */
-abstract class AbstractCommand extends Command implements
-    SignalableCommandInterface,
-    ServiceSubscriberInterface
+abstract class AbstractCommand extends AbstractCommandUseTrait
 {
+	use LockableTrait;
+	
     //###> CONSTANTS CHANGE ME ###
+	protected bool $makeLock = true;
     protected const WIDTH_PROGRESS_BAR = 40;
     protected const EMPTY_COLOR_PROGRESS_BAR = 'black';
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
     //###< CONSTANTS CHANGE ME ###
+	
 
-    protected SymfonyStyle $style;
-    protected $formatter;
-    protected $progressBar;
-    protected $table;
+    private SymfonyStyle $io;
+    private ProgressBar $progressBar;
+    private Table $table;
+    private FormatterHelper $formatter;
 
     public readonly string $initialCwd;
 
     public function __construct(
         protected $devLogger,
-        protected $t,
+        protected readonly TranslatorInterface $t,
         protected readonly array $progressBarSpin,
     ) {
         $this->initialCwd = Path::normalize(\getcwd());
@@ -89,26 +94,35 @@ abstract class AbstractCommand extends Command implements
 
 
     //###> PUBLIC API ###
+	
+    public function &getTranslator(): TranslatorInterface
+    {
+        return $this->t;
+    }
 
-	/*
-		gets the \Symfony\Component\Console\Style\SymfonyStyle object
-	*/
-    public function getIo(): SymfonyStyle
+    public function &getIo(): SymfonyStyle
     {
         return $this->io;
     }
 
-	/*
-		gets the \Symfony\Component\Console\Helper\Table object
-	*/
-    public function getTable(): Table
+    public function &getProgressBar(): ProgressBar
+    {
+        return $this->progressBar;
+    }
+
+    public function &getTable(): Table
     {
         return $this->table;
     }
 
+    public function &getFormatter(): FormatterHelper
+    {
+        return $this->formatter;
+    }
+	
     //###< PUBLIC API ###
-
-
+	
+	
     //###> API ###
 
 	/*
@@ -131,11 +145,12 @@ abstract class AbstractCommand extends Command implements
         int $mode,
         mixed $default = null,
         string|array $shortcut = null,
+        bool $add_default_to_description = true,
     ): void {
-		if ($mode != InputOption::VALUE_REQUIRED) {
+		if ($add_default_to_description && $mode != InputOption::VALUE_REQUIRED) {
 			$description = $this->getInfoDescription($mode, $description, $default);			
 		}
-		
+
         if ($shortcut === null) {
             $this
                 ->addOption(
@@ -175,7 +190,13 @@ abstract class AbstractCommand extends Command implements
         string $name,
         int $mode,
         ?string $description = null,
+		mixed $default = null,
+		bool $add_default_to_description = true,
     ) {
+		if ($add_default_to_description && $description !== null && $default !== null) {
+			$description = $this->getInfoDescription($mode, $description, $default);
+		}
+		
         if ($description === null) {
             $this
                 ->addArgument(
@@ -391,7 +412,137 @@ abstract class AbstractCommand extends Command implements
     //###< API ###
 
 
+    //###> ABSTRACT REALIZATION ###
+	
+	/* MakeLockAbleTrait */
+	protected function &getMakeLockProperty(): bool {
+		return $this->makeLock;
+	}
+	
+    /* AbstractCommandTrait */
+    protected function configure()
+    {
+        //\pcntl_signal(\SIGINT, $this->shutdown(...));
+        //\register_shutdown_function($this->shutdown(...));
+		
+        $this->configureLockOption();
+
+        /*###> parent::configure() AT THE END ###*/
+        parent::configure();
+    }
+
+    /* AbstractCommandTrait */
+    protected function initialize(
+        InputInterface $input,
+        OutputInterface $output,
+    ) {
+        /*###> parent::initialize() AT THE BEGINNING ###*/
+        parent::initialize(
+            $input,
+            $output,
+        );
+
+
+        //###>
+        $this->io = new SymfonyStyle($input, $output);
+        $this->setFormatter(
+            $input,
+            $output,
+        );
+        $this->setProgressBar(
+            $input,
+            $output,
+        );
+        $this->setTable(
+            $input,
+            $output,
+        );
+
+        $this->initializeLockOption(
+            $input,
+            $output,
+        );
+    }
+
+    /* AbstractCommand
+		// OK
+		return Command::SUCCESS;
+
+		// Incorrect usage
+		return Command::INVALID;
+
+		// Program failure
+		return Command::FAILURE;
+	*/
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ) {
+        //###> LOCK ###
+        if ($this->getMakeLockProperty()) {
+            if (!$this->lock(
+				$this->getLockName(),
+			)) {
+                $this->exit(
+					$this->t->trans('gs_command.command_word')
+					. ' ' . '"'. $this->getName() . '" '
+					. $this->t->trans('gs_command.already_triggered') . '!'
+				);
+                return Command::FAILURE;
+            }
+        }
+
+        $code = $this->command(
+            $input,
+            $output,
+        );
+
+        return $code;
+    }
+
+    /* Command */
+    protected function interact(
+        InputInterface $input,
+        OutputInterface $output,
+    ) {
+        // get missed options/arguments
+    }
+
+    /* SignalableCommandInterface */
+    public function getSubscribedSignals(): array
+    {
+        return [
+            //\SIGINT,
+            //\SIGTERM,
+        ];
+    }
+
+    /* SignalableCommandInterface */
+    public function handleSignal(int $signal): void
+    {
+        /*
+        if (\SIGINT == $signal) {
+            $this->shutdown();
+        }
+        */
+    }
+
+    /* ServiceSubscriberInterface */
+    public static function getSubscribedServices(): array
+    {
+        return [
+            'logger' => '?Psr\Log\LoggerInterface',
+        ];
+    }
+
+    //###< ABSTRACT REALIZATION ###
+
+
     //###> YOU CAN OVERRIDE IT  ###
+	
+	protected function getLockName(): string {
+		return $this->getName();
+	}
 
     protected function setFormatter(
         InputInterface $input,
@@ -436,99 +587,4 @@ abstract class AbstractCommand extends Command implements
     }
 
     //###< YOU CAN OVERRIDE IT ###
-
-
-    //###> REALIZED ABSTRACT ###
-
-    /*
-        protected function execute(
-            InputInterface $input,
-            OutputInterface $output,
-        ): int {
-            // OK
-            return Command::SUCCESS;
-
-            // Incorrect usage
-            return Command::INVALID;
-
-            // Program failure
-            return Command::FAILURE;
-        }
-    */
-
-    /* Command */
-    protected function configure(): void
-    {
-        //\pcntl_signal(\SIGINT, $this->shutdown(...));
-        //\register_shutdown_function($this->shutdown(...));
-
-        /*###> parent::configure() AT THE END ###*/
-        parent::configure();
-    }
-
-    /* Command */
-    protected function initialize(
-        InputInterface $input,
-        OutputInterface $output,
-    ) {
-        /*###> parent::initialize() AT THE BEGINNING ###*/
-        parent::initialize(
-            $input,
-            $output,
-        );
-
-        //###> Objects
-        $this->io = new SymfonyStyle($input, $output);
-
-        //###> Style
-        $this->setFormatter(
-            $input,
-            $output,
-        );
-        $this->setProgressBar(
-            $input,
-            $output,
-        );
-        $this->setTable(
-            $input,
-            $output,
-        );
-    }
-
-    /* Command */
-    protected function interact(
-        InputInterface $input,
-        OutputInterface $output,
-    ) {
-        // get missed options/arguments
-    }
-
-    /* SignalableCommandInterface */
-    public function getSubscribedSignals(): array
-    {
-        return [
-            //\SIGINT,
-            //\SIGTERM,
-        ];
-    }
-
-    /* SignalableCommandInterface */
-    public function handleSignal(int $signal): void
-    {
-        /*
-        if (\SIGINT == $signal) {
-            $this->shutdown();
-        }
-        */
-    }
-
-    /* ServiceSubscriberInterface */
-    public static function getSubscribedServices(): array
-    {
-        return [
-            'logger' => '?Psr\Log\LoggerInterface',
-        ];
-    }
-
-    //###< REALIZED ABSTRACT ###
 }
