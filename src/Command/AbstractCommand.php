@@ -4,6 +4,7 @@ namespace GS\Command\Command;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Filesystem\{
@@ -66,7 +67,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     public readonly string $initialCwd;
 
     public function __construct(
-        protected $devLogger,
+        protected readonly Logger $devLogger,
         protected readonly TranslatorInterface $t,
         protected readonly array $progressBarSpin,
     ) {
