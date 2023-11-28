@@ -4,12 +4,11 @@ namespace GS\Command\Command;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Component\Finder\Finder;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Filesystem\{
-    Path
-};
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Console\Question\{
     Question,
     ConfirmationQuestion
@@ -136,6 +135,24 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	
 	
     //###> API ###
+	
+	/*
+		Debug: Symfony Finder
+		ONLY FOR DEBUGGING
+	*/
+	protected function ddFinder(
+		Finder $finder,
+	): void {
+		$this->io->warning('FINDER START');
+		
+		foreach($finder as $finderSplFileInfo) {
+			$this->io->info(
+				Path::normalize($finderSplFileInfo->getRealPath()),
+			);
+		}
+		
+		$this->exit('FINDER END');
+	}
 
 	/*
 		Usage:
