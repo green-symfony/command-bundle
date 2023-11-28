@@ -40,12 +40,6 @@ $this->progressBar->setMaxSteps(KNOWN_MAX_STEPS);
 $this->progressBar->start();
 ```
 
-### Initial state of the AbstractCommand
-
-| AbstractCommand state | Description |
-| ------------- | ------------- |
-| $this->initialCwd | `\getcwd()` |
-
 ## Traits
 
 | Trait | Description |
@@ -59,6 +53,19 @@ $this->progressBar->start();
 | [AbstractConstructedFromToCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) | Abstraction for doing something with the constructed absolute paths from and to. |
 | [AbstractPatternAbleCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractPatternAbleCommandTrait.php) | Abstraction for processing the passed pattern. |
 | [AbstractConvertExtCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConvertExtCommandTrait.php) | Abstraction for converting files into another extension. |
+
+## Command
+
+| Command | Description |
+| ------------- | ------------- |
+| [AbstractCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/AbstractCommand.php) | Ready to extending abstract command |
+| [PdfCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/PdfCommand.php) | Ready to use pdf converter |
+
+### Initial state of the AbstractCommand
+
+| AbstractCommand state | Description |
+| ------------- | ------------- |
+| $this->initialCwd | `\getcwd()` |
 
 # Installation
 

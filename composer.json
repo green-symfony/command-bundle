@@ -21,6 +21,7 @@
         "symfony/translation": "6.*",
         "symfony/monolog-bundle": "^3.8",
 		"green-symfony/service-bundle": "*",
+		"green-symfony/env-processor-bundle": "*",
         "symfony/property-access": "6.*",
         "symfony/string": "6.*",
         "symfony/config": "6.*",
@@ -32,6 +33,10 @@
 		{
 			"type": "path",
 			"url": "./bundles/green-symfony/service-bundle"
+		},
+		{
+			"type": "path",
+			"url": "./bundles/green-symfony/env-processor-bundle"
 		}
 	]
 }

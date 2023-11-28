@@ -414,6 +414,13 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
     //###> ABSTRACT REALIZATION ###
 	
+	/* AbstractGetCommandTrait
+		Get This Command into service and use API of this Command
+	*/
+	protected function &gsCommandGetCommandForTrait(): AbstractCommand {
+		return $this;
+	}
+	
 	/* MakeLockAbleTrait */
 	protected function &getMakeLockProperty(): bool {
 		return $this->makeLock;

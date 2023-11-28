@@ -49,9 +49,6 @@ use Symfony\Component\Console\Input\{
 use Symfony\Component\Console\Output\{
     OutputInterface
 };
-use App\Contracts\{
-    AbstractConstructedFromToPathsDataSupplier
-};
 use GS\Command\Contracts\PatternAbleCommandInterface;
 
 /*

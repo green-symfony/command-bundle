@@ -56,9 +56,7 @@ use GS\Service\Service\{
     RegexService,
     DumpInfoService
 };
-use App\Contracts\{
-    AbstractConstructedFromToPathsDataSupplier
-};
+use GS\Command\Contracts\AbstractConstructedFromToPathsDataSupplier;
 use GS\Command\Contracts\PatternAbleCommandInterface;
 use GS\Command\Trait\MoveAbleTrait;
 use GS\Command\Trait\AskAbleTrait;

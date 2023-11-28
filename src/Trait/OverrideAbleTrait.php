@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use App\Command\AbstractCommand;
+use GS\Command\Command\AbstractCommand;
 use GS\Service\Service\{
     ConfigService,
     FilesystemService,
