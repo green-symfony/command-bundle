@@ -94,6 +94,17 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
 
+    //###> ABSTRACT ###
+	
+	/* AbstractCommand */
+	abstract protected static function getCommandDescription(): string;
+	
+	/* AbstractCommand */
+	abstract protected static function getCommandHelp(): string;
+	
+    //###< ABSTRACT ###
+
+
     //###> PUBLIC API ###
 	
     public function &getTranslator(): TranslatorInterface
@@ -411,9 +422,9 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
     //###< API ###
-
-
-    //###> ABSTRACT REALIZATION ###
+    
+	
+	//###> ABSTRACT REALIZATION ###
 	
 	/* AbstractGetCommandTrait
 		Get This Command into service and use API of this Command
@@ -432,6 +443,10 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     {
         //\pcntl_signal(\SIGINT, $this->shutdown(...));
         //\register_shutdown_function($this->shutdown(...));
+		
+        $this->configureCommandHelp();
+       
+		$this->configureCommandDescription();
 		
         $this->configureLockOption();
 
@@ -595,4 +610,21 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
     //###< YOU CAN OVERRIDE IT ###
+	
+	
+	//###> HELPER ###
+	
+	protected function configureCommandHelp(): void {
+		$this
+            ->setHelp(static::getCommandHelp())
+        ;
+	}
+	
+	protected function configureCommandDescription(): void {
+		$this
+            ->setDescription(static::getCommandDescription())
+        ;
+	}
+	
+	//###< HELPER ###
 }

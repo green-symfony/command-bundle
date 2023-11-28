@@ -104,9 +104,6 @@ trait AbstractConvertExtCommandTrait
     abstract protected function getToExtension(): string;
 	
 	/* AbstractConvertExtCommandTrait */
-    abstract protected function getCommandDescription(): string;
-	
-	/* AbstractConvertExtCommandTrait */
     abstract protected function getFromDescription(): string;
 	
 	/* AbstractConvertExtCommandTrait */
@@ -197,14 +194,6 @@ trait AbstractConvertExtCommandTrait
             description:    $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.convertor.is_dump_converting_info'),
             mode:           InputOption::VALUE_NEGATABLE,
         );
-
-        $this
-            // >>> ARGUMENTS >>>
-            // >>> OPTIONS >>>
-            // >>> HELP >>>
-            ->setHelp($this->getCommandDescription())
-            ->setDescription($this->getCommandDescription())
-        ;
 
         parent::configure();
     }

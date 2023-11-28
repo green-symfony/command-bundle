@@ -97,6 +97,16 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
 
     //###> ABSTRACT REALIZATION ###
 	
+	/* AbstractCommand */
+	protected static function getCommandDescription(): string {
+		return self::DESCRIPTION;
+	}
+	
+	/* AbstractCommand */
+	protected static function getCommandHelp(): string {
+		return self::DESCRIPTION;
+	}
+	
 	/* AbstractConvertExtCommandTrait */
 	protected function &gsCommandGetStringServiceForTrait(): StringService {
 		return $this->stringService;
@@ -163,11 +173,6 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
     protected function getToExtension(): string
     {
         return 'pdf';
-    }
-
-    protected function getCommandDescription(): string
-    {
-        return self::DESCRIPTION;
     }
 
     protected function getFromDescription(): string

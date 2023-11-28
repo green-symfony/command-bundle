@@ -84,14 +84,6 @@ class NowDateCommand extends AbstractCommand
             $this->t->trans('Путь к файлу, дату которого нужно изменить на текущую дату ПК'),
         );
 
-        $this
-            // >>> ARGUMENTS >>>
-            // >>> OPTIONS >>>
-            // >>> HELP >>>
-            ->setHelp(self::DESCRIPTION)
-            ->setDescription(self::DESCRIPTION)
-        ;
-
         parent::configure();
     }
 
@@ -126,6 +118,16 @@ class NowDateCommand extends AbstractCommand
     }
 
     //###> ABSTRACT REALIZATION ###
+	
+	/* AbstractCommand */
+	protected static function getCommandDescription(): string {
+		return self::DESCRIPTION;
+	}
+	
+	/* AbstractCommand */
+	protected static function getCommandHelp(): string {
+		return self::DESCRIPTION;
+	}
 
     /* AbstractCommand */
     protected function command(

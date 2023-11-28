@@ -94,14 +94,6 @@ class ShowCommand extends AbstractCommand
 			add_default_to_description: false,
         );
 
-        $this
-            // >>> ARGUMENTS >>>
-            // >>> OPTIONS >>>
-            // >>> HELP >>>
-            ->setHelp(self::DESCRIPTION)
-            ->setDescription(self::DESCRIPTION)
-        ;
-
         parent::configure();
     }
 
@@ -123,6 +115,16 @@ class ShowCommand extends AbstractCommand
     }
 
     //###> ABSTRACT REALIZATION ###
+	
+	/* AbstractCommand */
+	protected static function getCommandDescription(): string {
+		return self::DESCRIPTION;
+	}
+	
+	/* AbstractCommand */
+	protected static function getCommandHelp(): string {
+		return self::DESCRIPTION;
+	}
 
     /* AbstractCommand */
     protected function command(
