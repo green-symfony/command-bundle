@@ -616,13 +616,21 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	
 	protected function configureCommandHelp(): void {
 		$this
-            ->setHelp(static::getCommandHelp())
+            ->setHelp(
+				$this->t->trans(
+					static::getCommandHelp(),
+				),
+			)
         ;
 	}
 	
 	protected function configureCommandDescription(): void {
 		$this
-            ->setDescription(static::getCommandDescription())
+            ->setDescription(
+				$this->t->trans(
+					static::getCommandDescription(),
+				),
+			)
         ;
 	}
 	
