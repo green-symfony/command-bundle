@@ -5,7 +5,7 @@
             "GS\\Command\\": "src/"
         }
     },
-	"version":		"0.0.0",
+	"version":		"1.0.0",
     "type":			"symfony-bundle",
     "description":	"Commands for extending into Symfony Application.",
     "authors": [
