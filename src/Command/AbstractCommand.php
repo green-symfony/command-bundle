@@ -524,9 +524,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 				$this->getLockName(),
 			)) {
                 $this->exit(
-					$this->t->trans('gs_command.command_word')
-					. ' ' . '"'. $this->getName() . '" '
-					. $this->t->trans('gs_command.already_triggered') . '!'
+					$this->getExitCuzLockMessage(),
 				);
                 return Command::FAILURE;
             }
@@ -579,6 +577,15 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> YOU CAN OVERRIDE IT  ###
+	
+	/* AbstractCommand */
+	protected function getExitCuzLockMessage(): string {
+		return ''
+			. $this->t->trans('gs_command.command_word')
+			. ' ' . '"'. $this->getName() . '" '
+			. $this->t->trans('gs_command.already_triggered') . '!'
+		;
+	}
 	
 	/* AbstractCommand */
 	protected function getLockName(): string {
