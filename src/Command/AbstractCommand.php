@@ -563,10 +563,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
     //###> YOU CAN OVERRIDE IT  ###
 	
+	/* AbstractCommand */
 	protected function getLockName(): string {
 		return $this->getName();
 	}
 
+	/* AbstractCommand */
     protected function setFormatter(
         InputInterface $input,
         OutputInterface $output,
@@ -574,7 +576,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         $this->formatter = $this->getHelper('formatter');
     }
 
-    /*
+    /* AbstractCommand
         WHEN YOU HAVE THE MAX STEPS USE IT:
             $this->progressBar->setMaxSteps(<int>);
             $this->progressBar->start();
@@ -590,6 +592,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         $this->progressBar->setBarWidth(static::WIDTH_PROGRESS_BAR);
     }
 
+	/* AbstractCommand */
     protected function setTable(
         InputInterface $input,
         OutputInterface $output,
