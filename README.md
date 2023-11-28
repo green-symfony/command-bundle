@@ -61,6 +61,7 @@ $this->progressBar->start();
 | [AbstractCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/AbstractCommand.php) | Ready to extending abstract command |
 | [PdfCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/PdfCommand.php) | PDF converter (READY TO USE) |
 | [NowDateCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/NowDateCommand.php) | Assign updating and creation date and time of the file (READY TO USE) |
+| [ShowCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/ShowCommand.php) | Show not empty directories by path (READY TO USE) |
 
 ### Initial state of the AbstractCommand
 
