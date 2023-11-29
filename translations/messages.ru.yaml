@@ -1,6 +1,12 @@
 gs_command:
+    exception:
+        type: 'Передан неверный тип "%given_type%", ожидается "%expected_type%"'
+    
     command_word: 'Команда'
     already_triggered: 'уже запущена'
+    
+    from_word: 'из'
+    directory_word: 'директории'
     
     command:
         default:

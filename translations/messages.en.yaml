@@ -1,6 +1,12 @@
 gs_command:
+    exception:
+        type: 'Was given an incorrect type "%given_type%", expected "%expected_type%"'
+        
     command_word: 'Command'
     already_triggered: 'has already triggered'
+    
+    from_word: 'from'
+    directory_word: 'directory'
 
     command:
         default:

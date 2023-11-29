@@ -365,16 +365,19 @@ trait AbstractConstructedFromToCommandTrait
         array $pathsForRemove,
     ): void {
         $longestCommon  = Path::getLongestCommonBasePath(...$pathsForRemove);
+		$whatFromIsInConstructedFromToPaths = $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+			$whatFromIsInConstructedFromToPaths,
+		);
 
         $longestCommon  = $this->getDirIfFile($longestCommon);
 
         $fromDirPartMessage = ''
 			. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-				'from_word',
+				'gs_command.from_word',
 			)
 			. ' ' . '[' . $longestCommon . ']'
 			. ' ' . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-				'directory_word',
+				'gs_command.directory_word',
 			)
 		;
         $message = ''
