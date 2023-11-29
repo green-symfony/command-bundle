@@ -109,6 +109,8 @@ abstract class AbstractDisplayCommand extends AbstractCommand
 	/* AbstractGrepCommand */
 	abstract protected function isShowResultsQuantity(): bool;
 	
+	/* AbstractGrepCommand */
+	abstract protected function isCaseSensitive(): bool;
 	
 	//###< ABSTRACT ###
 	
@@ -116,7 +118,9 @@ abstract class AbstractDisplayCommand extends AbstractCommand
 	//###> CAN OVERRIDE ###
 	
 	/* AbstractGrepCommand */
-	protected function isSkipStringForDisplay(): bool {
+	protected function isSkipStringForDisplay(
+		$stringForComparsionWithUserPattern,
+	): bool {
 		return false;
 	}
 	
@@ -191,11 +195,16 @@ abstract class AbstractDisplayCommand extends AbstractCommand
     ): void {
 		$s = $stringForComparsionWithUserPattern;
 		
+		//###> FLAGS ###
+		$regexFlags = 'u';// Unicode
+		if (!$this->isCaseSensitive()) $regexFlags .= 'i';// Case-Insensitive
+		//###< FLAGS ###
+		
 		if (
             false
             || \is_null($s)
             || (!\is_string($s) && !\is_int($s) && !\is_float($s))
-            || !\preg_match('~' . $this->userPattern . '~ui', $s)
+            || !\preg_match('~' . $this->userPattern . '~' . $regexFlags, $s)
             || $this->isSkipStringForDisplay($s)
         ) {
             return;
@@ -244,13 +253,6 @@ abstract class AbstractDisplayCommand extends AbstractCommand
             $input,
             $output,
         );
-		
-		//###>
-		$ek = $this->getExcludedKeys(
-			$input,
-			$output,
-		);
-		$this->excludeKeys = \array_combine($ek, $ek);
 
 		//###>
 		$getEscapedStrings = $this->regexService->getEscapedStrings(...);
@@ -279,6 +281,11 @@ abstract class AbstractDisplayCommand extends AbstractCommand
         InputInterface $input,
         OutputInterface $output,
     ): int {
+		
+		$this->setExcludedKeys(
+			$input,
+			$output,
+		);
 		
         foreach ($this->getDataCallbackConnectorsIntoCycle($input, $output) as $dcc) {
 			$dccType = \gettype($dcc);
@@ -314,6 +321,17 @@ abstract class AbstractDisplayCommand extends AbstractCommand
 
     //###> HELPER ###
 
+    private function setExcludedKeys(
+        InputInterface $input,
+        OutputInterface $output,
+	): void {
+		$ek = $this->getExcludedKeys(
+			$input,
+			$output,
+		);
+		$this->excludeKeys = \array_combine($ek, $ek);
+	}
+	
     private function removeExcludedKeysFromResult(
         InputInterface $input,
         OutputInterface $output,
