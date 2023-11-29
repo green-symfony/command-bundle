@@ -121,6 +121,20 @@ abstract class AbstractDisplayCommand extends AbstractCommand
 	}
 	
 	/* AbstractGrepCommand */
+	protected function userDisplayInfo(
+        InputInterface $input,
+        OutputInterface $output,
+        string|int|float $title,
+        mixed $dop = null,
+	): void {
+		if (\is_array($dop)) {
+			$this->getIo()->note([$title, ...$dop]);			
+		} else {
+			$dop ? $this->getIo()->note([$title, $dop]) : $this->getIo()->note($title);
+		}
+	}
+	
+	/* AbstractGrepCommand */
 	protected function displayInfo(
         InputInterface $input,
         OutputInterface $output,
@@ -129,7 +143,7 @@ abstract class AbstractDisplayCommand extends AbstractCommand
     ): void {
 		if (\is_array($dop)) {
 			$getTranslationPrefix = $this->getTranslationPrefix(...);
-            $resultShow = [];
+            $resultDop = [];
 
             $getTranslateKey = static fn(
 				string $name,
@@ -141,22 +155,22 @@ abstract class AbstractDisplayCommand extends AbstractCommand
 				\array_keys($dop),
 			);
             
-			\array_walk($dop, function ($v, $k) use (&$resultShow, &$dop, &$getTranslateKey, &$translatedMessages) {
+			\array_walk($dop, function ($v, $k) use (&$resultDop, &$dop, &$getTranslateKey, &$translatedMessages) {
                 if (\is_array($v)) {
                     return;
                 }
 
                 $translatedMessage      = $this->t->trans($getTranslateKey($k));
                 $width = $this->stringService->getOptimalWidthForStrPad($translatedMessage, $translatedMessages);
-                $resultShow[] = ""
+                $resultDop[] = ""
                     . \str_pad($translatedMessage . ":", $width)
                     . $v
                 ;
             });
-            $this->getIo()->note([$title, ...$resultShow]);
+			$this->userDisplayInfo($input, $output, $title, $resultDop);
             return;
         } else {
-            $dop ? $this->getIo()->note([$title, $dop]) : $this->getIo()->note($title);
+			$this->userDisplayInfo($input, $output, $title, $dop);
             return;
         }
     }
