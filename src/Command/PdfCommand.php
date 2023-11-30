@@ -62,10 +62,7 @@ use GS\Command\Command\UseTrait\AbstractConvertExtCommandUseTrait;
 
 class PdfCommand extends AbstractConvertExtCommandUseTrait
 {
-    public const DESCRIPTION = ''
-        . 'Преобразовать .doc .docx файлы в .pdf формат'
-        . ' ' . '(открывай консоль откуда копировать)'
-    ;
+    public const DESCRIPTION = 'gs_command.command.pdf.description';
 
 	protected bool $dumpConvertedInfo = true;
 	protected bool $move            = false;

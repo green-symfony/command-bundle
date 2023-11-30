@@ -7,8 +7,18 @@ gs_command:
     
     from_word: 'from'
     directory_word: 'directory'
-
+    
     command:
+    
+        nowd:
+            description: "Changes the creation and modification date of the specified file to the current PC date (depends on where the console is opened)"
+    
+        pdf:
+            description: "Converts .doc .docx files in .pdf format (depends on where the console is opened)"
+    
+        show:
+            description: "Shows non-empty folders in the directory"
+
         default:
             exit: 'Exit'
             is_ok: 'Ok?'

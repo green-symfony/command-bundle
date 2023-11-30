@@ -51,10 +51,7 @@ use GS\Service\Service\{
 
 class NowDateCommand extends AbstractCommand
 {
-    public const DESCRIPTION                = ''
-        . 'Меняет у указанного файла дату создания'
-        . ' ' . 'и модификации на текущую дату ПК'
-    ;
+    public const DESCRIPTION = 'gs_command.command.nowd.description';
 
     protected ?string $path = null;
 

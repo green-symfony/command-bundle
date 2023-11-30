@@ -60,9 +60,7 @@ class ShowCommand extends AbstractCommand
         '== 1',/* == 1 ONLY! */
     ];
 
-    public const DESCRIPTION    = ''
-        . 'Показать непустые папки в каталоге'
-    ;
+    public const DESCRIPTION    = 'gs_command.command.show.description';
 
     protected ?string $from     = null;
     protected ?Finder $finder   = null;
