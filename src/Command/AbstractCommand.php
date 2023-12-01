@@ -126,6 +126,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         return $this->table;
     }
 
+    public function getCloneTable(): Table
+    {
+        return clone $this->table;
+    }
+
     public function &getFormatter(): FormatterHelper
     {
         return $this->formatter;
