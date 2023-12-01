@@ -256,7 +256,7 @@ trait AbstractConstructedFromToCommandTrait
     //###< CAN OVERRIDE ###
 	
 	
-	//###> ABSTRACT REALIZATION ###	
+	//###> ABSTRACT REALIZATION ###
 
     /* AbstractCommand */
     protected function command(
