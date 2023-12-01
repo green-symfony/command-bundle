@@ -55,7 +55,7 @@ gs_command:
         override_able:
             description: '!ОПАСНЫЙ ФЛАГ! Перезаписывать даже более новые файлы'
             ask_description: 'Спрашивать об уверенности перезаписи'
-            confirm_ask: 'Overwrite even newer files?'
+            confirm_ask: 'Перезаписать даже более новые файлы?'
             
         move_able:
             description: 'Переместить вместо копирования'
