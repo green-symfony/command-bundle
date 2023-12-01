@@ -534,6 +534,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
                 return Command::FAILURE;
             }
         }
+		
+		$this->displayInfoHowToExit(
+            $input,
+            $output,
+        );
 
         $code = $this->command(
             $input,
@@ -584,6 +589,17 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     //###> YOU CAN OVERRIDE IT  ###
 	
 	/* AbstractCommand */
+	protected function displayInfoHowToExit(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+		$this->getIo()->warning(
+            $this->t->trans(
+				'gs_command.exit_shortcut',
+			),
+        );
+	}
+	
 	protected function getExitCuzLockMessage(): string {
 		return ''
 			. $this->t->trans('gs_command.command_word')

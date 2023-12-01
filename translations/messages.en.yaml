@@ -1,6 +1,8 @@
 gs_command:
     exception:
         type: 'Was given an incorrect type "%given_type%", expected "%expected_type%"'
+    
+    exit_shortcut: "To exit straight away just push this combination: \"Ctrl + C\""
         
     command_word: 'Command'
     already_triggered: 'has already triggered'
