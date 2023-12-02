@@ -1,5 +1,8 @@
 parameters:
     ###> DEFAULT ###
+    
+    env(GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE): true
+    
     ###> DEFAULT WAY: parameters -> ContainerBuilder::getParameter -> Extension -> Configuration ###
     gs_command.progress_bar_spin:
         -    " ⠋"

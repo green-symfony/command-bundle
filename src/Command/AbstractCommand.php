@@ -108,7 +108,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 		$this->_gs_command_bundle_config_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
 			$stringService->getPath(
 				$kernelProjectDir,
-				'config/packages/gs_command.yaml',
+				'.env.local',
 			),
 		);
 		$this->_gs_is_display_init_help = $displayInitHelp;
@@ -636,7 +636,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 					'gs_command.init_help.exit_shortcut',
 				),
 				$this->t->trans(
-					'gs_command.init_help.i_want_to_remove_exit_shortcut',
+					'gs_command.init_help.i_want_to_remove_init_description',
 					[
 						'%bundle_config_pathname%' => $this->_gs_command_bundle_config_pathname,
 					],
