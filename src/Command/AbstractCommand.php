@@ -105,9 +105,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 		#[Autowire('@GS\Service\Service\StringService')]
 		$stringService,
 	): void {
-		$this->_gs_command_bundle_config_pathname = $stringService->getPath(
-			$kernelProjectDir,
-			'config/packages/gs_command.yaml',
+		$this->_gs_command_bundle_config_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
+			$stringService->getPath(
+				$kernelProjectDir,
+				'config/packages/gs_command.yaml',
+			),
 		);
 		$this->_gs_is_display_init_help = $displayHowToExit;
 	}
