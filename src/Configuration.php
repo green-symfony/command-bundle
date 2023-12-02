@@ -32,7 +32,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode(GSCommandExtension::APP_ENV)
                     ->info('env(APP_ENV) of the project')
                     ->isRequired()
-                    #->defaultValue('%gs_generic_parts.locale%') Don't work, it's a simple string
+                    #->defaultValue('%gs_command.locale%') Don't work, it's a simple string
+                ->end()
+
+                ->booleanNode(GSCommandExtension::DISPLAY_HOW_TO_EXIT)
+                    ->info('Display to user how to exit during programm executing')
+					->defaultValue(true)
                 ->end()
 
                 ->arrayNode(GSCommandExtension::PROGRESS_BAR_SPIN)

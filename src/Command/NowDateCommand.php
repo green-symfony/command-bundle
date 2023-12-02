@@ -297,7 +297,7 @@ class NowDateCommand extends AbstractCommand
 
     private function getRoot(): string
     {
-        return $this->initialCwd;
+        return $this->gsCommandInitialCwd;
     }
 
     private function check(): void

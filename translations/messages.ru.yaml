@@ -1,8 +1,14 @@
 gs_command:
+    
+    init_help:
+        description_of_flag: 'Отобразить как немедленного прекратить выполнение команды?'
+        init_description: "Ознакомься:"
+        exit_shortcut: "1) Для немедленного прекращения любой команды нажми сочетание клавиш: \"Ctrl + C\""
+        i_want_to_remove_exit_shortcut: "Чтобы скрыть это сообщение удали знак # у display_how_to_ext по пути: \"%bundle_config_pathname%\""
+    
     exception:
         type: 'Передан неверный тип "%given_type%", ожидается "%expected_type%"'
     
-    exit_shortcut: "Для немедленного прекращения операции нажми сочетание клавиш: \"Ctrl + C\""
     
     command_word: 'Команда'
     already_triggered: 'уже запущена'
@@ -37,6 +43,13 @@ gs_command:
         have_not_been_converted: 'Не преобразовался в "%ext%"'
     
     trait:
+    
+        pattern_able_one_three_replacement:
+            description: 'Всевозможные человекопонятные комбинации трёх частей'
+            first_part_for_display: 'первая часть'
+            second_part_for_display: 'вторая часть'
+            third_part_for_display: 'третья часть'
+            have_not_passed: 'не передан'
     
         constructed_from_to_trait:
             will_be_executed_word: 'Будет выполнено'

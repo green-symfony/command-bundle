@@ -131,20 +131,20 @@ trait AbstractPatternAbleCommandTrait
         USE PARSERS API HERE
 
         EXAMPLE:
-            return $this-><use*Parser>(
-                $stringPattern,
-                <>::SECTION_DELIMITER,
-            );
+            return $this-><use*Parser>($stringPattern);
     */
     abstract protected function getCalculatedExplodedPatterns(
         string $stringPattern,
     ): array;
-    /* AbstractPatternAbleConstructedFromToCommand */
-    abstract protected function getPatternName(): string;
-    /* AbstractPatternAbleConstructedFromToCommand */
-    abstract protected function getPatternMode(): int;
+	
     /* AbstractPatternAbleConstructedFromToCommand */
     abstract protected function getPatternDescription(): string;
+	
+    /* AbstractPatternAbleConstructedFromToCommand */
+    abstract protected function getPatternName(): string;
+	
+    /* AbstractPatternAbleConstructedFromToCommand */
+    abstract protected function getPatternMode(): int;
 
     //###< ABSTRACT ###
 

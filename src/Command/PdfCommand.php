@@ -184,7 +184,7 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
 
     protected function getDefaultFrom(): string
     {
-        return $this->initialCwd;
+        return $this->gsCommandInitialCwd;
     }
 
     protected function getDefaultTo(): string
@@ -209,7 +209,7 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
         try {
 			\chdir($filesystemService->getLocalRoot());
 			\exec($command, result_code: $code);
-			\chdir($this->initialCwd); /* ! RETURN TO THE CURRENT DIRECTORY ! */			
+			\chdir($this->gsCommandInitialCwd); /* ! RETURN TO THE CURRENT DIRECTORY ! */			
 		} finally {
 			if (!\is_null($code) && $code !== Command::SUCCESS) {
 				$this->exit(
