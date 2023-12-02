@@ -98,8 +98,8 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	
 	#[Required]
 	public function _gsCommandSetRequired(
-		#[Autowire(value: '%gs_command.display_how_to_ext%')]
-		bool $displayHowToExit,
+		#[Autowire(value: '%gs_command.display_init_help%')]
+		bool $displayInitHelp,
 		#[Autowire(value: '%kernel.project_dir%')]
 		string $kernelProjectDir,
 		#[Autowire('@GS\Service\Service\StringService')]
@@ -111,7 +111,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 				'config/packages/gs_command.yaml',
 			),
 		);
-		$this->_gs_is_display_init_help = $displayHowToExit;
+		$this->_gs_is_display_init_help = $displayInitHelp;
 	}
 
 

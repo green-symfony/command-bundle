@@ -6,7 +6,7 @@ gs_command:
         description_of_flag: 'Display how to immediately stop executing a command?'
         init_description: "Must know:"
         exit_shortcut: "1) To exit straight away just push this combination: \"Ctrl + C\""
-        i_want_to_remove_exit_shortcut: "To escape this message remove the sign # from display_how_to_ext by path: \"%bundle_config_pathname%\""
+        i_want_to_remove_exit_shortcut: "To escape this message remove the sign # from display_init_help by path: \"%bundle_config_pathname%\""
         
     command_word: 'Command'
     already_triggered: 'has already triggered'

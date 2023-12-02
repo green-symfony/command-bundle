@@ -35,8 +35,8 @@ class Configuration implements ConfigurationInterface
                     #->defaultValue('%gs_command.locale%') Don't work, it's a simple string
                 ->end()
 
-                ->booleanNode(GSCommandExtension::DISPLAY_HOW_TO_EXIT)
-                    ->info('Display to user how to exit during programm executing')
+                ->booleanNode(GSCommandExtension::DISPLAY_INIT_HELP)
+                    ->info('Display to user init help information of this bundle')
 					->defaultValue(true)
                 ->end()
 
