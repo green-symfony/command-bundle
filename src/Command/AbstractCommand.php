@@ -4,6 +4,8 @@ namespace GS\Command\Command;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Component\Finder\Finder;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -57,20 +59,22 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
     //###< CONSTANTS CHANGE ME ###
 	
+	protected $_gs_is_display_init_help;
+	protected ?string $_gs_command_bundle_config_pathname = null;
 
     private SymfonyStyle $io;
     private ProgressBar $progressBar;
     private Table $table;
     private FormatterHelper $formatter;
 
-    public readonly string $initialCwd;
+    public readonly string $gsCommandInitialCwd;
 
     public function __construct(
         protected readonly Logger $devLogger,
         protected readonly TranslatorInterface $t,
         protected readonly array $progressBarSpin,
     ) {
-        $this->initialCwd = Path::normalize(\getcwd());
+        $this->gsCommandInitialCwd = Path::normalize(\getcwd());
 
         parent::__construct();
 
@@ -91,6 +95,24 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         ProgressBar::setFormatDefinition('normal', '%bar% %percent:2s%% %spin%');
         ProgressBar::setFormatDefinition('normal_nomax', '%bar% progress: %current% %spin%');
     }
+	
+	#[Required]
+	public function _gsCommandSetRequired(
+		#[Autowire(value: '%gs_command.display_init_help%')]
+		bool $displayInitHelp,
+		#[Autowire(value: '%kernel.project_dir%')]
+		string $kernelProjectDir,
+		#[Autowire('@GS\Service\Service\StringService')]
+		$stringService,
+	): void {
+		$this->_gs_command_bundle_config_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
+			$stringService->getPath(
+				$kernelProjectDir,
+				'.env.local',
+			),
+		);
+		$this->_gs_is_display_init_help = $displayInitHelp;
+	}
 
 
     //###> ABSTRACT ###
@@ -124,6 +146,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     public function &getTable(): Table
     {
         return $this->table;
+    }
+
+    public function getCloneTable(): Table
+    {
+        return clone $this->table;
     }
 
     public function &getFormatter(): FormatterHelper
@@ -466,6 +493,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 		$this->configureCommandDescription();
 		
         $this->configureLockOption();
+		
+		$this->configureOption(
+            name:           'gs-command-display-init-help',
+            mode:           InputOption::VALUE_NEGATABLE,
+            description:    $this->t->trans('gs_command.init_help.description_of_flag'),
+        );
 
         /*###> parent::configure() AT THE END ###*/
         parent::configure();
@@ -482,6 +515,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
             $output,
         );
 
+		$this->initializeOption(
+            $input,
+            $output,
+            'gs-command-display-init-help',
+            $this->_gs_is_display_init_help,
+        );
 
         //###>
         $this->io = new SymfonyStyle($input, $output);
@@ -529,6 +568,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
                 return Command::FAILURE;
             }
         }
+		
+		$this->displayInfoHowToExit(
+            $input,
+            $output,
+        );
 
         $code = $this->command(
             $input,
@@ -579,6 +623,28 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     //###> YOU CAN OVERRIDE IT  ###
 	
 	/* AbstractCommand */
+	protected function displayInfoHowToExit(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+		if ($this->_gs_is_display_init_help) {
+			$this->getIo()->warning([
+				$this->t->trans(
+					'gs_command.init_help.init_description',
+				),
+				$this->t->trans(
+					'gs_command.init_help.exit_shortcut',
+				),
+				$this->t->trans(
+					'gs_command.init_help.i_want_to_remove_init_description',
+					[
+						'%bundle_config_pathname%' => $this->_gs_command_bundle_config_pathname,
+					],
+				),
+			]);			
+		}
+	}
+	
 	protected function getExitCuzLockMessage(): string {
 		return ''
 			. $this->t->trans('gs_command.command_word')

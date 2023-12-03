@@ -32,7 +32,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode(GSCommandExtension::APP_ENV)
                     ->info('env(APP_ENV) of the project')
                     ->isRequired()
-                    #->defaultValue('%gs_generic_parts.locale%') Don't work, it's a simple string
+                    #->defaultValue('%gs_command.locale%') Don't work, it's a simple string
+                ->end()
+
+                ->booleanNode(GSCommandExtension::DISPLAY_INIT_HELP)
+                    ->info('Display to user init help information of this bundle')
+					->defaultValue('%env(bool:GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE)%')
                 ->end()
 
                 ->arrayNode(GSCommandExtension::PROGRESS_BAR_SPIN)

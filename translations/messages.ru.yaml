@@ -1,6 +1,14 @@
 gs_command:
+    
+    init_help:
+        description_of_flag: 'Отобразить как немедленного прекратить выполнение команды?'
+        init_description: "Ознакомься:"
+        exit_shortcut: "1) Для немедленного прекращения любой команды нажми сочетание клавиш: \"Ctrl + C\""
+        i_want_to_remove_init_description: "Чтобы скрыть это сообщение создай файл по пути: \"%bundle_config_pathname%\" и запиши с новой строчки: GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE=0"
+    
     exception:
         type: 'Передан неверный тип "%given_type%", ожидается "%expected_type%"'
+    
     
     command_word: 'Команда'
     already_triggered: 'уже запущена'
@@ -36,6 +44,13 @@ gs_command:
     
     trait:
     
+        pattern_able_one_three_replacement:
+            description: 'Всевозможные человекопонятные комбинации трёх частей'
+            first_part_for_display: 'первая часть'
+            second_part_for_display: 'вторая часть'
+            third_part_for_display: 'третья часть'
+            have_not_passed: 'не передан'
+    
         constructed_from_to_trait:
             will_be_executed_word: 'Будет выполнено'
             have_not_been_deleted: 'Не удалены'
@@ -55,7 +70,7 @@ gs_command:
         override_able:
             description: '!ОПАСНЫЙ ФЛАГ! Перезаписывать даже более новые файлы'
             ask_description: 'Спрашивать об уверенности перезаписи'
-            confirm_ask: 'Overwrite even newer files?'
+            confirm_ask: 'Перезаписать даже более новые файлы?'
             
         move_able:
             description: 'Переместить вместо копирования'

@@ -27,6 +27,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
     public const PREFIX = 'gs_command';
     public const APP_ENV = 'app_env';
     public const PROGRESS_BAR_SPIN = 'progress_bar_spin';
+    public const DISPLAY_INIT_HELP = 'display_init_help';
 
     public function getAlias(): string
     {
@@ -96,6 +97,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
             keys: [
                 self::APP_ENV,
                 self::PROGRESS_BAR_SPIN,
+                self::DISPLAY_INIT_HELP,
             ],
         );
         /* to use in this object */

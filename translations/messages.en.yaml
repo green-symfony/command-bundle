@@ -1,6 +1,12 @@
 gs_command:
     exception:
         type: 'Was given an incorrect type "%given_type%", expected "%expected_type%"'
+    
+    init_help:
+        description_of_flag: 'Display how to immediately stop executing a command?'
+        init_description: "Must know:"
+        exit_shortcut: "1) To exit straight away just push this combination: \"Ctrl + C\""
+        i_want_to_remove_init_description: "To hide this message create the file by path: \"%bundle_config_pathname%\" and write down the following with a new line: GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE=0"
         
     command_word: 'Command'
     already_triggered: 'has already triggered'
@@ -35,6 +41,13 @@ gs_command:
         have_not_been_converted: 'Not converted into "%ext%"'
         
     trait:
+    
+        pattern_able_one_three_replacement:
+            description: 'All kinds of human-understandable combinations of the three parts'
+            first_part_for_display: 'first part'
+            second_part_for_display: 'second part'
+            third_part_for_display: 'third part'
+            have_not_passed: 'have not passed'
     
         constructed_from_to_trait:
             will_be_executed_word: 'Will be executed'

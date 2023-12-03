@@ -230,7 +230,6 @@ trait AbstractConvertExtCommandTrait
         $this->initializeOverrideOptions(
             $input,
             $output,
-            command: $this,
         );
 
         $this->gsCommandGetCommandForTrait()->initializeOption(
