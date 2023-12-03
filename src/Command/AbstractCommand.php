@@ -60,7 +60,8 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     //###< CONSTANTS CHANGE ME ###
 	
 	protected $_gs_is_display_init_help;
-	protected ?string $_gs_command_bundle_config_pathname = null;
+	protected ?string $_gs_command_bundle_config_path = null;
+	protected ?string $_gs_command_bundle_config_filename = null;
 
     private SymfonyStyle $io;
     private ProgressBar $progressBar;
@@ -105,12 +106,10 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 		#[Autowire('@GS\Service\Service\StringService')]
 		$stringService,
 	): void {
-		$this->_gs_command_bundle_config_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
-			$stringService->getPath(
-				$kernelProjectDir,
-				'.env.local',
-			),
+		$this->_gs_command_bundle_config_path = $stringService->replaceSlashWithSystemDirectorySeparator(
+			$kernelProjectDir,
 		);
+		$this->_gs_command_bundle_config_filename = '.env.local';
 		$this->_gs_is_display_init_help = $displayInitHelp;
 	}
 
@@ -638,7 +637,8 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 				$this->t->trans(
 					'gs_command.init_help.i_want_to_remove_init_description',
 					[
-						'%bundle_config_pathname%' => $this->_gs_command_bundle_config_pathname,
+						'%bundle_config_path%' => $this->_gs_command_bundle_config_path,
+						'%bundle_config_filename%' => $this->_gs_command_bundle_config_filename,
 					],
 				),
 			]);			
