@@ -207,7 +207,7 @@ class ShowCommand extends AbstractCommand
                 useNaturalSort: true,
             )
             ->notName([
-                $this->regexService->getWinSysFileRegex()
+                $this->regexService->getDocxSysFileRegex()
             ])
             ->depth(self::DEPTH)
         ;

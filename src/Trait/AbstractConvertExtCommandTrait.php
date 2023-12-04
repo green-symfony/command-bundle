@@ -131,7 +131,7 @@ trait AbstractConvertExtCommandTrait
 	): void {
 		$finder
 			->notName([
-				$this->gsCommandGetRegexServiceForTrait()->getWinSysFileRegex(),
+				$this->gsCommandGetRegexServiceForTrait()->getDocxSysFileRegex(),
 			])
 		;
 	}
