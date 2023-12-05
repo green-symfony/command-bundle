@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
 
                 ->booleanNode(GSCommandExtension::DISPLAY_INIT_HELP)
                     ->info('Display to user init help information of this bundle')
-					->defaultValue('%env(bool:GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE)%')
+                    ->defaultValue('%env(bool:GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE)%')
                 ->end()
 
                 ->arrayNode(GSCommandExtension::PROGRESS_BAR_SPIN)

@@ -27,14 +27,14 @@ use GS\Service\Service\{
 
 trait DepthAbleTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* DepthAbleTrait */
-	abstract protected function &getDepthProperty(): array|string;
+    use AbstractGetCommandTrait;
 
-	//###< ABSTRACT ###
+    //###> ABSTRACT ###
+
+    /* DepthAbleTrait */
+    abstract protected function &getDepthProperty(): array|string;
+
+    //###< ABSTRACT ###
 
 
     protected function configureDepthOption(): void

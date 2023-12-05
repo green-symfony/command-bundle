@@ -29,17 +29,17 @@ use GS\Service\Service\{
 
 trait OverrideAbleTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* OverrideAbleTrait */
-	abstract protected function &getOverrideProperty(): bool;
-	
-	/* OverrideAbleTrait */
-	abstract protected function &isAskOverride(): bool;
-	
-	//###< ABSTRACT ###
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* OverrideAbleTrait */
+    abstract protected function &getOverrideProperty(): bool;
+
+    /* OverrideAbleTrait */
+    abstract protected function &isAskOverride(): bool;
+
+    //###< ABSTRACT ###
 
     protected function configureOverrideOptions(): void
     {
@@ -50,7 +50,7 @@ trait OverrideAbleTrait
             mode:           InputOption::VALUE_NEGATABLE,
             shortcut:       'o',
         );
-		
+
         $this->configureOption(
             name:           'ask-override',
             default:        $this->isAskOverride(),
@@ -63,7 +63,7 @@ trait OverrideAbleTrait
         InputInterface $input,
         OutputInterface $output,
     ): void {
-		
+
         $this->initializeOption(
             $input,
             $output,
@@ -71,29 +71,30 @@ trait OverrideAbleTrait
             $this->isAskOverride(),
         );
 
-		$command = $this->gsCommandGetCommandForTrait();
+        $command = $this->gsCommandGetCommandForTrait();
         $do = function (
             string $overrideUserOption,
             &$override,/*by ref*/
-        ) use (&$command, &$output) {
+        ) use (
+            &$command,
+            &$output
+) {
             if ($overrideUserOption == true) {
                 if ($this->isAskOverride()) {
-                    
-					//###>
-					$output->writeln('');
-                    $output->write(''
-						. '<bg=black;fg=green>'
-						. ' ' . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-							'gs_command.trait.override_able.confirm_ask'
-						)
-						. '</>',
-					);
+                    //###>
                     $output->writeln('');
-					
-					//###>
-					$answer = $command->isOk(
-						default: $override,
-					);
+                    $output->write(''
+                        . '<bg=black;fg=green>'
+                        . ' ' . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                            'gs_command.trait.override_able.confirm_ask'
+                        )
+                        . '</>',);
+                    $output->writeln('');
+
+                    //###>
+                    $answer = $command->isOk(
+                        default: $override,
+                    );
                 } else {
                     $answer = true;
                 }
