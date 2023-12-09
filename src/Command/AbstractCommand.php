@@ -168,6 +168,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     */
     protected function ddFinder(
         Finder $finder,
+        bool $isExit = true,
     ): void {
         $this->io->warning('FINDER START');
 
@@ -177,7 +178,40 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
             );
         }
 
-        $this->exit('FINDER END');
+		$exitMess = 'FINDER END';
+        if ($isExit) {
+			$this->exit($exitMess);
+		} else {
+			$this->io->warning($exitMess);			
+		}
+    }
+
+    /*
+        Debug: Symfony \dd()
+        ONLY FOR DEBUGGING
+    */
+    protected function dd(
+        ...$forDDPack,
+    ): void {
+		$this->io->warning('\\dd() START');
+		
+        foreach($forDDPack as $k => $forDD) {
+			if ($forDD instanceof Finder) {
+				$this->ddFinder($forDD, isExit: false);
+				unset($forDDPack[$k]);
+				continue;
+			}
+		}
+		
+		$exitMess = '\\dd() END';
+		if (!empty($forDDPack)) {
+			\dd(
+				$forDDPack,
+				'SYSTEM MESSAGE: ' . $exitMess,
+			);				
+		}
+		
+		$this->exit($exitMess);
     }
 
     /*
