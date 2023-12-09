@@ -56,7 +56,7 @@ abstract class AbstractDisplayCommand extends AbstractCommand
     private array $excludeKeys = [];
     private int $counter = 0;
     private $clip = null;
-	
+
     public function __construct(
         $devLogger,
         $t,
@@ -72,94 +72,94 @@ abstract class AbstractDisplayCommand extends AbstractCommand
             progressBarSpin:    $progressBarSpin,
         );
     }
-	
-	
-	//###> ABSTRACT ###
-	
-	/* EXAMPLE: 
-		[
-			'',
-			...
-		]
-	*/
-	/* AbstractGrepCommand */
-	abstract protected function getDataCallbackConnectorsIntoCycle(
+
+
+    //###> ABSTRACT ###
+
+    /* EXAMPLE:
+        [
+            '',
+            ...
+        ]
+    */
+    /* AbstractGrepCommand */
+    abstract protected function getDataCallbackConnectorsIntoCycle(
         InputInterface $input,
         OutputInterface $output,
-	): \Generator;
-	
-	/* AbstractGrepCommand */
-	abstract protected function getExcludedKeys(
+    ): \Generator;
+
+    /* AbstractGrepCommand */
+    abstract protected function getExcludedKeys(
         InputInterface $input,
         OutputInterface $output,
-	): array;
-	
-	/* AbstractGrepCommand */
-	abstract protected function getTranslationPrefix(
+    ): array;
+
+    /* AbstractGrepCommand */
+    abstract protected function getTranslationPrefix(
         InputInterface $input,
         OutputInterface $output,
-	): string;
-	
-	/* AbstractGrepCommand */
-	abstract protected function isEscapeRegexCharacters(): bool;
-	
-	/* AbstractGrepCommand */
-	abstract protected function isCopyFirstResult(): bool;
-	
-	/* AbstractGrepCommand */
-	abstract protected function isShowResultsQuantity(): bool;
-	
-	/* AbstractGrepCommand */
-	abstract protected function isCaseSensitive(): bool;
-	
-	//###< ABSTRACT ###
-	
-	
-	//###> CAN OVERRIDE ###
-	
-	/* AbstractGrepCommand */
-	protected function isSkipStringForDisplay(
-		$stringForComparsionWithUserPattern,
-	): bool {
-		return false;
-	}
-	
-	/* AbstractGrepCommand */
-	protected function userDisplayInfo(
-        InputInterface $input,
-        OutputInterface $output,
-        string|int|float $title,
-        mixed $dop = null,
-	): void {
-		if (\is_array($dop)) {
-			$this->getIo()->note([$title, ...$dop]);			
-		} else {
-			$dop ? $this->getIo()->note([$title, $dop]) : $this->getIo()->note($title);
-		}
-	}
-	
-	/* AbstractGrepCommand */
-	protected function displayInfo(
+    ): string;
+
+    /* AbstractGrepCommand */
+    abstract protected function isEscapeRegexCharacters(): bool;
+
+    /* AbstractGrepCommand */
+    abstract protected function isCopyFirstResult(): bool;
+
+    /* AbstractGrepCommand */
+    abstract protected function isShowResultsQuantity(): bool;
+
+    /* AbstractGrepCommand */
+    abstract protected function isCaseSensitive(): bool;
+
+    //###< ABSTRACT ###
+
+
+    //###> CAN OVERRIDE ###
+
+    /* AbstractGrepCommand */
+    protected function isSkipStringForDisplay(
+        $stringForComparsionWithUserPattern,
+    ): bool {
+        return false;
+    }
+
+    /* AbstractGrepCommand */
+    protected function userDisplayInfo(
         InputInterface $input,
         OutputInterface $output,
         string|int|float $title,
         mixed $dop = null,
     ): void {
-		if (\is_array($dop)) {
-			$getTranslationPrefix = $this->getTranslationPrefix(...);
+        if (\is_array($dop)) {
+            $this->getIo()->note([$title, ...$dop]);
+        } else {
+            $dop ? $this->getIo()->note([$title, $dop]) : $this->getIo()->note($title);
+        }
+    }
+
+    /* AbstractGrepCommand */
+    protected function displayInfo(
+        InputInterface $input,
+        OutputInterface $output,
+        string|int|float $title,
+        mixed $dop = null,
+    ): void {
+        if (\is_array($dop)) {
+            $getTranslationPrefix = $this->getTranslationPrefix(...);
             $resultDop = [];
 
             $getTranslateKey = static fn(
-				string $name,
-			) => $getTranslationPrefix($input, $output) . $name;
+                string $name,
+            ) => $getTranslationPrefix($input, $output) . $name;
             $translatedMessages = \array_map(
-				fn($v) => $this->t->trans(
-					$getTranslateKey($v)
-				),
-				\array_keys($dop),
-			);
-            
-			\array_walk($dop, function ($v, $k) use (&$resultDop, &$dop, &$getTranslateKey, &$translatedMessages) {
+                fn($v) => $this->t->trans(
+                    $getTranslateKey($v)
+                ),
+                \array_keys($dop),
+            );
+
+            \array_walk($dop, function ($v, $k) use (&$resultDop, &$dop, &$getTranslateKey, &$translatedMessages) {
                 if (\is_array($v)) {
                     return;
                 }
@@ -171,36 +171,38 @@ abstract class AbstractDisplayCommand extends AbstractCommand
                     . $v
                 ;
             });
-			$this->userDisplayInfo($input, $output, $title, $resultDop);
+            $this->userDisplayInfo($input, $output, $title, $resultDop);
             return;
         } else {
-			$this->userDisplayInfo($input, $output, $title, $dop);
+            $this->userDisplayInfo($input, $output, $title, $dop);
             return;
         }
     }
-	
-	//###< CAN OVERRIDE ###
-	
-	
-	//###> API ###
-	
-	/*
-		Use it into the cycle
-	*/
-	protected function process(
+
+    //###< CAN OVERRIDE ###
+
+
+    //###> API ###
+
+    /*
+        Use it into the cycle
+    */
+    protected function process(
         InputInterface $input,
         OutputInterface $output,
         $stringForComparsionWithUserPattern,
         $dop = null,
     ): void {
-		$s = $stringForComparsionWithUserPattern;
-		
-		//###> FLAGS ###
-		$regexFlags = 'u';// Unicode
-		if (!$this->isCaseSensitive()) $regexFlags .= 'i';// Case-Insensitive
-		//###< FLAGS ###
-		
-		if (
+        $s = $stringForComparsionWithUserPattern;
+
+        //###> FLAGS ###
+        $regexFlags = 'u';// Unicode
+        if (!$this->isCaseSensitive()) {
+            $regexFlags .= 'i';// Case-Insensitive
+        }
+        //###< FLAGS ###
+
+        if (
             false
             || \is_null($s)
             || (!\is_string($s) && !\is_int($s) && !\is_float($s))
@@ -211,11 +213,11 @@ abstract class AbstractDisplayCommand extends AbstractCommand
         }
         $this->counter++;
 
-		$this->removeExcludedKeysFromResult(
-			$input,
-			$output,
-			$dop,
-		);
+        $this->removeExcludedKeysFromResult(
+            $input,
+            $output,
+            $dop,
+        );
 
         $this->clip(
             $s,
@@ -228,9 +230,9 @@ abstract class AbstractDisplayCommand extends AbstractCommand
             $dop,
         );
     }
-	
-	//###< API ###
-	
+
+    //###< API ###
+
 
     //###> ABSTRACT REALIZATION ###
 
@@ -254,25 +256,28 @@ abstract class AbstractDisplayCommand extends AbstractCommand
             $output,
         );
 
-		//###>
-		$getEscapedStrings = $this->regexService->getEscapedStrings(...);
-		$isEscapeRegexCharacters = $this->isEscapeRegexCharacters();
-		$userPatternSetter = static function(
-			?string $userArgument,
-			&$argument/*by ref*/
-		) use (&$getEscapedStrings, $isEscapeRegexCharacters) {
-			
-			if ($isEscapeRegexCharacters) {
-				$userArgument = $getEscapedStrings($userArgument);
-			}
-			$argument = $userArgument;
-		};
+        //###>
+        $getEscapedStrings = $this->regexService->getEscapedStrings(...);
+        $isEscapeRegexCharacters = $this->isEscapeRegexCharacters();
+        $userPatternSetter = static function (
+            ?string $userArgument,
+            &$argument/*by ref*/
+        ) use (
+            &$getEscapedStrings,
+            $isEscapeRegexCharacters
+) {
+
+            if ($isEscapeRegexCharacters) {
+                $userArgument = $getEscapedStrings($userArgument);
+            }
+            $argument = $userArgument;
+        };
         $this->initializeArgument(
             $input,
             $output,
             'pattern',
             $this->userPattern,
-			set: $userPatternSetter,
+            set: $userPatternSetter,
         );
     }
 
@@ -281,37 +286,37 @@ abstract class AbstractDisplayCommand extends AbstractCommand
         InputInterface $input,
         OutputInterface $output,
     ): int {
-		
-		$this->setExcludedKeys(
-			$input,
-			$output,
-		);
-		
+
+        $this->setExcludedKeys(
+            $input,
+            $output,
+        );
+
         foreach ($this->getDataCallbackConnectorsIntoCycle($input, $output) as $dcc) {
-			$dccType = \gettype($dcc);
-			if (!$dcc instanceof DataCallbackConnector) {
-				throw new \Exception(
-					$this->t->trans(
-						'gs_command.exception.type',
-						[
-							'%given_type%' => $dccType == 'object' ? \get_class($dcc) : $dccType,
-							'%expected_type%' => DataCallbackConnector::class,
-						],
-					),
-				);
-			}
+            $dccType = \gettype($dcc);
+            if (!$dcc instanceof DataCallbackConnector) {
+                throw new \Exception(
+                    $this->t->trans(
+                        'gs_command.exception.type',
+                        [
+                            '%given_type%' => $dccType == 'object' ? \get_class($dcc) : $dccType,
+                            '%expected_type%' => DataCallbackConnector::class,
+                        ],
+                    ),
+                );
+            }
             $dcc();
         }
-		
-		$this->dumpClipped(
-			$input,
-			$output,
-		);
-        
-		$this->dumpCount(
-			$input,
-			$output,
-		);
+
+        $this->dumpClipped(
+            $input,
+            $output,
+        );
+
+        $this->dumpCount(
+            $input,
+            $output,
+        );
 
         return Command::SUCCESS;
     }
@@ -324,37 +329,41 @@ abstract class AbstractDisplayCommand extends AbstractCommand
     private function setExcludedKeys(
         InputInterface $input,
         OutputInterface $output,
-	): void {
-		$ek = $this->getExcludedKeys(
-			$input,
-			$output,
-		);
-		$this->excludeKeys = \array_combine($ek, $ek);
-	}
-	
+    ): void {
+        $ek = $this->getExcludedKeys(
+            $input,
+            $output,
+        );
+        $this->excludeKeys = \array_combine($ek, $ek);
+    }
+
     private function removeExcludedKeysFromResult(
         InputInterface $input,
         OutputInterface $output,
-		&$data,
-	): void {
-		if (!\is_array($data)) return;
-		
-		$excludeKeys = $this->excludeKeys;
-		$data = \array_diff_key($data, $excludeKeys);
+        &$data,
+    ): void {
+        if (!\is_array($data)) {
+            return;
+        }
+
+        $excludeKeys = $this->excludeKeys;
+        $data = \array_diff_key($data, $excludeKeys);
     }
 
     private function dumpClipped(
         InputInterface $input,
         OutputInterface $output,
     ): void {
-		if (!$this->isCopyFirstResult()) return;
-		
-		if ($this->clip === null) {
-			$copiedMess = 'Нечего копировать';
-		} else {
-			$copiedMess = '"' . $this->clip . '" copied';
-		}
-		$output->writeln('<bg=green;fg=black>' . $copiedMess . '</>');
+        if (!$this->isCopyFirstResult()) {
+            return;
+        }
+
+        if ($this->clip === null) {
+            $copiedMess = 'Нечего копировать';
+        } else {
+            $copiedMess = '"' . $this->clip . '" copied';
+        }
+        $output->writeln('<bg=green;fg=black>' . $copiedMess . '</>');
     }
 
     private function dumpCount(
@@ -362,20 +371,20 @@ abstract class AbstractDisplayCommand extends AbstractCommand
         OutputInterface $output,
     ): void {
         if ($this->isShowResultsQuantity()) {
-			$output->writeln('<bg=yellow;fg=black>Результатов: ' . $this->counter . '</>');
-		}
+            $output->writeln('<bg=yellow;fg=black>Результатов: ' . $this->counter . '</>');
+        }
     }
 
     private function clip(
         $string,
     ): bool {
-		if ($this->isCopyFirstResult() && $this->clip === null) {
-			$this->clip = $string;
-			$this->clipService->copy($string);
-			return true;
-		}
+        if ($this->isCopyFirstResult() && $this->clip === null) {
+            $this->clip = $string;
+            $this->clipService->copy($string);
+            return true;
+        }
         return false;
     }
-	
+
     //###< HELPER ###
 }

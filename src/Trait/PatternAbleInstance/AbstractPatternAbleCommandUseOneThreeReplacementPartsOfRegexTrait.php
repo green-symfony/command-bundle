@@ -58,99 +58,100 @@ use GS\Command\Trait\AbstractGetCommandTrait;
 /**/
 trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function isCaseSensitive(): bool;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function isDisplayPatternInfoBeforeCommand(): bool;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getFirstPartName(): string;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getSecondPartName(): string;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getThirdPartName(): string;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getFirstPartRegex(): string;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getSecondPartRegex(): string;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getThirdPartRegex(): string;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function isSkipByParsedForFirstPart(
-		string $parsed,
-	): bool;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function isSkipByParsedForSecondPart(
-		string $parsed,
-	): bool;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function isSkipByParsedForThirdPart(
-		string $parsed,
-	): bool;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getNormalizedFirstPartParsed(
-		string $parsed,
-	): mixed;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getNormalizedSecondPartParsed(
-		string $parsed,
-	): mixed;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getNormalizedThirdPartParsed(
-		string $parsed,
-	): mixed;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getFirstPartFromSource(
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function isCaseSensitive(): bool;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function isDisplayPatternInfoBeforeCommand(): bool;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getFirstPartName(): string;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getSecondPartName(): string;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getThirdPartName(): string;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getFirstPartRegex(): string;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getSecondPartRegex(): string;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getThirdPartRegex(): string;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function isSkipByParsedForFirstPart(
+        string $parsed,
+    ): bool;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function isSkipByParsedForSecondPart(
+        string $parsed,
+    ): bool;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function isSkipByParsedForThirdPart(
+        string $parsed,
+    ): bool;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getNormalizedFirstPartParsed(
+        string $parsed,
+    ): mixed;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getNormalizedSecondPartParsed(
+        string $parsed,
+    ): mixed;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getNormalizedThirdPartParsed(
+        string $parsed,
+    ): mixed;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getFirstPartFromSource(
         SplFileInfo $finderSplFileInfo,
-	): mixed;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getSecondPartFromSource(
+    ): mixed;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getSecondPartFromSource(
         SplFileInfo $finderSplFileInfo,
-	): mixed;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getThirdPartFromSource(
+    ): mixed;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getThirdPartFromSource(
         SplFileInfo $finderSplFileInfo,
-	): mixed;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getBoolService(): BoolService;
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	abstract protected function getArrayService(): ArrayService;
-	
-	//###< ABSTRACT ###
-	
-	
-	//###> PUBLIC API ###
-	
-	/* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
-	public function getPatternDelimiter(): string {
-		return ',';
-	}
-	
-	//###< PUBLIC API ###
-	
-	
-	//###> ABSTRACT REALIZATION ###
+    ): mixed;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getBoolService(): BoolService;
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    abstract protected function getArrayService(): ArrayService;
+
+    //###< ABSTRACT ###
+
+
+    //###> PUBLIC API ###
+
+    /* AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait */
+    public function getPatternDelimiter(): string
+    {
+        return ',';
+    }
+
+    //###< PUBLIC API ###
+
+
+    //###> ABSTRACT REALIZATION ###
 
     /* Command */
     protected function command(
@@ -162,14 +163,14 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
             $output,
         );
 
-		$this->makeExplodedPatternsSortedWhenFirstMoreRestrictions();
-        
-		if ($this->isDisplayPatternInfoBeforeCommand()) {
-			$this->displayPatternInfo(
-				$input,
-				$output,
-			);			
-		}
+        $this->makeExplodedPatternsSortedWhenFirstMoreRestrictions();
+
+        if ($this->isDisplayPatternInfoBeforeCommand()) {
+            $this->displayPatternInfo(
+                $input,
+                $output,
+            );
+        }
 
         return parent::command(
             $input,
@@ -180,13 +181,13 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
     /* AbstractPatternAbleConstructedFromToCommand */
     protected function getPatternDescription(): string
     {
-		return $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-				'gs_command.trait.pattern_able_one_three_replacement.description',
-			)
+        return $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+            'gs_command.trait.pattern_able_one_three_replacement.description',
+        )
         ;
     }
-	
-	/* AbstractPatternAbleConstructedFromToCommand */
+
+    /* AbstractPatternAbleConstructedFromToCommand */
     protected function getCalculatedExplodedPatterns(
         string $stringPattern,
     ): array {
@@ -218,96 +219,99 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
             $output,
         );
     }
-	
-	//###< ABSTRACT REALIZATION ###
-	
-	
+
+    //###< ABSTRACT REALIZATION ###
+
+
     //###> CAN OVERRIDE ###
-	
-	/* AbstractPatternAbleConstructedFromToCommand */
-	protected function displayPatternInfo(
+
+    /* AbstractPatternAbleConstructedFromToCommand */
+    protected function displayPatternInfo(
         InputInterface $input,
         OutputInterface $output,
-	): void {
-		$patterns = $this->getExplodedPatterns();
-		if (empty($patterns)) return;
-		
-		$patternInfos = [];
-		$t = $this->gsCommandGetCommandForTrait()->getTranslator();
-		
-		$getTranlatedInfoEl = static function(
-			string|int $v,
-			string $dop,
-		) use (
-			&$t,
-		): string {
-			
-			return u($t->trans($dop))->title() . '' . $v;
-		};
-		
-		foreach($patterns as $info) {
-			$infoEl = [];
-			$bs = $this->getBoolService();
-			
-			$assignInfoEl = static function(
-				array...$names,
-			) use(
-				&$infoEl,
-				&$bs,
-				&$info,
-				&$getTranlatedInfoEl,
-			): void {
-				foreach($names as [$paramName, $paramTitle, $anyWord]) {
-					if ($v = $bs->isGet($info, $paramName)) {
-						$infoEl []= $getTranlatedInfoEl($v, $paramTitle);
-					} else {
-						$infoEl []= $getTranlatedInfoEl($anyWord, $paramTitle);
-					}					
-				}
-			};
-			
-			$assignInfoEl(
-				[$this->getFirstPartName(), '', $this->getHaveNotPassedMessage()],
-				[$this->getSecondPartName(), '', $this->getHaveNotPassedMessage()],
-				[$this->getThirdPartName(), '', $this->getHaveNotPassedMessage()],
-			);
-			
-			$patternInfos []= $infoEl;
-		}
-		
-		//###> show
-		$this->getCloneTable()
-			->setHeaders([
-				$this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-					'gs_command.trait.pattern_able_one_three_replacement.first_part_for_display',
-				),
-				$this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-					'gs_command.trait.pattern_able_one_three_replacement.second_part_for_display',
-				),
-				$this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-					'gs_command.trait.pattern_able_one_three_replacement.third_part_for_display',
-				),
-			])
-			->setRows($patternInfos)
-			->render()
-		;
-	}
-	
-	protected function getHaveNotPassedMessage(): string {
-		return $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-			'gs_command.trait.pattern_able_one_three_replacement.have_not_passed'
-		);
-	}
-	
+    ): void {
+        $patterns = $this->getExplodedPatterns();
+        if (empty($patterns)) {
+            return;
+        }
+
+        $patternInfos = [];
+        $t = $this->gsCommandGetCommandForTrait()->getTranslator();
+
+        $getTranlatedInfoEl = static function (
+            string|int $v,
+            string $dop,
+        ) use (
+            &$t,
+        ): string {
+
+            return u($t->trans($dop))->title() . '' . $v;
+        };
+
+        foreach ($patterns as $info) {
+            $infoEl = [];
+            $bs = $this->getBoolService();
+
+            $assignInfoEl = static function (
+                array ...$names,
+            ) use (
+                &$infoEl,
+                &$bs,
+                &$info,
+                &$getTranlatedInfoEl,
+            ): void {
+                foreach ($names as [$paramName, $paramTitle, $anyWord]) {
+                    if ($v = $bs->isGet($info, $paramName)) {
+                        $infoEl [] = $getTranlatedInfoEl($v, $paramTitle);
+                    } else {
+                        $infoEl [] = $getTranlatedInfoEl($anyWord, $paramTitle);
+                    }
+                }
+            };
+
+            $assignInfoEl(
+                [$this->getFirstPartName(), '', $this->getHaveNotPassedMessage()],
+                [$this->getSecondPartName(), '', $this->getHaveNotPassedMessage()],
+                [$this->getThirdPartName(), '', $this->getHaveNotPassedMessage()],
+            );
+
+            $patternInfos [] = $infoEl;
+        }
+
+        //###> show
+        $this->getCloneTable()
+            ->setHeaders([
+                $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                    'gs_command.trait.pattern_able_one_three_replacement.first_part_for_display',
+                ),
+                $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                    'gs_command.trait.pattern_able_one_three_replacement.second_part_for_display',
+                ),
+                $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                    'gs_command.trait.pattern_able_one_three_replacement.third_part_for_display',
+                ),
+            ])
+            ->setRows($patternInfos)
+            ->render()
+        ;
+    }
+
+    protected function getHaveNotPassedMessage(): string
+    {
+        return $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+            'gs_command.trait.pattern_able_one_three_replacement.have_not_passed'
+        );
+    }
+
     //###< CAN OVERRIDE ###
-	
-	
-	###> API ###
-	
-	/* FOR FILTERING BY PATTERN
-		use it into your Command
-        
-		returns null    when pattern wasn't passed
+
+
+    ###> API ###
+
+    /* FOR FILTERING BY PATTERN
+        use it into your Command
+
+        returns null    when pattern wasn't passed
         returns false   when pattern wasn't matched
         returns true    when pattern was matched
     */
@@ -316,25 +320,24 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
     ): ?bool {
         $isPassedMached = null; /* THERE WERE NO ANY PATTERN */
         if (!empty($this->getExplodedPatterns())) {
-
             $firstPart = $this->getFirstPartFromSource(
-				$finderSplFileInfo,
-			);
+                $finderSplFileInfo,
+            );
             $secondPart = $this->getSecondPartFromSource(
-				$finderSplFileInfo,
-			);
+                $finderSplFileInfo,
+            );
             $thirdPart = $this->getThirdPartFromSource(
-				$finderSplFileInfo,
-			);
-            
-			if ($thirdPart === null) {
+                $finderSplFileInfo,
+            );
+
+            if ($thirdPart === null) {
                 return false;
             }
 
             $patternFilter = $this->getArrayService()->getParsedOneThreeReplacementPartsRegex(
                 [
                     $this->getFirstPartName() => $firstPart,
-                    $this->getSecondPartName()=> $secondPart,
+                    $this->getSecondPartName() => $secondPart,
                     $this->getThirdPartName() => $thirdPart,
                 ],
                 $this->getExplodedPatterns(),
@@ -344,30 +347,30 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
         }
         return $isPassedMached;
     }
-	
-	###< API ###
+
+    ###< API ###
 
 
-    //###> PARSERS API ### 
-	
-	/*
+    //###> PARSERS API ###
+
+    /*
         OUTPUT:
             [
                 [
-                    'First'			=> <>,
+                    'First'         => <>,
                 ],
                 [
-                    'First'			=> <>,
-                    'Third'   		=> <>,
+                    'First'         => <>,
+                    'Third'         => <>,
                 ],
                 [
-                    'First'			=> <>,
-                    'Second'		=> <>,
+                    'First'         => <>,
+                    'Second'        => <>,
                 ],
                 [
-                    'First'			=> <>,
-                    'Second'		=> <>,
-                    'Third'   		=> <>,
+                    'First'         => <>,
+                    'Second'        => <>,
+                    'Third'         => <>,
                 ],
                 ...
             ]
@@ -382,26 +385,26 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
             $this->getPatternDelimiter(),
             $stringPattern,
         );
-		
-		$isCaseSensitive = $this->isCaseSensitive();
-		$is = static function(
-			string $partOfRegex,
-			string $string,
-		) use (
-			$isCaseSensitive,
-		) {
-			$flags = 'u';
-			
-			if (!$isCaseSensitive) {				
-				$flags .= 'i';
-			}
-			
-			return \preg_match($fulRegex = '~^' . $partOfRegex . '$~'.$flags, $string) === 1
-				? $fulRegex
-				: false
-			;
-		};
-			
+
+        $isCaseSensitive = $this->isCaseSensitive();
+        $is = static function (
+            string $partOfRegex,
+            string $string,
+        ) use (
+            $isCaseSensitive,
+        ) {
+            $flags = 'u';
+
+            if (!$isCaseSensitive) {
+                $flags .= 'i';
+            }
+
+            return \preg_match($fulRegex = '~^' . $partOfRegex . '$~' . $flags, $string) === 1
+                ? $fulRegex
+                : false
+            ;
+        };
+
         $idx = -1; /* ONLY FOR PARSE FUNCTION */
         foreach ($explodedStringPatterns as $explodedStringPattern) {
             ++$idx;
@@ -412,43 +415,45 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
             $SP = '(?<' . $this->getSecondPartName() . '>' . $this->getSecondPartRegex() . ')';
             $TP = '(?<' . $this->getThirdPartName() . '>' . $this->getThirdPartRegex() . ')';
 
-			foreach([
-				$FP . '\s*' . $SP . '\s*' . $TP,
-				$FP . '\s+' . $TP . '\s*' . $SP,
-				$SP . '\s*' . $TP . '\s+' . $FP,
-				$SP . '\s*' . $FP . '\s+' . $TP,
-				$TP . '\s+' . $FP . '\s*' . $SP,
-				$TP . '\s*' . $SP . '\s*' . $FP,
-				$FP . '\s*' . $SP,
-				$SP . '\s*' . $FP,
-				$FP . '\s+' . $TP,
-				$TP . '\s+' . $FP,
-				$SP . '\s*' . $TP,
-				$TP . '\s*' . $SP,
-				$FP,
-				$SP,
-				$TP,
-			] as $possiblePattern) {
-				if ($regex = $is($possiblePattern, $explodedStringPattern)) {
-					$this->parseAndAssing(
-						$threeReplacementPartsRegex,
-						$regex,
-						$explodedStringPattern,
-						$asIntoConfig,
-						$idx,
-					);
-					break;
-				}
-			}
+            foreach (
+                [
+                $FP . '\s*' . $SP . '\s*' . $TP,
+                $FP . '\s+' . $TP . '\s*' . $SP,
+                $SP . '\s*' . $TP . '\s+' . $FP,
+                $SP . '\s*' . $FP . '\s+' . $TP,
+                $TP . '\s+' . $FP . '\s*' . $SP,
+                $TP . '\s*' . $SP . '\s*' . $FP,
+                $FP . '\s*' . $SP,
+                $SP . '\s*' . $FP,
+                $FP . '\s+' . $TP,
+                $TP . '\s+' . $FP,
+                $SP . '\s*' . $TP,
+                $TP . '\s*' . $SP,
+                $FP,
+                $SP,
+                $TP,
+                ] as $possiblePattern
+            ) {
+                if ($regex = $is($possiblePattern, $explodedStringPattern)) {
+                    $this->parseAndAssing(
+                        $threeReplacementPartsRegex,
+                        $regex,
+                        $explodedStringPattern,
+                        $asIntoConfig,
+                        $idx,
+                    );
+                    break;
+                }
+            }
         }
 
         return $threeReplacementPartsRegex;
     }
-	
+
     //###< PARSERS API ###
-	
-	
-	//###> PARSER HELPERS ###
+
+
+    //###> PARSER HELPERS ###
 
     private function parseAndAssing(
         array &$array,
@@ -459,54 +464,57 @@ trait AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait
     ): void {
         $matches = [];
         \preg_match($regex, $string, $matches);
-		
-		foreach([
-			[
-				$this->getFirstPartName(),
-				$this->isSkipByParsedForFirstPart(...),
-				$this->getNormalizedFirstPartParsed(...),
-			],
-			[
-				$this->getSecondPartName(),
-				$this->isSkipByParsedForSecondPart(...),
-				$this->getNormalizedSecondPartParsed(...),
-			],
-			[
-				$this->getThirdPartName(),
-				$this->isSkipByParsedForThirdPart(...),
-				$this->getNormalizedThirdPartParsed(...),
-			],
-		] as [
-			$partName,
-			$isSkip,
-			$getNormalizedPartParsed,
-		]) {
-			$parsed = $this->getBoolService()->isGet($matches, $partName);
-			
-			if ($parsed !== null && !$isSkip($parsed)) {
-				$parsed = $getNormalizedPartParsed($parsed);
-				$array[$idx][$partName] = $parsed;
-				//\dd($parsed, $array);
-			}
-		}
+
+        foreach (
+            [
+            [
+                $this->getFirstPartName(),
+                $this->isSkipByParsedForFirstPart(...),
+                $this->getNormalizedFirstPartParsed(...),
+            ],
+            [
+                $this->getSecondPartName(),
+                $this->isSkipByParsedForSecondPart(...),
+                $this->getNormalizedSecondPartParsed(...),
+            ],
+            [
+                $this->getThirdPartName(),
+                $this->isSkipByParsedForThirdPart(...),
+                $this->getNormalizedThirdPartParsed(...),
+            ],
+            ] as [
+            $partName,
+            $isSkip,
+            $getNormalizedPartParsed,
+            ]
+        ) {
+            $parsed = $this->getBoolService()->isGet($matches, $partName);
+
+            if ($parsed !== null && !$isSkip($parsed)) {
+                $parsed = $getNormalizedPartParsed($parsed);
+                $array[$idx][$partName] = $parsed;
+                //\dd($parsed, $array);
+            }
+        }
     }
 
     //###< PARSER HELPERS ###
-	
-    
+
+
     //###> HELPERS ###
 
-	/* For correct filtering
-		First contains more restrictions
-	*/
-	private function makeExplodedPatternsSortedWhenFirstMoreRestrictions(): static {
-		\usort(
-			$this->getExplodedPatternsProperty(),
-			static fn($f, $s) => \count($f) > \count($s),
-		);
-		
-		return $this;
-	}
-	
-	//###< HELPERS ###
+    /* For correct filtering
+        First contains more restrictions
+    */
+    private function makeExplodedPatternsSortedWhenFirstMoreRestrictions(): static
+    {
+        \usort(
+            $this->getExplodedPatternsProperty(),
+            static fn($f, $s) => \count($f) > \count($s),
+        );
+
+        return $this;
+    }
+
+    //###< HELPERS ###
 }

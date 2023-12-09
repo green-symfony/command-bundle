@@ -27,15 +27,15 @@ use GS\Service\Service\{
 
 trait DumpInfoAbleTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* DumpInfoAbleTrait */
-	abstract protected function &getDumpInfoProperty(): bool;
-	
-	//###< ABSTRACT ###
-	
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* DumpInfoAbleTrait */
+    abstract protected function &getDumpInfoProperty(): bool;
+
+    //###< ABSTRACT ###
+
 
     //###> PUBLIC API ###
 

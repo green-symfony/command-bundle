@@ -14,6 +14,6 @@ abstract class AbstractCommandUseTrait extends Command implements
     SignalableCommandInterface,
     ServiceSubscriberInterface
 {
-	use AbstractCommandTrait;
+    use AbstractCommandTrait;
     use MakeLockAbleTrait;
 }

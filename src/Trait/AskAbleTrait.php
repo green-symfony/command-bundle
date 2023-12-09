@@ -27,14 +27,14 @@ use GS\Service\Service\{
 
 trait AskAbleTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* AskAbleTrait */
-	abstract protected function &getAskProperty(): bool;
-	
-	//###< ABSTRACT ###
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* AskAbleTrait */
+    abstract protected function &getAskProperty(): bool;
+
+    //###< ABSTRACT ###
 
 
     protected function configureAskOption(): void

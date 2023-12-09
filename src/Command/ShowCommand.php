@@ -89,7 +89,7 @@ class ShowCommand extends AbstractCommand
                             . ' ' . $this->getDefaultValueForHelp('диск, с наименьшим размером'),
             mode:           InputOption::VALUE_REQUIRED,
             shortcut:       'f',
-			add_default_to_description: false,
+            add_default_to_description: false,
         );
 
         parent::configure();
@@ -113,16 +113,18 @@ class ShowCommand extends AbstractCommand
     }
 
     //###> ABSTRACT REALIZATION ###
-	
-	/* AbstractCommand */
-	protected static function getCommandDescription(): string {
-		return self::DESCRIPTION;
-	}
-	
-	/* AbstractCommand */
-	protected static function getCommandHelp(): string {
-		return self::DESCRIPTION;
-	}
+
+    /* AbstractCommand */
+    protected static function getCommandDescription(): string
+    {
+        return self::DESCRIPTION;
+    }
+
+    /* AbstractCommand */
+    protected static function getCommandHelp(): string
+    {
+        return self::DESCRIPTION;
+    }
 
     /* AbstractCommand */
     protected function command(
