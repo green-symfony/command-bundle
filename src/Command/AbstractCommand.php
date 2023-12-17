@@ -459,17 +459,24 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     protected function exit(
         array|string|null $message = null,
         \Closure|callable|null $callback = null,
+		string $style = 'warning',
     ) {
         //$this->devLogger->info(__METHOD__);
+		
+		if ($style === 'warning') {
+			$showMessCallback = $this->io->warning(...);
+		} else if ($style === 'error') {
+			$showMessCallback = $this->io->error(...);
+		}
 
         //###> message
         $this->io->writeln('');
         if ($message !== null) {
-            $this->io->warning(
+            $showMessCallback(
                 $this->t->trans($message),
             );
         } else {
-            $this->io->warning(
+            $showMessCallback(
                 $this->t->trans('gs_command.command.default.exit'),
             );
         }
