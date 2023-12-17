@@ -66,7 +66,7 @@ class NowDateCommand extends AbstractCommand
         protected $gsServiceCarbonFactory,
         protected readonly string $gsCommandPathToNircmd,
     ) {
-		parent::__construct(
+        parent::__construct(
             devLogger:          $devLogger,
             t:                  $t,
             progressBarSpin:    $progressBarSpin,
@@ -93,38 +93,40 @@ class NowDateCommand extends AbstractCommand
             $output,
         );
 
-		$pathNormalizer = static fn($v) => \trim((string) $v);
-		$pathPredicat = function(?string $userArgument, &$argument/*by ref*/) use (&$pathNormalizer): bool {
-			$userArgument = $pathNormalizer($userArgument);
-			
-			if ($userArgument !== null && empty($userArgument)) {
-				$this->exit('Передано пустое значение пути!');
-			}
-			
-			return $userArgument !== null && $argument != $userArgument;
-		};
-		$set = static fn(?string $userArgument, &$argument/*by ref*/) => $argument = $pathNormalizer($userArgument);
+        $pathNormalizer = static fn($v) => \trim((string) $v);
+        $pathPredicat = function (?string $userArgument, &$argument/*by ref*/) use (&$pathNormalizer): bool {
+            $userArgument = $pathNormalizer($userArgument);
+
+            if ($userArgument !== null && empty($userArgument)) {
+                $this->exit('Передано пустое значение пути!');
+            }
+
+            return $userArgument !== null && $argument != $userArgument;
+        };
+        $set = static fn(?string $userArgument, &$argument/*by ref*/) => $argument = $pathNormalizer($userArgument);
         $this->initializeArgument(
             $input,
             $output,
             'path',
             $this->path,
-			predicat: $pathPredicat,
-			set: $set,
+            predicat: $pathPredicat,
+            set: $set,
         );
     }
 
     //###> ABSTRACT REALIZATION ###
-	
-	/* AbstractCommand */
-	protected static function getCommandDescription(): string {
-		return self::DESCRIPTION;
-	}
-	
-	/* AbstractCommand */
-	protected static function getCommandHelp(): string {
-		return self::DESCRIPTION;
-	}
+
+    /* AbstractCommand */
+    protected static function getCommandDescription(): string
+    {
+        return self::DESCRIPTION;
+    }
+
+    /* AbstractCommand */
+    protected static function getCommandHelp(): string
+    {
+        return self::DESCRIPTION;
+    }
 
     /* AbstractCommand */
     protected function command(
@@ -297,7 +299,7 @@ class NowDateCommand extends AbstractCommand
 
     private function getRoot(): string
     {
-        return $this->initialCwd;
+        return $this->gsCommandInitialCwd;
     }
 
     private function check(): void

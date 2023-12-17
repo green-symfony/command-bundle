@@ -59,18 +59,18 @@ use GS\Command\Contracts\PatternAbleCommandInterface;
 */
 trait AbstractPatternAbleCommandTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* AbstractPatternAbleCommandTrait */
-	abstract protected function &getStringPatternProperty(): ?string;
-	
-	/* AbstractPatternAbleCommandTrait */
-	abstract protected function &getExplodedPatternsProperty(): array;
-	
-	//###< ABSTRACT ###
-	
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* AbstractPatternAbleCommandTrait */
+    abstract protected function &getStringPatternProperty(): ?string;
+
+    /* AbstractPatternAbleCommandTrait */
+    abstract protected function &getExplodedPatternsProperty(): array;
+
+    //###< ABSTRACT ###
+
 
     //###> PARSERS DESCRIPTIONS ###
     //###< PARSERS DESCRIPTIONS ###
@@ -82,10 +82,10 @@ trait AbstractPatternAbleCommandTrait
         /* GUARANTEE THAT THE stringPattern WAS GIVEN */
         if ($this->getStringPatternProperty() !== null) {
             $this->setExplodedPatterns(
-				$this->getCalculatedExplodedPatterns(
-					$this->getStringPatternProperty(),
-				),
-			);
+                $this->getCalculatedExplodedPatterns(
+                    $this->getStringPatternProperty(),
+                ),
+            );
         }
     }
 
@@ -131,20 +131,20 @@ trait AbstractPatternAbleCommandTrait
         USE PARSERS API HERE
 
         EXAMPLE:
-            return $this-><use*Parser>(
-                $stringPattern,
-                <>::SECTION_DELIMITER,
-            );
+            return $this-><use*Parser>($stringPattern);
     */
     abstract protected function getCalculatedExplodedPatterns(
         string $stringPattern,
     ): array;
-    /* AbstractPatternAbleConstructedFromToCommand */
-    abstract protected function getPatternName(): string;
-    /* AbstractPatternAbleConstructedFromToCommand */
-    abstract protected function getPatternMode(): int;
+
     /* AbstractPatternAbleConstructedFromToCommand */
     abstract protected function getPatternDescription(): string;
+
+    /* AbstractPatternAbleConstructedFromToCommand */
+    abstract protected function getPatternName(): string;
+
+    /* AbstractPatternAbleConstructedFromToCommand */
+    abstract protected function getPatternMode(): int;
 
     //###< ABSTRACT ###
 
@@ -157,8 +157,8 @@ trait AbstractPatternAbleCommandTrait
             name: $this->getPatternName(),
             mode: $this->getPatternMode(),
             description: $this->gsCommandGetCommandForTrait()->getTranslator()->trans('gs_command.trait.pattern_able_trait.string_like_word')
-			. ': "' . $this->getPatternDescription() . '"',
-			add_default_to_description: false,
+            . ': "' . $this->getPatternDescription() . '"',
+            add_default_to_description: false,
         );
     }
 
@@ -173,14 +173,14 @@ trait AbstractPatternAbleCommandTrait
             $this->getStringPatternProperty(),
         );
     }
-	
-	private function setExplodedPatterns(
-		array $explodedPatterns,
-	): static {
-		$v =& $this->getExplodedPatternsProperty();
-		$v = $explodedPatterns;
-		return $this;
-	}
+
+    private function setExplodedPatterns(
+        array $explodedPatterns,
+    ): static {
+        $v =& $this->getExplodedPatternsProperty();
+        $v = $explodedPatterns;
+        return $this;
+    }
 
     //###< HELPER ###
 

@@ -3,6 +3,9 @@
 gs_command:
     app_env: '%env(APP_ENV)%'
     
+    # TODO: uncomment it to hide title about how to exit
+    display_init_help: true
+    
     #https://raw.githubusercontent.com/sindresorhus/cli-spinners/master/spinners.json
     progress_bar_spin:
     -    ⠋

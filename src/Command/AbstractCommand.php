@@ -4,6 +4,8 @@ namespace GS\Command\Command;
 
 use function Symfony\Component\String\u;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Component\Finder\Finder;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -48,29 +50,32 @@ use GS\Command\Command\UseTrait\AbstractCommandUseTrait;
 */
 abstract class AbstractCommand extends AbstractCommandUseTrait
 {
-	use LockableTrait;
-	
+    use LockableTrait;
+
     //###> CONSTANTS CHANGE ME ###
-	protected bool $makeLock = true;
+    protected bool $makeLock = true;
     protected const WIDTH_PROGRESS_BAR = 40;
     protected const EMPTY_COLOR_PROGRESS_BAR = 'black';
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
     //###< CONSTANTS CHANGE ME ###
-	
+
+    protected $_gs_is_display_init_help;
+    protected ?string $_gs_command_bundle_config_path = null;
+    protected ?string $_gs_command_bundle_config_filename = null;
 
     private SymfonyStyle $io;
     private ProgressBar $progressBar;
     private Table $table;
     private FormatterHelper $formatter;
 
-    public readonly string $initialCwd;
+    public readonly string $gsCommandInitialCwd;
 
     public function __construct(
         protected readonly Logger $devLogger,
         protected readonly TranslatorInterface $t,
         protected readonly array $progressBarSpin,
     ) {
-        $this->initialCwd = Path::normalize(\getcwd());
+        $this->gsCommandInitialCwd = Path::normalize(\getcwd());
 
         parent::__construct();
 
@@ -92,20 +97,36 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         ProgressBar::setFormatDefinition('normal_nomax', '%bar% progress: %current% %spin%');
     }
 
+    #[Required]
+    public function _gsCommandSetRequired(
+        #[Autowire(value: '%gs_command.display_init_help%')]
+        bool $displayInitHelp,
+        #[Autowire(value: '%kernel.project_dir%')]
+        string $kernelProjectDir,
+        #[Autowire('@GS\Service\Service\StringService')]
+        $stringService,
+    ): void {
+        $this->_gs_command_bundle_config_path = $stringService->replaceSlashWithSystemDirectorySeparator(
+            $kernelProjectDir,
+        );
+        $this->_gs_command_bundle_config_filename = '.env.local';
+        $this->_gs_is_display_init_help = $displayInitHelp;
+    }
+
 
     //###> ABSTRACT ###
-	
-	/* AbstractCommand */
-	abstract protected static function getCommandDescription(): string;
-	
-	/* AbstractCommand */
-	abstract protected static function getCommandHelp(): string;
-	
+
+    /* AbstractCommand */
+    abstract protected static function getCommandDescription(): string;
+
+    /* AbstractCommand */
+    abstract protected static function getCommandHelp(): string;
+
     //###< ABSTRACT ###
 
 
     //###> PUBLIC API ###
-	
+
     public function &getTranslator(): TranslatorInterface
     {
         return $this->t;
@@ -126,48 +147,87 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         return $this->table;
     }
 
+    public function getCloneTable(): Table
+    {
+        return clone $this->table;
+    }
+
     public function &getFormatter(): FormatterHelper
     {
         return $this->formatter;
     }
-	
-    //###< PUBLIC API ###
-	
-	
-    //###> API ###
-	
-	/*
-		Debug: Symfony Finder
-		ONLY FOR DEBUGGING
-	*/
-	protected function ddFinder(
-		Finder $finder,
-	): void {
-		$this->io->warning('FINDER START');
-		
-		foreach($finder as $finderSplFileInfo) {
-			$this->io->info(
-				Path::normalize($finderSplFileInfo->getRealPath()),
-			);
-		}
-		
-		$this->exit('FINDER END');
-	}
 
-	/*
-		Usage:
-		
-		protected function configure(): void
-		{
-			$this-><methodName>(
-				name:			<NAME>,
-				default:        <PROPERTY>,
-				description:    <DESCRIPTION>,
-				mode:           InputOption::<CONSTANT>,
-				shortcut:       <SHORTCUT>,
-			);
+    //###< PUBLIC API ###
+
+
+    //###> API ###
+
+    /*
+        Debug: Symfony Finder
+        ONLY FOR DEBUGGING
+    */
+    protected function ddFinder(
+        Finder $finder,
+        bool $isExit = true,
+    ): void {
+        $this->io->warning('FINDER START');
+
+        foreach ($finder as $finderSplFileInfo) {
+            $this->io->info(
+                Path::normalize($finderSplFileInfo->getRealPath()),
+            );
+        }
+
+		$exitMess = 'FINDER END';
+        if ($isExit) {
+			$this->exit($exitMess);
+		} else {
+			$this->io->warning($exitMess);			
 		}
-	*/
+    }
+
+    /*
+        Debug: Symfony \dd()
+        ONLY FOR DEBUGGING
+    */
+    protected function dd(
+        ...$forDDPack,
+    ): void {
+		$this->io->warning('\\dd() START');
+		
+        foreach($forDDPack as $k => $forDD) {
+			if ($forDD instanceof Finder) {
+				$this->ddFinder($forDD, isExit: false);
+				unset($forDDPack[$k]);
+				continue;
+			}
+		}
+		
+		$exitMess = '\\dd() END';
+		if (!empty($forDDPack)) {
+			\dd(
+				$forDDPack,
+				'SYSTEM MESSAGE: ' . $exitMess,
+			);				
+		}
+		
+		$this->exit($exitMess);
+    }
+
+    /*
+        Usage:
+
+        protected function configure(): void
+        {
+            $this-><methodName>(
+                name:           <NAME>,
+                default:        <PROPERTY>,
+                description:    <DESCRIPTION>,
+                mode:           InputOption::<CONSTANT>,
+                shortcut:       <SHORTCUT>,
+            );
+        }
+    */
     protected function configureOption(
         string $name,
         string $description,
@@ -176,9 +236,9 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         string|array $shortcut = null,
         bool $add_default_to_description = true,
     ): void {
-		if ($add_default_to_description && $mode != InputOption::VALUE_REQUIRED) {
-			$description = $this->getInfoDescription($mode, $description, $default);			
-		}
+        if ($add_default_to_description && $mode != InputOption::VALUE_REQUIRED) {
+            $description = $this->getInfoDescription($mode, $description, $default);
+        }
 
         if ($shortcut === null) {
             $this
@@ -198,34 +258,34 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
                 shortcut:       $shortcut,
                 mode:           $mode,
                 description:    $description,
-				default:        $default,
+                default:        $default,
             )
         ;
     }
 
-	/*
-		Usage:
-		
-		protected function configure(): void
-		{
-			$this-><methodName>(
-				name:			<NAME>,
-				mode:           InputArgument::<CONSTANT>,
-				description:    <DESCRIPTION>,
-			);
-		}
-	*/
+    /*
+        Usage:
+
+        protected function configure(): void
+        {
+            $this-><methodName>(
+                name:           <NAME>,
+                mode:           InputArgument::<CONSTANT>,
+                description:    <DESCRIPTION>,
+            );
+        }
+    */
     protected function configureArgument(
         string $name,
         int $mode,
         ?string $description = null,
-		mixed $default = null,
-		bool $add_default_to_description = true,
+        mixed $default = null,
+        bool $add_default_to_description = true,
     ) {
-		if ($add_default_to_description && $description !== null && $default !== null) {
-			$description = $this->getInfoDescription($mode, $description, $default);
-		}
-		
+        if ($add_default_to_description && $description !== null && $default !== null) {
+            $description = $this->getInfoDescription($mode, $description, $default);
+        }
+
         if ($description === null) {
             $this
                 ->addArgument(
@@ -245,21 +305,21 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         ;
     }
 
-	/*
-		Usage:
-		
-		protected function initialize(): void
-		{
-			$this-><methodName>(
-				input:			<InputInterface object>,
-				output:			<OutputInterface object>,
-				name:			<NAME>,
-				option:			$this-><OPTION>,
-				predicat:		<predicat CALLABLE>,
-				set:			<set CALLABLE>,
-			);
-		}
-	*/
+    /*
+        Usage:
+
+        protected function initialize(): void
+        {
+            $this-><methodName>(
+                input:          <InputInterface object>,
+                output:         <OutputInterface object>,
+                name:           <NAME>,
+                option:         $this-><OPTION>,
+                predicat:       <predicat CALLABLE>,
+                set:            <set CALLABLE>,
+            );
+        }
+    */
     protected function initializeOption(
         InputInterface $input,
         OutputInterface $output,
@@ -281,21 +341,21 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
 
-	/*
-		Usage:
-		
-		protected function initialize(): void
-		{
-			$this-><methodName>(
-				input:			<InputInterface object>,
-				output:			<OutputInterface object>,
-				name:			<NAME>,
-				argument:		$this-><ARGUMENT>,
-				predicat:		<predicat CALLABLE>,
-				set:			<set CALLABLE>,
-			);
-		}
-	*/
+    /*
+        Usage:
+
+        protected function initialize(): void
+        {
+            $this-><methodName>(
+                input:          <InputInterface object>,
+                output:         <OutputInterface object>,
+                name:           <NAME>,
+                argument:       $this-><ARGUMENT>,
+                predicat:       <predicat CALLABLE>,
+                set:            <set CALLABLE>,
+            );
+        }
+    */
     protected function initializeArgument(
         InputInterface $input,
         OutputInterface $output,
@@ -316,34 +376,34 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         }
     }
 
-	/*
-		Gets the TRANSLATED description of the option or argument configuration
-	*/
+    /*
+        Gets the TRANSLATED description of the option or argument configuration
+    */
     protected function getInfoDescription(
         int $mode,
         string $description,
         mixed $default,
     ): string {
-		$description = $this->t->trans($description);
-		
+        $description = $this->t->trans($description);
+
         if ($mode === InputOption::VALUE_NEGATABLE && gettype($default) === 'boolean') {
             return (string) u(
-					''
-					. u($description)->ensureEnd(' ')
-					. $this->getDefaultValueNegatableForHelp($default)
-			)->collapseWhitespace();
+                ''
+                    . u($description)->ensureEnd(' ')
+                    . $this->getDefaultValueNegatableForHelp($default)
+            )->collapseWhitespace();
         }
-		
+
         return (string) u(
-				''
-				. u($description)->ensureEnd(' ')
-				. $this->getDefaultValueForHelp($default)
-			)->collapseWhitespace();
+            ''
+                . u($description)->ensureEnd(' ')
+                . $this->getDefaultValueForHelp($default)
+        )->collapseWhitespace();
     }
 
-	/*
-		Gets part of the option description
-	*/
+    /*
+        Gets part of the option description
+    */
     protected function getDefaultValueForHelp(
         ?string $default,
     ): string {
@@ -353,9 +413,9 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         return '<bg=black;fg=yellow>[default: "' . $default . '"]</>';
     }
 
-	/*
-		Gets boolean part of the option description
-	*/
+    /*
+        Gets boolean part of the option description
+    */
     protected function getDefaultValueNegatableForHelp(
         ?bool $bool,
     ): string {
@@ -365,16 +425,16 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         return $this->getDefaultValueForHelp($bool ? 'yes' : 'no');
     }
 
-	/*
-		Asks user in the console: MOVE ON?
-	*/
+    /*
+        Asks user in the console: MOVE ON?
+    */
     protected function isOk(
         array|string $message = 'gs_command.command.default.is_ok',
         bool $default = true,
         bool $exitWhenDisagree = false,
     ) {
-		$message = $this->t->trans($message);
-		
+        $message = $this->t->trans($message);
+
         $agree = $this->io->askQuestion(
             new ConfirmationQuestion(
                 \is_array($message) ? \implode(\PHP_EOL, $message) : $message,
@@ -389,13 +449,13 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         return $agree;
     }
 
-	/*
-		Dumps the TRANSLATED message
-		
-		Executes callback
-		
-		And afther all this exits from the command
-	*/
+    /*
+        Dumps the TRANSLATED message
+
+        Executes callback
+
+        And afther all this exits from the command
+    */
     protected function exit(
         array|string|null $message = null,
         \Closure|callable|null $callback = null,
@@ -406,12 +466,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         $this->io->writeln('');
         if ($message !== null) {
             $this->io->warning(
-				$this->t->trans($message),
-			);
+                $this->t->trans($message),
+            );
         } else {
             $this->io->warning(
-				$this->t->trans('gs_command.command.default.exit'),
-			);
+                $this->t->trans('gs_command.command.default.exit'),
+            );
         }
 
         //###> callback before the exit
@@ -423,9 +483,9 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         exit(Command::INVALID);
     }
 
-	/*
-		Alias for exit with the defined message
-	*/
+    /*
+        Alias for exit with the defined message
+    */
     protected function shutdown(): void
     {
         $this->exit(
@@ -439,33 +499,41 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
     //###< API ###
-    
-	
-	//###> ABSTRACT REALIZATION ###
-	
-	/* AbstractGetCommandTrait
-		Get This Command into service and use API of this Command
-	*/
-	protected function &gsCommandGetCommandForTrait(): AbstractCommand {
-		return $this;
-	}
-	
-	/* MakeLockAbleTrait */
-	protected function &getMakeLockProperty(): bool {
-		return $this->makeLock;
-	}
-	
+
+
+    //###> ABSTRACT REALIZATION ###
+
+    /* AbstractGetCommandTrait
+        Get This Command into service and use API of this Command
+    */
+    protected function &gsCommandGetCommandForTrait(): AbstractCommand
+    {
+        return $this;
+    }
+
+    /* MakeLockAbleTrait */
+    protected function &getMakeLockProperty(): bool
+    {
+        return $this->makeLock;
+    }
+
     /* AbstractCommandTrait */
     protected function configure()
     {
         //\pcntl_signal(\SIGINT, $this->shutdown(...));
         //\register_shutdown_function($this->shutdown(...));
-		
+
         $this->configureCommandHelp();
-       
-		$this->configureCommandDescription();
-		
+
+        $this->configureCommandDescription();
+
         $this->configureLockOption();
+
+        $this->configureOption(
+            name:           'gs-command-display-init-help',
+            mode:           InputOption::VALUE_NEGATABLE,
+            description:    $this->t->trans('gs_command.init_help.description_of_flag'),
+        );
 
         /*###> parent::configure() AT THE END ###*/
         parent::configure();
@@ -482,6 +550,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
             $output,
         );
 
+        $this->initializeOption(
+            $input,
+            $output,
+            'gs-command-display-init-help',
+            $this->_gs_is_display_init_help,
+        );
 
         //###>
         $this->io = new SymfonyStyle($input, $output);
@@ -505,30 +579,37 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
     /* AbstractCommand
-		// OK
-		return Command::SUCCESS;
+        // OK
+        return Command::SUCCESS;
 
-		// Incorrect usage
-		return Command::INVALID;
+        // Incorrect usage
+        return Command::INVALID;
 
-		// Program failure
-		return Command::FAILURE;
-	*/
+        // Program failure
+        return Command::FAILURE;
+    */
     protected function execute(
         InputInterface $input,
         OutputInterface $output,
     ) {
         //###> LOCK ###
         if ($this->getMakeLockProperty()) {
-            if (!$this->lock(
-				$this->getLockName(),
-			)) {
+            if (
+                !$this->lock(
+                    $this->getLockName(),
+                )
+            ) {
                 $this->exit(
-					$this->getExitCuzLockMessage(),
-				);
+                    $this->getExitCuzLockMessage(),
+                );
                 return Command::FAILURE;
             }
         }
+
+        $this->displayInfoHowToExit(
+            $input,
+            $output,
+        );
 
         $code = $this->command(
             $input,
@@ -577,22 +658,47 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> YOU CAN OVERRIDE IT  ###
-	
-	/* AbstractCommand */
-	protected function getExitCuzLockMessage(): string {
-		return ''
-			. $this->t->trans('gs_command.command_word')
-			. ' ' . '"'. $this->getName() . '" '
-			. $this->t->trans('gs_command.already_triggered') . '!'
-		;
-	}
-	
-	/* AbstractCommand */
-	protected function getLockName(): string {
-		return $this->getName();
-	}
 
-	/* AbstractCommand */
+    /* AbstractCommand */
+    protected function displayInfoHowToExit(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+        if ($this->_gs_is_display_init_help) {
+            $this->getIo()->warning([
+                $this->t->trans(
+                    'gs_command.init_help.init_description',
+                ),
+                $this->t->trans(
+                    'gs_command.init_help.exit_shortcut',
+                ),
+                $this->t->trans(
+                    'gs_command.init_help.i_want_to_remove_init_description',
+                    [
+                        '%bundle_config_path%' => $this->_gs_command_bundle_config_path,
+                        '%bundle_config_filename%' => $this->_gs_command_bundle_config_filename,
+                    ],
+                ),
+            ]);
+        }
+    }
+
+    protected function getExitCuzLockMessage(): string
+    {
+        return ''
+            . $this->t->trans('gs_command.command_word')
+            . ' ' . '"' . $this->getName() . '" '
+            . $this->t->trans('gs_command.already_triggered') . '!'
+        ;
+    }
+
+    /* AbstractCommand */
+    protected function getLockName(): string
+    {
+        return $this->getName();
+    }
+
+    /* AbstractCommand */
     protected function setFormatter(
         InputInterface $input,
         OutputInterface $output,
@@ -616,7 +722,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         $this->progressBar->setBarWidth(static::WIDTH_PROGRESS_BAR);
     }
 
-	/* AbstractCommand */
+    /* AbstractCommand */
     protected function setTable(
         InputInterface $input,
         OutputInterface $output,
@@ -637,29 +743,31 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
     //###< YOU CAN OVERRIDE IT ###
-	
-	
-	//###> HELPER ###
-	
-	protected function configureCommandHelp(): void {
-		$this
+
+
+    //###> HELPER ###
+
+    protected function configureCommandHelp(): void
+    {
+        $this
             ->setHelp(
-				$this->t->trans(
-					static::getCommandHelp(),
-				),
-			)
+                $this->t->trans(
+                    static::getCommandHelp(),
+                ),
+            )
         ;
-	}
-	
-	protected function configureCommandDescription(): void {
-		$this
+    }
+
+    protected function configureCommandDescription(): void
+    {
+        $this
             ->setDescription(
-				$this->t->trans(
-					static::getCommandDescription(),
-				),
-			)
+                $this->t->trans(
+                    static::getCommandDescription(),
+                ),
+            )
         ;
-	}
-	
-	//###< HELPER ###
+    }
+
+    //###< HELPER ###
 }

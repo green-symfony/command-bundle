@@ -38,7 +38,7 @@ abstract class AbstractConstructedFromToPathsDataSupplier
     }
 
     //###< PUBLIC API ###
-	
+
 
     //###> ABSTRACT ###
 

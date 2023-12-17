@@ -64,13 +64,13 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
 {
     public const DESCRIPTION = 'gs_command.command.pdf.description';
 
-	protected bool $dumpConvertedInfo = true;
-	protected bool $move            = false;
-	protected array|string $depth   = '== 0';
-	protected bool $ask             = true;
-	protected bool $dumpInfo        = true;
-	protected bool $override        = false;
-	protected bool $askOverride     = true;
+    protected bool $dumpConvertedInfo = true;
+    protected bool $move            = false;
+    protected array|string $depth   = '== 0';
+    protected bool $ask             = true;
+    protected bool $dumpInfo        = true;
+    protected bool $override        = false;
+    protected bool $askOverride     = true;
 
     public function __construct(
         $devLogger,
@@ -93,71 +93,84 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
 
 
     //###> ABSTRACT REALIZATION ###
-	
-	/* AbstractCommand */
-	protected static function getCommandDescription(): string {
-		return self::DESCRIPTION;
-	}
-	
-	/* AbstractCommand */
-	protected static function getCommandHelp(): string {
-		return self::DESCRIPTION;
-	}
-	
-	/* AbstractConvertExtCommandTrait */
-	protected function &gsCommandGetStringServiceForTrait(): StringService {
-		return $this->stringService;
-	}
-	
-	/* AbstractConvertExtCommandTrait */
-	protected function &gsCommandGetFilesystemServiceForTrait(): FilesystemService {
-		return $this->filesystemService;
-	}
-	
-	/* AbstractConvertExtCommandTrait */
-	protected function &gsCommandGetDumpInfoServiceForTrait(): DumpInfoService {
-		return $this->dumpInfoService;	
-	}
-	
-	/* AbstractConvertExtCommandTrait */
-	protected function &gsCommandGetRegexServiceForTrait(): RegexService {
-		return $this->regexService;	
-	}
-	
-	/* MoveAbleTrait */
-	protected function &getMoveProperty(): bool {
-		return $this->move;
-	}
-	
-	/* DepthAbleTrait */
-	protected function &getDepthProperty(): array|string {
-		return $this->depth;
-	}
-	
-	/* AskAbleTrait */
-	protected function &getAskProperty(): bool {
-		return $this->ask;
-	}
-	
-	/* DumpInfoAbleTrait */
-	protected function &getDumpInfoProperty(): bool {
-		return $this->dumpInfo;
-	}
-	
-	/* OverrideAbleTrait */
-	protected function &getOverrideProperty(): bool {
-		return $this->override;
-	}
-	
-	/* OverrideAbleTrait */
-	protected function &isAskOverride(): bool {
-		return $this->askOverride;
-	}
-	
-	/* AbstractConvertExtCommandTrait */
-    protected function &isDumpConvertedInfo(): bool {
-		return $this->dumpConvertedInfo;
-	}
+
+    /* AbstractCommand */
+    protected static function getCommandDescription(): string
+    {
+        return self::DESCRIPTION;
+    }
+
+    /* AbstractCommand */
+    protected static function getCommandHelp(): string
+    {
+        return self::DESCRIPTION;
+    }
+
+    /* AbstractConvertExtCommandTrait */
+    protected function &gsCommandGetStringServiceForTrait(): StringService
+    {
+        return $this->stringService;
+    }
+
+    /* AbstractConvertExtCommandTrait */
+    protected function &gsCommandGetFilesystemServiceForTrait(): FilesystemService
+    {
+        return $this->filesystemService;
+    }
+
+    /* AbstractConvertExtCommandTrait */
+    protected function &gsCommandGetDumpInfoServiceForTrait(): DumpInfoService
+    {
+        return $this->dumpInfoService;
+    }
+
+    /* AbstractConvertExtCommandTrait */
+    protected function &gsCommandGetRegexServiceForTrait(): RegexService
+    {
+        return $this->regexService;
+    }
+
+    /* MoveAbleTrait */
+    protected function &getMoveProperty(): bool
+    {
+        return $this->move;
+    }
+
+    /* DepthAbleTrait */
+    protected function &getDepthProperty(): array|string
+    {
+        return $this->depth;
+    }
+
+    /* AskAbleTrait */
+    protected function &getAskProperty(): bool
+    {
+        return $this->ask;
+    }
+
+    /* DumpInfoAbleTrait */
+    protected function &getDumpInfoProperty(): bool
+    {
+        return $this->dumpInfo;
+    }
+
+    /* OverrideAbleTrait */
+    protected function &getOverrideProperty(): bool
+    {
+        return $this->override;
+    }
+
+    /* OverrideAbleTrait */
+    protected function &isAskOverride(): bool
+    {
+        return $this->askOverride;
+    }
+
+    /* AbstractConvertExtCommandTrait */
+    protected function &isDumpConvertedInfo(): bool
+    {
+        return $this->dumpConvertedInfo;
+    }
 
     protected function getFromExtensions(): string|array
     {
@@ -184,7 +197,7 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
 
     protected function getDefaultFrom(): string
     {
-        return $this->initialCwd;
+        return $this->gsCommandInitialCwd;
     }
 
     protected function getDefaultTo(): string
@@ -198,7 +211,7 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
     ): void {
         $code = null;
         $commandPath = $this->gsCommandPathToPdfConverter;
-		$filesystemService = $this->filesystemService;
+        $filesystemService = $this->filesystemService;
 
         $command = ''
             . '"' . $commandPath . '"'
@@ -207,17 +220,17 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
             . ' -T "wdFormatPDF"'
         ;
         try {
-			\chdir($filesystemService->getLocalRoot());
-			\exec($command, result_code: $code);
-			\chdir($this->initialCwd); /* ! RETURN TO THE CURRENT DIRECTORY ! */			
-		} finally {
-			if (!\is_null($code) && $code !== Command::SUCCESS) {
-				$this->exit(
-					message: 'Отмена',
-					callback: static fn() => $filesystemService->deleteByAbsPathIfExists($absPathTo),
-				);
-			}
-		}
+            \chdir($filesystemService->getLocalRoot());
+            \exec($command, result_code: $code);
+            \chdir($this->gsCommandInitialCwd); /* ! RETURN TO THE CURRENT DIRECTORY ! */
+        } finally {
+            if (!\is_null($code) && $code !== Command::SUCCESS) {
+                $this->exit(
+                    message: 'Отмена',
+                    callback: static fn() => $filesystemService->deleteByAbsPathIfExists($absPathTo),
+                );
+            }
+        }
     }
 
     //###< ABSTRACT REALIZATION ###

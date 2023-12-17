@@ -21,11 +21,24 @@ This bundle provides:
 
 For several functions you can add your own translations:
 
-| Functions | Extra information |
-| ------------- | ------------- |
-| AbstractCommand::getInfoDescription() |  |
-| AbstractCommand::exit() |  |
-| AbstractCommand::isOk() | Should always be in English |
+| Functions API |
+| ------------- |
+| AbstractCommand::getTranslator() |
+| AbstractCommand::getIo() |
+| AbstractCommand::getProgressBar() |
+| AbstractCommand::getTable() |
+| AbstractCommand::getCloneTable() |
+| AbstractCommand::getFormatter() |
+| AbstractCommand::ddFinder() |
+| AbstractCommand::configureOption() |
+| AbstractCommand::configureArgument() |
+| AbstractCommand::initializeOption() |
+| AbstractCommand::initializeArgument() |
+| AbstractCommand::getInfoDescription() |
+| AbstractCommand::isOk() |
+| AbstractCommand::exit() |
+| AbstractCommand::shutdown() |
+
 
 For the "ru" locale add your translations into the directory:
 `%kernel.project_dir%/translations/GS/Command/messages.ru.yaml`
@@ -53,6 +66,7 @@ $this->progressBar->start();
 | [AbstractConstructedFromToCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConstructedFromToCommandTrait.php) | Abstraction for doing something with the constructed absolute paths from and to. |
 | [AbstractPatternAbleCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractPatternAbleCommandTrait.php) | Abstraction for processing the passed pattern. |
 | [AbstractConvertExtCommandTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/AbstractConvertExtCommandTrait.php) | Abstraction for converting files into another extension. |
+| [AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait](https://github.com/green-symfony/command-bundle/blob/main/src/Trait/PatternAbleInstance/AbstractPatternAbleCommandUseOneThreeReplacementPartsOfRegexTrait.php) | It parses three parts of an expression with all the possible combinations |
 
 ## Command
 
@@ -68,7 +82,7 @@ $this->progressBar->start();
 
 | AbstractCommand state | Description |
 | ------------- | ------------- |
-| $this->initialCwd | `\getcwd()` |
+| $this->gsCommandInitialCwd | `\getcwd()` when the command starts |
 
 # Installation
 

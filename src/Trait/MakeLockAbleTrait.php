@@ -27,14 +27,14 @@ use GS\Service\Service\{
 
 trait MakeLockAbleTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* MakeLockAbleTrait */
-	abstract protected function &getMakeLockProperty(): bool;
-	
-	//###< ABSTRACT ###
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* MakeLockAbleTrait */
+    abstract protected function &getMakeLockProperty(): bool;
+
+    //###< ABSTRACT ###
 
     protected function configureLockOption(): void
     {

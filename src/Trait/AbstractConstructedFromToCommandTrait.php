@@ -48,7 +48,7 @@ use GS\Command\Trait\{
 */
 trait AbstractConstructedFromToCommandTrait
 {
-	use AbstractGetCommandTrait;
+    use AbstractGetCommandTrait;
 
     /*
         [
@@ -64,18 +64,18 @@ trait AbstractConstructedFromToCommandTrait
     private ?Finder $finder                     = null;
     private ?AbstractConstructedFromToPathsDataSupplier $dataSupplierForConstructedFromToPaths = null;
     private int $quantityConstructedFromToPaths = 0;
-    
-	
-	//###> ABSTRACT ###
-	
-	/* AbstractConstructedFromToCommandTrait */
-	abstract protected function &gsCommandGetStringServiceForTrait(): StringService;
-	
-	/* AbstractConstructedFromToCommandTrait */
-	abstract protected function &gsCommandGetDumpInfoServiceForTrait(): DumpInfoService;
-	
-	/* AbstractConstructedFromToCommandTrait */
-	abstract protected function &gsCommandGetFilesystemServiceForTrait(): FilesystemService;
+
+
+    //###> ABSTRACT ###
+
+    /* AbstractConstructedFromToCommandTrait */
+    abstract protected function &gsCommandGetStringServiceForTrait(): StringService;
+
+    /* AbstractConstructedFromToCommandTrait */
+    abstract protected function &gsCommandGetDumpInfoServiceForTrait(): DumpInfoService;
+
+    /* AbstractConstructedFromToCommandTrait */
+    abstract protected function &gsCommandGetFilesystemServiceForTrait(): FilesystemService;
 
     /* AbstractConstructedFromToCommandTrait
         create your own ConstructedFromToPathsDataSupplier for a certain command
@@ -249,14 +249,15 @@ trait AbstractConstructedFromToCommandTrait
     //###> CAN OVERRIDE ###
 
     // число отставания от цикла выполнения
-	protected function getProgressBarDisplayFrequency(): int {
-		return 0;
-	}
+    protected function getProgressBarDisplayFrequency(): int
+    {
+        return 0;
+    }
 
     //###< CAN OVERRIDE ###
-	
-	
-	//###> ABSTRACT REALIZATION ###	
+
+
+    //###> ABSTRACT REALIZATION ###
 
     /* AbstractCommand */
     protected function command(
@@ -264,7 +265,7 @@ trait AbstractConstructedFromToCommandTrait
         OutputInterface $output,
     ): int {
         $dataSuppliers = $this->getDataSuppliersForConstructedFromToPaths();
-		
+
         // DATA SUPPLIERS
         foreach ($dataSuppliers as $dataSupplier) {
             $this->setDataSupplierForConstructedFromToPaths(
@@ -338,15 +339,15 @@ trait AbstractConstructedFromToCommandTrait
     //###> !OVERRIDE IT! ###
 
     protected function userChecksFrom(
-		string $from,
-	): void {
-	}
+        string $from,
+    ): void {
+    }
 
     protected function userChecksTo(
-		string $to,
-	): void {
-	}
-	
+        string $to,
+    ): void {
+    }
+
     //###< !OVERRIDE IT! ###
 
 
@@ -365,41 +366,41 @@ trait AbstractConstructedFromToCommandTrait
         array $pathsForRemove,
     ): void {
         $longestCommon  = Path::getLongestCommonBasePath(...$pathsForRemove);
-		$whatFromIsInConstructedFromToPaths = $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-			$whatFromIsInConstructedFromToPaths,
-		);
+        $whatFromIsInConstructedFromToPaths = $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+            $whatFromIsInConstructedFromToPaths,
+        );
 
         $longestCommon  = $this->getDirIfFile($longestCommon);
 
         $fromDirPartMessage = ''
-			. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-				'gs_command.from_word',
-			)
-			. ' ' . '[' . $longestCommon . ']'
-			. ' ' . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-				'gs_command.directory_word',
-			)
-		;
+            . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                'gs_command.from_word',
+            )
+            . ' ' . '[' . $longestCommon . ']'
+            . ' ' . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                'gs_command.directory_word',
+            )
+        ;
         $message = ''
             . \mb_strtoupper($this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-				'gs_command.trait.constructed_from_to_trait.delete_word',
-			)) . ':'
-			. ' ' . $whatFromIsInConstructedFromToPaths
+                'gs_command.trait.constructed_from_to_trait.delete_word',
+            )) . ':'
+            . ' ' . $whatFromIsInConstructedFromToPaths
             . ' ' . $fromDirPartMessage . '?'
-		;
+        ;
 
         $infoMessage = (string) u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
-        
-		$this->gsCommandGetCommandForTrait()->getIo()->info([
-			$this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
-		]);
-		if ($this->gsCommandGetCommandForTrait()->isOk()) {
+
+        $this->gsCommandGetCommandForTrait()->getIo()->info([
+            $this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
+        ]);
+        if ($this->gsCommandGetCommandForTrait()->isOk()) {
             $this->gsCommandGetCommandForTrait()->getIo()->info([
                 ''
-				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-					'gs_command.trait.constructed_from_to_trait.deleting_process',
-				)
-				. $infoMessage . '...',
+                . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                    'gs_command.trait.constructed_from_to_trait.deleting_process',
+                )
+                . $infoMessage . '...',
             ]);
             foreach ($pathsForRemove as $pathForRemove) {
                 $this->gsCommandGetFilesystemServiceForTrait()->deleteByAbsPathIfExists(
@@ -409,19 +410,19 @@ trait AbstractConstructedFromToCommandTrait
             //###>
             $this->gsCommandGetCommandForTrait()->getIo()->note([
                 ''
-				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-					'gs_command.trait.constructed_from_to_trait.have_been_deleted',
-				)
-				. $infoMessage,
+                . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                    'gs_command.trait.constructed_from_to_trait.have_been_deleted',
+                )
+                . $infoMessage,
             ]);
         } else {
             //###>
             $this->gsCommandGetCommandForTrait()->getIo()->note([
                 ''
-				. $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
-					'gs_command.trait.constructed_from_to_trait.have_not_been_deleted',
-				)
-				. $infoMessage,
+                . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
+                    'gs_command.trait.constructed_from_to_trait.have_not_been_deleted',
+                )
+                . $infoMessage,
             ]);
         }
     }
@@ -543,7 +544,7 @@ trait AbstractConstructedFromToCommandTrait
         $this->beforeMakeFromToAlgorithm(
             $input,
             $output,
-			$dataSupplier,
+            $dataSupplier,
         );
 
         //###>
@@ -620,10 +621,10 @@ trait AbstractConstructedFromToCommandTrait
             $to             = $this->dataSupplierForConstructedFromToPaths->getTo(
                 $finderSplFileInfo,
             );
-			
-			$this->userChecksFrom($from);
-			
-			$this->userChecksTo($to);
+
+            $this->userChecksFrom($from);
+
+            $this->userChecksTo($to);
 
             $this->scanningCycleForConstructedFromToPaths(
                 $input,
@@ -709,7 +710,7 @@ trait AbstractConstructedFromToCommandTrait
     private function getDirIfFile(
         string $path,
     ): string {
-		if (\is_file($path)) {
+        if (\is_file($path)) {
             return $this->gsCommandGetStringServiceForTrait()->getDirectory($path);
         }
         return $path;

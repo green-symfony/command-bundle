@@ -27,14 +27,14 @@ use GS\Service\Service\{
 
 trait MoveAbleTrait
 {
-	use AbstractGetCommandTrait;
-	
-	//###> ABSTRACT ###
-	
-	/* MoveAbleTrait */
-	abstract protected function &getMoveProperty(): bool;
-	
-	//###< ABSTRACT ###
+    use AbstractGetCommandTrait;
+
+    //###> ABSTRACT ###
+
+    /* MoveAbleTrait */
+    abstract protected function &getMoveProperty(): bool;
+
+    //###< ABSTRACT ###
 
     protected function configureMoveOption(): void
     {
