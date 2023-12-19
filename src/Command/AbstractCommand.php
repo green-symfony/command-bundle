@@ -427,6 +427,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
     /*
         Asks user in the console: MOVE ON?
+		
+		Usage:
+			if ($this->isOk()) {
+				//...
+			}
     */
     protected function isOk(
         array|string $message = 'gs_command.command.default.is_ok',

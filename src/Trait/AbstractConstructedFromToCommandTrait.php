@@ -381,6 +381,7 @@ trait AbstractConstructedFromToCommandTrait
                 'gs_command.directory_word',
             )
         ;
+		
         $message = ''
             . \mb_strtoupper($this->gsCommandGetCommandForTrait()->getTranslator()->trans(
                 'gs_command.trait.constructed_from_to_trait.delete_word',
@@ -389,7 +390,7 @@ trait AbstractConstructedFromToCommandTrait
             . ' ' . $fromDirPartMessage . '?'
         ;
 
-        $infoMessage = (string) u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
+        $infoMessage = ': ' . u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
 
         $this->gsCommandGetCommandForTrait()->getIo()->info([
             $this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
