@@ -390,7 +390,7 @@ trait AbstractConstructedFromToCommandTrait
             . ' ' . $fromDirPartMessage . '?'
         ;
 
-        $infoMessage = ': ' . u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
+        $infoMessage = ':' . u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
 
         $this->gsCommandGetCommandForTrait()->getIo()->info([
             $this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
