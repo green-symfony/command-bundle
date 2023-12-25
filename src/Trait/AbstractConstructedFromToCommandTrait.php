@@ -381,20 +381,30 @@ trait AbstractConstructedFromToCommandTrait
                 'gs_command.directory_word',
             )
         ;
+		
         $message = ''
             . \mb_strtoupper($this->gsCommandGetCommandForTrait()->getTranslator()->trans(
                 'gs_command.trait.constructed_from_to_trait.delete_word',
-            )) . ':'
+            ))
+			. ':'
             . ' ' . $whatFromIsInConstructedFromToPaths
-            . ' ' . $fromDirPartMessage . '?'
+            . ' ' . $fromDirPartMessage
+			. '?'
         ;
 
-        $infoMessage = (string) u(u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ') . \trim($fromDirPartMessage))->ensureStart(' ');
+        $infoMessage = ':'
+			. u(
+				u($whatFromIsInConstructedFromToPaths)->ensureEnd(' ')
+				. \trim($fromDirPartMessage)
+			)->ensureStart(' ')
+		;
 
-        $this->gsCommandGetCommandForTrait()->getIo()->info([
-            $this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
-        ]);
-        if ($this->gsCommandGetCommandForTrait()->isOk()) {
+		$this->gsCommandGetCommandForTrait()->ioDump(
+			$this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
+			//new \GS\Command\Contracts\IO\CautionIODumper,
+		);
+		
+		if ($this->gsCommandGetCommandForTrait()->isOk()) {
             $this->gsCommandGetCommandForTrait()->getIo()->info([
                 ''
                 . $this->gsCommandGetCommandForTrait()->getTranslator()->trans(
