@@ -39,6 +39,8 @@ use Symfony\Component\Console\Output\{
     OutputInterface
 };
 use GS\Command\Command\UseTrait\AbstractCommandUseTrait;
+use GS\Command\Contracts\IO\AbstractIODumper;
+use GS\Command\Contracts\IO\DefaultIODumper;
 
 // PROJECT_DIR/bin/console <command>
 /*
@@ -127,31 +129,64 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
     //###> PUBLIC API ###
 
+	/*
+		Use it instead of $this->getIo()->note(), ...
+	*/
+    public function ioDump(
+		mixed $message,
+		?AbstractIODumper $dumper = null,
+		bool $translate = true,
+	): static {
+		$dumper ??= new DefaultIODumper();
+		
+		if ($translate && (false
+			|| \is_string($message)
+			|| \is_int($message)
+			|| \is_float($message)
+			|| \is_null($message)
+		)) {
+			$message = $this->getTranslator()->trans(\is_null($message) ? $message : (string) $message);
+		}
+		
+		$dumper(
+			$this->getIo(),
+			$message,
+		);
+		
+        return $this;
+    }
+
+	/**/
     public function &getTranslator(): TranslatorInterface
     {
         return $this->t;
     }
 
+	/**/
     public function &getIo(): SymfonyStyle
     {
         return $this->io;
     }
 
+	/**/
     public function &getProgressBar(): ProgressBar
     {
         return $this->progressBar;
     }
 
+	/**/
     public function &getTable(): Table
     {
         return $this->table;
     }
 
+	/**/
     public function getCloneTable(): Table
     {
         return clone $this->table;
     }
 
+	/**/
     public function &getFormatter(): FormatterHelper
     {
         return $this->formatter;

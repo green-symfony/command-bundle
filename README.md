@@ -25,6 +25,7 @@ For several functions you can add your own translations:
 | ------------- |
 | AbstractCommand::getTranslator() |
 | AbstractCommand::getIo() |
+| AbstractCommand::ioDump() |
 | AbstractCommand::getProgressBar() |
 | AbstractCommand::getTable() |
 | AbstractCommand::getCloneTable() |
@@ -77,6 +78,23 @@ $this->progressBar->start();
 | [PdfCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/PdfCommand.php) | PDF converter (READY TO USE) |
 | [NowDateCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/NowDateCommand.php) | Assign updating and creation date and time of the file (READY TO USE) |
 | [ShowCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/ShowCommand.php) | Show not empty directories by path (READY TO USE) |
+
+### Use various IODumpers with AbstractCommand::ioDump()
+
+| IODumpers |
+| ------------- |
+| [CautionIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/CautionIODumper.php) |
+| [CommentIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/CommentIODumper.php) |
+| [DefaultIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/DefaultIODumper.php) |
+| [ErrorIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/ErrorIODumper.php) |
+| [InfoIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/InfoIODumper.php) |
+| [ListingIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/ListingIODumper.php) |
+| [NoteIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/NoteIODumper.php) |
+| [SectionIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/SectionIODumper.php) |
+| [SuccessIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/SuccessIODumper.php) |
+| [TextIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/TextIODumper.php) |
+| [TitleIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/TitleIODumper.php) |
+| [WarningIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/WarningIODumper.php) |
 
 ### Initial state of the AbstractCommand
 
