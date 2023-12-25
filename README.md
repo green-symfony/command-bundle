@@ -25,6 +25,7 @@ For several functions you can add your own translations:
 | ------------- |
 | AbstractCommand::getTranslator() |
 | AbstractCommand::getIo() |
+| AbstractCommand::ioDump() |
 | AbstractCommand::getProgressBar() |
 | AbstractCommand::getTable() |
 | AbstractCommand::getCloneTable() |
@@ -77,6 +78,23 @@ $this->progressBar->start();
 | [PdfCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/PdfCommand.php) | PDF converter (READY TO USE) |
 | [NowDateCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/NowDateCommand.php) | Assign updating and creation date and time of the file (READY TO USE) |
 | [ShowCommand](https://github.com/green-symfony/command-bundle/tree/main/src/Command/ShowCommand.php) | Show not empty directories by path (READY TO USE) |
+
+### Use various IODumpers with AbstractCommand::ioDump()
+
+| IODumpers |
+| ------------- |
+| [CautionIODumper]() |
+| [CommentIODumper]() |
+| [DefaultIODumper]() |
+| [ErrorIODumper]() |
+| [InfoIODumper]() |
+| [ListingIODumper]() |
+| [NoteIODumper]() |
+| [SectionIODumper]() |
+| [SuccessIODumper]() |
+| [TextIODumper]() |
+| [TitleIODumper]() |
+| [WarningIODumper]() |
 
 ### Initial state of the AbstractCommand
 
