@@ -65,10 +65,10 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     protected ?string $_gs_command_bundle_config_path = null;
     protected ?string $_gs_command_bundle_config_filename = null;
 
-    private SymfonyStyle $io;
-    private ProgressBar $progressBar;
-    private Table $table;
-    private FormatterHelper $formatter;
+    protected SymfonyStyle $io;
+    protected ProgressBar $progressBar;
+    protected Table $table;
+    protected FormatterHelper $formatter;
 
     public readonly string $gsCommandInitialCwd;
 
