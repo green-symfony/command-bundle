@@ -7,6 +7,11 @@ use GS\Service\Service\BufferService;
 
 abstract class AbstractIODumper
 {
+	public function __construct(
+		protected readonly int $afterDumpNewLines = 0,
+	) {
+	}
+	
 	public function __invoke(
 		SymfonyStyle &$io,
 		mixed $message,
@@ -16,10 +21,24 @@ abstract class AbstractIODumper
 			return $this;
 		}
 		
-		$this->dump(
-			$io,
-			$this->getNormalizedMessage($message),
-		);
+		if (\is_array($message)) {
+			foreach($message as $m) {
+				$this->dump(
+					$io,
+					$this->getNormalizedMessage($m),
+				);
+				
+				$afterDumpNewLines = $this->afterDumpNewLines;
+				while($afterDumpNewLines-- > 0) {
+					$io->writeln('');
+				}
+			}
+		} else {
+			$this->dump(
+				$io,
+				$this->getNormalizedMessage($message),
+			);			
+		}
 		
 		if ($flush) {
 			BufferService::clear();
