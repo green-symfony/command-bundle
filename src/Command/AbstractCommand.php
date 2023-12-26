@@ -137,7 +137,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 		?AbstractIODumper $dumper = null,
 		bool $translate = true,
 	): static {
-		$dumper ??= new DefaultIODumper();
+		$dumper ??= new DefaultIODumper;
 		
 		if ($translate && (false
 			|| \is_string($message)
