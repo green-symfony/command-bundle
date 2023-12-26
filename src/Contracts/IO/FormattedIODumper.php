@@ -11,7 +11,13 @@ class FormattedIODumper extends AbstractIODumper
 
 	public function __construct(
 		?string $formatter = null,
+		int $afterDumpNewLines = 0,
 	) {
+		parent::__construct(
+			afterDumpNewLines: $afterDumpNewLines,
+		);
+		
+		//###>
 		$formatter ??= 'bg=black;fg=green';
 		$this->formatter = \trim($formatter);
 	}
@@ -53,13 +59,15 @@ class FormattedIODumper extends AbstractIODumper
 	protected function getNormalizedMessage(
 		mixed $message,
 	): mixed {
+		$getFormatted = $this->getFormatted(...);
+		
 		if (\is_array($message)) {
 			\array_walk(
 				$message,
-				$this->getFormatted(...),
+				static fn(&$el) => $el = $getFormatted($el),
 			);
 		} else {
-			$message = $this->getFormatted($message);
+			$message = $getFormatted($message);
 		}
 		
 		return $message;

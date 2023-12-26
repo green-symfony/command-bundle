@@ -135,6 +135,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     public function ioDump(
 		mixed $message,
 		?AbstractIODumper $dumper = null,
+		int $afterDumpNewLines = 0,
 		bool $translate = true,
 	): static {
 		$dumper ??= new DefaultIODumper;
@@ -152,6 +153,10 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 			$this->getIo(),
 			$message,
 		);
+		
+		while ($afterDumpNewLines-- > 0) {
+			$this->getIo()->writeln('');
+		}
 		
         return $this;
     }
