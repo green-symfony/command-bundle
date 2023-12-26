@@ -18,7 +18,7 @@ class FormattedIODumper extends AbstractIODumper
 		);
 		
 		//###>
-		$format ??= '<bg=black;fg=green>%s</>';
+		$format ??= '<bg=black;fg=green> %s</>';
 		$this->format = \trim($format);
 	}
 	
