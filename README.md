@@ -87,6 +87,7 @@ $this->progressBar->start();
 | [CommentIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/CommentIODumper.php) |
 | [DefaultIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/DefaultIODumper.php) |
 | [ErrorIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/ErrorIODumper.php) |
+| [FormattedIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/FormattedIODumper.php) |
 | [InfoIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/InfoIODumper.php) |
 | [ListingIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/ListingIODumper.php) |
 | [NoteIODumper](https://github.com/green-symfony/command-bundle/blob/v1/src/Contracts/IO/NoteIODumper.php) |
