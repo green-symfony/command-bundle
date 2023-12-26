@@ -7,10 +7,10 @@ use GS\Command\Command\AbstractCommand;
 
 class FormattedIODumper extends AbstractIODumper
 {
-	protected readonly string $formatter;
+	protected readonly string $format;
 
 	public function __construct(
-		?string $formatter = null,
+		?string $format = null,
 		int $afterDumpNewLines = 0,
 	) {
 		parent::__construct(
@@ -18,8 +18,8 @@ class FormattedIODumper extends AbstractIODumper
 		);
 		
 		//###>
-		$formatter ??= 'bg=black;fg=green';
-		$this->formatter = \trim($formatter);
+		$format ??= '<bg=black;fg=green>%s</>';
+		$this->format = \trim($format);
 	}
 	
 	//###> API ###
@@ -30,11 +30,11 @@ class FormattedIODumper extends AbstractIODumper
 	protected function getFormatted(
 		$string,
 	): string {
-		if (empty($this->formatter)) {
+		if (empty($this->format)) {
 			return $string;
 		}
 		
-		return '<' . $this->formatter . '>' . $string . '</>';
+		return \sprintf($this->format, $string);
 	}
 	
 	//###< API ###
