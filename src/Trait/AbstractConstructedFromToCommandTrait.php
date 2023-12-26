@@ -401,7 +401,7 @@ trait AbstractConstructedFromToCommandTrait
 
 		$this->gsCommandGetCommandForTrait()->ioDump(
 			$this->gsCommandGetCommandForTrait()->getTranslator()->trans($message),
-			//new \GS\Command\Contracts\IO\CautionIODumper,
+			//new \GS\Command\Contracts\IO\ErrorIODumper,
 		);
 		
 		if ($this->gsCommandGetCommandForTrait()->isOk()) {
