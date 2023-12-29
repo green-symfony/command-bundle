@@ -644,7 +644,13 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         InputInterface $input,
         OutputInterface $output,
     ) {
-        //###> LOCK ###
+		//###> BEFORE LOCK
+		$this->executeBeforeLock(
+			$input,
+			$output,
+		);
+		
+        //###> LOCK
         if ($this->getMakeLockProperty()) {
             if (
                 !$this->lock(
@@ -710,6 +716,14 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> YOU CAN OVERRIDE IT  ###
+
+    /* AbstractCommand */
+    protected function executeBeforeLock(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+		// nothing by default
+	}
 
     /* AbstractCommand */
     protected function displayInfoHowToExit(
