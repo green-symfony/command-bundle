@@ -191,6 +191,8 @@ class ShowCommand extends AbstractCommand
                 $this->filesystemService->getSmallestDrive(),
             ))
         );
+		
+		$this->from = $this->stringService->getEnsuredRootDrive($this->from);
     }
 
     private function assignFinder()
