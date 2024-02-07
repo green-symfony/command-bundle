@@ -41,6 +41,7 @@ use Symfony\Component\Console\Output\{
 use GS\Command\Command\UseTrait\AbstractCommandUseTrait;
 use GS\Command\Contracts\IO\AbstractIODumper;
 use GS\Command\Contracts\IO\DefaultIODumper;
+use GS\Service\Service\BufferService;
 
 // PROJECT_DIR/bin/console <command>
 /*
@@ -480,6 +481,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     ) {
         $message = $this->t->trans($message);
 
+		//BufferService::clear();
         $agree = $this->io->askQuestion(
             new ConfirmationQuestion(
                 \is_array($message) ? \implode(\PHP_EOL, $message) : $message,
