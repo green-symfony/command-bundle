@@ -187,15 +187,10 @@ class ShowCommand extends AbstractCommand
         //### явно
         $this->from ??= $this->getIo()->askQuestion(
             (new Question(
-                'Flash?'
-                . '',
+                \mb_strtoupper($this->t->trans('gs_command.drive')) . '?',
                 $this->filesystemService->getSmallestDrive(),
             ))
         );
-        // OR скрыто
-        //$this->from ??= $this->filesystemService->getSmallestDrive();
-
-        $this->from = $this->stringService->getEnsuredRootDrive($this->from);
     }
 
     private function assignFinder()

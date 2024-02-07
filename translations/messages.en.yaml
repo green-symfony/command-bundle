@@ -16,6 +16,8 @@ gs_command:
     
     command:
     
+        drive: 'drive'
+    
         nowd:
             description: "Changes the creation and modification date of the specified file to the current PC date (depends on where the console is opened)"
     
