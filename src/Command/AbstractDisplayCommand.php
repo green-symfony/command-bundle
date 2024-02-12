@@ -49,6 +49,7 @@ use GS\Service\Service\{
     ConfigService
 };
 use GS\Command\Contracts\DataCallbackConnector;
+use GS\Command\Contracts\IO as IODumper;
 
 abstract class AbstractDisplayCommand extends AbstractCommand
 {
@@ -131,10 +132,17 @@ abstract class AbstractDisplayCommand extends AbstractCommand
         string|int|float $title,
         mixed $dop = null,
     ): void {
+		$ioDump = $this->ioDump(...);
+		$displayFunc = static fn($info) => $ioDump(
+			$info,
+			new IODumper\FormattedIODumper('<bg=black;fg=yellow>%s</>'),
+			1,
+		);
+		
         if (\is_array($dop)) {
-            $this->getIo()->note([$title, ...$dop]);
+            $displayFunc([$title, ...$dop]);
         } else {
-            $dop ? $this->getIo()->note([$title, $dop]) : $this->getIo()->note($title);
+            $dop ? $displayFunc([$title, $dop]) : $displayFunc($title);
         }
     }
 
