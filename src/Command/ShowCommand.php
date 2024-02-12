@@ -190,10 +190,12 @@ class ShowCommand extends AbstractCommand
     {
 		$driveWord = (string) u($this->t->trans('gs_command.command.drive'))->title();
         
-		$this->ioDump(
-			$driveWord . '?',
-			//new TextIODumper,
-		);
+		if ($this->from === null) {
+			$this->ioDump(
+				$driveWord . '?',
+				//new TextIODumper,
+			);			
+		}
 		
 		$this->from ??= $this->getIo()->ask(
 			'->',//$driveWord . '?', // err 
