@@ -3,7 +3,7 @@ gs_command:
         type: 'Was given an incorrect type "%given_type%", expected "%expected_type%"'
     
     init_help:
-        description_of_flag: 'Display how to immediately stop executing a command?'
+        description_of_flag: 'Should it display supporting information?'
         init_description: "Must know:"
         exit_shortcut: "1) To exit straight away just push this combination: \"Ctrl + C\""
         i_want_to_remove_init_description: "To hide this message by the path: \"%bundle_config_path%\" create the file \"%bundle_config_filename%\" and write down the following with a new line: GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE=0"
