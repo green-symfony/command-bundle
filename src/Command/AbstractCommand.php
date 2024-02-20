@@ -63,8 +63,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     //###< CONSTANTS CHANGE ME ###
 
     protected $_gs_is_display_init_help;
+    protected string $_gs_command_bundle_config_env_filename = '.env';
+    protected string $_gs_command_bundle_config_env_local_filename = '.env.local';
     protected ?string $_gs_command_bundle_config_path = null;
-    protected ?string $_gs_command_bundle_config_filename = null;
+    protected ?string $_gs_command_bundle_config_env_pathname = null;
+    protected ?string $_gs_command_bundle_config_env_local_pathname = null;
 
     protected SymfonyStyle $io;
     protected ProgressBar $progressBar;
@@ -112,7 +115,18 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         $this->_gs_command_bundle_config_path = $stringService->replaceSlashWithSystemDirectorySeparator(
             $kernelProjectDir,
         );
-        $this->_gs_command_bundle_config_filename = '.env.local';
+        $this->_gs_command_bundle_config_env_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
+            $stringService->getPath(
+				$kernelProjectDir,
+				$this->_gs_command_bundle_config_env_filename,
+			),
+        );
+        $this->_gs_command_bundle_config_env_local_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
+            $stringService->getPath(
+				$kernelProjectDir,
+				$this->_gs_command_bundle_config_env_local_filename,
+			),
+        );
         $this->_gs_is_display_init_help = $displayInitHelp;
     }
 
@@ -729,7 +743,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	}
 	
     /* AbstractCommand
-		Not number if the key !is_int()
+		If the key !is_int() doesn't number it
 	*/
 	protected function getBodyInitHelpMessages(): array {
 		return [
@@ -743,10 +757,25 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	protected function getBottomInitHelpMessages(): array {
 		return [
 			$this->t->trans(
+				'gs_command.init_help.how_to_change_lang',
+				[
+					'%bundle_config_path%' => $this->_gs_command_bundle_config_path,
+					'%env_local_filename%' => $this->_gs_command_bundle_config_env_local_filename,
+					'%lang_example%' => 'LOCALE="en_US"',
+				],
+			),
+			$this->t->trans(
+				'gs_command.init_help.how_to_change_default_behaviour',
+				[
+					'%env_pathname%' => $this->_gs_command_bundle_config_env_pathname,
+					'%env_local_pathname%' => $this->_gs_command_bundle_config_env_local_pathname,
+				],
+			),
+			$this->t->trans(
 				'gs_command.init_help.i_want_to_remove_init_description',
 				[
 					'%bundle_config_path%' => $this->_gs_command_bundle_config_path,
-					'%bundle_config_filename%' => $this->_gs_command_bundle_config_filename,
+					'%env_local_filename%' => $this->_gs_command_bundle_config_env_local_filename,
 				],
 			),
 		];
