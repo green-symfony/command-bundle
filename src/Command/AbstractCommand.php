@@ -728,7 +728,9 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 		];
 	}
 	
-    /* AbstractCommand */
+    /* AbstractCommand
+		Not number if the key !is_int()
+	*/
 	protected function getBodyInitHelpMessages(): array {
 		return [
 			$this->t->trans(
@@ -836,11 +838,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	
 	private function getInitHelpMessages(): array {
 		$n = 0;
-		$numberedBodyMessages = \array_map(
-			static function($v) use (&$n) {
-				return (string) u($v)->ensureStart(++$n . ') ');
+		$numberedBodyMessages = $this->getBodyInitHelpMessages();
+		\array_walk(
+			$numberedBodyMessages,
+			static function(&$v, $k) use (&$n) {
+				$v = is_int($k) ? ((string) u($v)->ensureStart(++$n . ') ')) : $v;
 			},
-			$this->getBodyInitHelpMessages(),
 		);
 		
 		return [
