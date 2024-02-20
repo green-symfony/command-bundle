@@ -666,7 +666,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
             }
         }
 
-        $this->displayInfoHowToExit(
+        $this->displayInitHelp(
             $input,
             $output,
         );
@@ -718,6 +718,39 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> YOU CAN OVERRIDE IT  ###
+	
+    /* AbstractCommand */
+	protected function getHeaderInitHelpMessages(): array {
+		return [
+			$this->t->trans(
+				'gs_command.init_help.init_description',
+			),
+		];
+	}
+	
+    /* AbstractCommand */
+	protected function getBodyInitHelpMessages(): array {
+		return [
+			$this->t->trans(
+				'gs_command.init_help.exit_shortcut',
+			),
+		];
+	}
+	
+    /* AbstractCommand */
+	protected function getBottomInitHelpMessages(): array {
+		return [
+			$this->t->trans(
+				'gs_command.init_help.i_want_to_remove_init_description',
+				[
+					'%bundle_config_path%' => $this->_gs_command_bundle_config_path,
+					'%bundle_config_filename%' => $this->_gs_command_bundle_config_filename,
+				],
+			),
+		];
+	}	
+	
+    /* AbstractCommand */
 
     /* AbstractCommand */
     protected function executeBeforeLock(
@@ -728,26 +761,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	}
 
     /* AbstractCommand */
-    protected function displayInfoHowToExit(
+    protected function displayInitHelp(
         InputInterface $input,
         OutputInterface $output,
     ): void {
         if ($this->_gs_is_display_init_help) {
-            $this->getIo()->warning([
-                $this->t->trans(
-                    'gs_command.init_help.init_description',
-                ),
-                $this->t->trans(
-                    'gs_command.init_help.exit_shortcut',
-                ),
-                $this->t->trans(
-                    'gs_command.init_help.i_want_to_remove_init_description',
-                    [
-                        '%bundle_config_path%' => $this->_gs_command_bundle_config_path,
-                        '%bundle_config_filename%' => $this->_gs_command_bundle_config_filename,
-                    ],
-                ),
-            ]);
+            $this->getIo()->warning($this->getInitHelpMessages());
         }
     }
 
@@ -814,6 +833,22 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> HELPER ###
+	
+	private function getInitHelpMessages(): array {
+		$n = 0;
+		$numberedBodyMessages = \array_map(
+			static function($v) use (&$n) {
+				return (string) u($v)->ensureStart(++$n . ') ');
+			},
+			$this->getBodyInitHelpMessages(),
+		);
+		
+		return [
+			...$this->getHeaderInitHelpMessages(),
+			...$numberedBodyMessages,
+			...$this->getBottomInitHelpMessages(),
+		];
+	}
 
     protected function configureCommandHelp(): void
     {
