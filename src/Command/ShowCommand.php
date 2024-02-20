@@ -2,6 +2,8 @@
 
 namespace GS\Command\Command;
 
+use function Symfony\Component\String\u;
+
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Filesystem\{
     Path,
@@ -50,9 +52,11 @@ use GS\Service\Service\{
     ConfigService,
     FilesystemService,
     RegexService,
+    BufferService,
     DumpInfoService,
     StringService
 };
+use GS\Command\Contracts\IO\TextIODumper;
 
 class ShowCommand extends AbstractCommand
 {
@@ -184,18 +188,21 @@ class ShowCommand extends AbstractCommand
 
     private function initFrom(): void
     {
-        //### явно
-        $this->from ??= $this->getIo()->askQuestion(
-            (new Question(
-                'Flash?'
-                . '',
-                $this->filesystemService->getSmallestDrive(),
-            ))
+		$driveWord = (string) u($this->t->trans('gs_command.command.drive'))->title();
+        
+		if ($this->from === null) {
+			$this->ioDump(
+				$driveWord . '?',
+				//new TextIODumper,
+			);			
+		}
+		
+		$this->from ??= $this->getIo()->ask(
+			'->',//$driveWord . '?', // err 
+			default: $this->filesystemService->getSmallestDrive(),
         );
-        // OR скрыто
-        //$this->from ??= $this->filesystemService->getSmallestDrive();
-
-        $this->from = $this->stringService->getEnsuredRootDrive($this->from);
+		
+		$this->from = $this->stringService->getEnsuredRootDrive($this->from);
     }
 
     private function assignFinder()

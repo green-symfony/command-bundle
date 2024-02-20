@@ -41,6 +41,7 @@ use Symfony\Component\Console\Output\{
 use GS\Command\Command\UseTrait\AbstractCommandUseTrait;
 use GS\Command\Contracts\IO\AbstractIODumper;
 use GS\Command\Contracts\IO\DefaultIODumper;
+use GS\Service\Service\BufferService;
 
 // PROJECT_DIR/bin/console <command>
 /*
@@ -62,8 +63,11 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     //###< CONSTANTS CHANGE ME ###
 
     protected $_gs_is_display_init_help;
+    protected string $_gs_command_bundle_config_env_filename = '.env';
+    protected string $_gs_command_bundle_config_env_local_filename = '.env.local';
     protected ?string $_gs_command_bundle_config_path = null;
-    protected ?string $_gs_command_bundle_config_filename = null;
+    protected ?string $_gs_command_bundle_config_env_pathname = null;
+    protected ?string $_gs_command_bundle_config_env_local_pathname = null;
 
     protected SymfonyStyle $io;
     protected ProgressBar $progressBar;
@@ -111,7 +115,18 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         $this->_gs_command_bundle_config_path = $stringService->replaceSlashWithSystemDirectorySeparator(
             $kernelProjectDir,
         );
-        $this->_gs_command_bundle_config_filename = '.env.local';
+        $this->_gs_command_bundle_config_env_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
+            $stringService->getPath(
+				$kernelProjectDir,
+				$this->_gs_command_bundle_config_env_filename,
+			),
+        );
+        $this->_gs_command_bundle_config_env_local_pathname = $stringService->replaceSlashWithSystemDirectorySeparator(
+            $stringService->getPath(
+				$kernelProjectDir,
+				$this->_gs_command_bundle_config_env_local_filename,
+			),
+        );
         $this->_gs_is_display_init_help = $displayInitHelp;
     }
 
@@ -480,6 +495,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     ) {
         $message = $this->t->trans($message);
 
+		//BufferService::clear();
         $agree = $this->io->askQuestion(
             new ConfirmationQuestion(
                 \is_array($message) ? \implode(\PHP_EOL, $message) : $message,
@@ -664,7 +680,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
             }
         }
 
-        $this->displayInfoHowToExit(
+        $this->displayInitHelp(
             $input,
             $output,
         );
@@ -716,6 +732,56 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> YOU CAN OVERRIDE IT  ###
+	
+    /* AbstractCommand */
+	protected function getHeaderInitHelpMessages(): array {
+		return [
+			$this->t->trans(
+				'gs_command.init_help.init_description',
+			),
+		];
+	}
+	
+    /* AbstractCommand
+		If the key !is_int() doesn't number it
+	*/
+	protected function getBodyInitHelpMessages(): array {
+		return [
+			$this->t->trans(
+				'gs_command.init_help.exit_shortcut',
+			),
+		];
+	}
+	
+    /* AbstractCommand */
+	protected function getBottomInitHelpMessages(): array {
+		return [
+			$this->t->trans(
+				'gs_command.init_help.how_to_change_lang',
+				[
+					'%bundle_config_path%' => $this->_gs_command_bundle_config_path,
+					'%env_local_filename%' => $this->_gs_command_bundle_config_env_local_filename,
+					'%lang_example%' => 'LOCALE="en_US"',
+				],
+			),
+			$this->t->trans(
+				'gs_command.init_help.how_to_change_default_behaviour',
+				[
+					'%env_pathname%' => $this->_gs_command_bundle_config_env_pathname,
+					'%env_local_pathname%' => $this->_gs_command_bundle_config_env_local_pathname,
+				],
+			),
+			$this->t->trans(
+				'gs_command.init_help.i_want_to_remove_init_description',
+				[
+					'%bundle_config_path%' => $this->_gs_command_bundle_config_path,
+					'%env_local_filename%' => $this->_gs_command_bundle_config_env_local_filename,
+				],
+			),
+		];
+	}	
+	
+    /* AbstractCommand */
 
     /* AbstractCommand */
     protected function executeBeforeLock(
@@ -726,26 +792,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 	}
 
     /* AbstractCommand */
-    protected function displayInfoHowToExit(
+    protected function displayInitHelp(
         InputInterface $input,
         OutputInterface $output,
     ): void {
         if ($this->_gs_is_display_init_help) {
-            $this->getIo()->warning([
-                $this->t->trans(
-                    'gs_command.init_help.init_description',
-                ),
-                $this->t->trans(
-                    'gs_command.init_help.exit_shortcut',
-                ),
-                $this->t->trans(
-                    'gs_command.init_help.i_want_to_remove_init_description',
-                    [
-                        '%bundle_config_path%' => $this->_gs_command_bundle_config_path,
-                        '%bundle_config_filename%' => $this->_gs_command_bundle_config_filename,
-                    ],
-                ),
-            ]);
+            $this->getIo()->warning($this->getInitHelpMessages());
         }
     }
 
@@ -812,6 +864,23 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
 
 
     //###> HELPER ###
+	
+	private function getInitHelpMessages(): array {
+		$n = 0;
+		$numberedBodyMessages = $this->getBodyInitHelpMessages();
+		\array_walk(
+			$numberedBodyMessages,
+			static function(&$v, $k) use (&$n) {
+				$v = is_int($k) ? ((string) u($v)->ensureStart(++$n . ') ')) : $v;
+			},
+		);
+		
+		return [
+			...$this->getHeaderInitHelpMessages(),
+			...$numberedBodyMessages,
+			...$this->getBottomInitHelpMessages(),
+		];
+	}
 
     protected function configureCommandHelp(): void
     {
