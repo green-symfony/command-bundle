@@ -27,9 +27,11 @@ For several functions you can add your own translations:
 | AbstractCommand::getIo() |
 | AbstractCommand::ioDump() |
 | AbstractCommand::getProgressBar() |
+| AbstractCommand::getDefaultTableStyle() |
 | AbstractCommand::getTable() |
 | AbstractCommand::getCloneTable() |
 | AbstractCommand::getFormatter() |
+| AbstractCommand::dd() |
 | AbstractCommand::ddFinder() |
 | AbstractCommand::configureOption() |
 | AbstractCommand::configureArgument() |
