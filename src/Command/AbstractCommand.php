@@ -62,6 +62,7 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     protected const PROGRESS_COLOR_PROGRESS_BAR = 'bright-blue';
     //###< CONSTANTS CHANGE ME ###
 
+    private TableStyle $_gs_command_default_table_style;
     protected $_gs_is_display_init_help;
     protected string $_gs_command_bundle_config_env_filename = '.env';
     protected string $_gs_command_bundle_config_env_local_filename = '.env.local';
@@ -198,6 +199,12 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     public function &getTable(): Table
     {
         return $this->table;
+    }
+
+	/**/
+    public function &getDefaultTableStyle(): TableStyle
+    {
+        return $this->_gs_command_default_table_style;
     }
 
 	/**/
@@ -635,6 +642,10 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
             $input,
             $output,
         );
+        $this->setDefaultTableStyle(
+            $input,
+            $output,
+        );
         $this->setTable(
             $input,
             $output,
@@ -841,12 +852,10 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
     }
 
     /* AbstractCommand */
-    protected function setTable(
+    protected function setDefaultTableStyle(
         InputInterface $input,
         OutputInterface $output,
     ): void {
-        //###> create table
-        $this->table = new Table($output); //$this->io->createTable();
         $tableStyle = new TableStyle();
 
         //###> customize style
@@ -857,7 +866,21 @@ abstract class AbstractCommand extends AbstractCommandUseTrait
         ;
 
         //###> set style
-        $this->table->setStyle($tableStyle);
+        $this->_gs_command_default_table_style = $tableStyle;
+    }
+
+    /* AbstractCommand */
+    protected function setTable(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+        //###> create table
+        $table = new Table($output); //$this->io->createTable();
+
+        //###> set style
+        $table->setStyle($this->getDefaultTableStyle());
+		
+		$this->table = $table;
     }
 
     //###< YOU CAN OVERRIDE IT ###
