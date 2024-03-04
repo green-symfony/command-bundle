@@ -222,8 +222,8 @@ class PdfCommand extends AbstractConvertExtCommandUseTrait
         try {
             \chdir($filesystemService->getLocalRoot());
             \exec($command, result_code: $code);
-            \chdir($this->gsCommandInitialCwd); /* ! RETURN TO THE CURRENT DIRECTORY ! */
         } finally {
+            \chdir($this->gsCommandInitialCwd); /* ! RETURN TO THE CURRENT DIRECTORY ! */
             if (!\is_null($code) && $code !== Command::SUCCESS) {
                 $this->exit(
                     message: 'Отмена',
