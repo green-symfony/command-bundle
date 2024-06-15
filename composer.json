@@ -18,16 +18,16 @@
     "license": "MIT",
     "require": {
         "php": ">=7",
-        "symfony/translation": "6.*",
-        "symfony/monolog-bundle": "^3.8",
+        "symfony/translation": "*",
+        "symfony/monolog-bundle": "*",
 		"green-symfony/service-bundle": "*",
 		"green-symfony/env-processor-bundle": "*",
-        "symfony/property-access": "6.*",
-        "symfony/string": "6.*",
-        "symfony/config": "6.*",
-        "nesbot/carbon": "^2.70",
-        "symfony/finder": "6.*",
-        "symfony/filesystem": "6.*"
+        "symfony/property-access": "*",
+        "symfony/string": "*",
+        "symfony/config": "*",
+        "nesbot/carbon": "*",
+        "symfony/finder": "*",
+        "symfony/filesystem": "*"
     },
     "repositories": [
 		{
