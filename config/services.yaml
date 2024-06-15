@@ -1,6 +1,7 @@
 parameters:
     ###> DEFAULT ###
     
+    gs_command.app_env: '%env(APP_ENV)%'
     env(GS_COMMAND_DISPLAY_INIT_HELP_MESSAGE): true
     
     ###> DEFAULT WAY: parameters -> ContainerBuilder::getParameter -> Extension -> Configuration ###
