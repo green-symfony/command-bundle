@@ -19,7 +19,7 @@
     "require": {
         "php": ">=7",
         "symfony/translation": ">=6",
-        "symfony/monolog-bundle": ">=6",
+        "symfony/monolog-bundle": ">=2",
 		"green-symfony/service-bundle": ">=1",
 		"green-symfony/env-processor-bundle": ">=1",
         "symfony/property-access": ">=6",
