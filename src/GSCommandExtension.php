@@ -43,6 +43,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
             ['config', 'services.yaml'],
             ['config/packages', 'translation.yaml'],
             ['config/packages', 'monolog.yaml'],
+            ['config/packages', 'gs_command.yaml'],
         ]);
     }
 
@@ -63,7 +64,7 @@ class GSCommandExtension extends ConfigurableExtension implements PrependExtensi
         -   config->services
         -   bundle's tags
     */
-    public function loadInternal(array $config, ContainerBuilder $container)
+    public function loadInternal(array $config, ContainerBuilder $container): void
     {
         $this->loadYaml($container, [
             //['config', 'services.yaml'],
